@@ -56,6 +56,8 @@ void setup() {
 
 
   populateArrays();
+
+  playSound(1);
 }
 float healthmax = 3;
 float health = healthmax;
@@ -74,25 +76,17 @@ void draw() {
 
   if (page==0) {
     drawTitle();
-    playSound(1);
   }
   if (page == 1) {
     story();
-    playSound(1);
   }
 
   if (page == 2) {
     gamePlay();
-    if (mapVar == 1){
-    playSound(2);
-    } else {
-    playSound(3);
-    }
-    
   }
   if (page == 3) {
-    win();
     playSound(4);
+    win();
   }
 }
 
@@ -196,6 +190,7 @@ void keyPressed() {
       cameraY = 1120;
       cameraX = 1440;
       //bordersAndCamera();
+      playSound(2);
     }
   }
 

@@ -63,9 +63,23 @@ console.log('blur');
 
 window.onfocus = function() {
     console.log('focused');
+if(muzic == 1){
+	starmusic.play();
+}
+
 if(muzic == 2){
 	OWmusic.play();
 }
+
+if(muzic == 3){
+	dgnmusic.play();
+}
+
+if(muzic == 4){
+	winmusic.play();
+}
+
+
 };
 
 
