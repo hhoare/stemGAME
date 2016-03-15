@@ -1,3 +1,39 @@
+
+
+PImage up1;
+PImage up2;
+PImage up3; //sword
+
+PImage down1;
+PImage down2;
+PImage down3; //sword
+
+PImage left1;
+PImage left2;
+PImage left3; //sword
+
+PImage right1;
+PImage right2;
+PImage right3; //sword
+
+
+PImage bup1;
+PImage bup2;
+PImage bup3; //sword
+
+PImage bdown1;
+PImage bdown2;
+PImage bdown3; //sword
+
+PImage bleft1;
+PImage bleft2;
+PImage bleft3; //sword
+
+PImage bright1;
+PImage bright2;
+PImage bright3; //sword
+
+
 void drawLink() {
 
   if (types==1) {
@@ -73,9 +109,9 @@ void drawLink() {
   // ellipse(frogX+16-cameraX, frogY+16- cameraY, 16, 16);
 
 
-//  fill(#0000FF, 150);
+  //  fill(#0000FF, 150);
   //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16); // up
- // ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16); //down
+  // ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16); //down
   //ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16); //left
   //ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);  //right
 }

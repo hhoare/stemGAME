@@ -4,21 +4,6 @@ PImage[] mt = new PImage[18*8];
 int[][] mapData;
 
 
-PImage up1;
-PImage up2;
-PImage up3; //sword
-
-PImage down1;
-PImage down2;
-PImage down3; //sword
-
-PImage left1;
-PImage left2;
-PImage left3; //sword
-
-PImage right1;
-PImage right2;
-PImage right3; //sword
 
 
 
