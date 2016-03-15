@@ -496,22 +496,13 @@ void loadLinkSprites() {
 
   up1= new PImage(16, 16, ARGB);
   up1.copy(q, 32, 0, 16, 16, 0, 0, 16, 16);
-  //fixImage(up1);
-
   up2= new PImage(16, 16, ARGB);
   up2.copy(q, 32, 16, 16, 16, 0, 0, 16, 16);
-  //fixImage(up2);
-
-
   up3= new PImage(16, 32, ARGB);
   up3.copy(q, 64, 0, 16, 32, 0, 0, 16, 32);
-  // fixImage(up3);
 
   down1= new PImage(16, 16, ARGB);
   down1.copy(q, 0, 0, 16, 16, 0, 0, 16, 16);
-  //fixImage(down1);
-
-
   down2= new PImage(16, 16, ARGB);
   down2.copy(q, 0, 16, 16, 16, 0, 0, 16, 16);
   down3= new PImage(16, 32, ARGB);
@@ -530,6 +521,35 @@ void loadLinkSprites() {
   right2.copy(q, 48, 16, 16, 16, 0, 0, 16, 16);
   right3= new PImage(32, 16, ARGB);
   right3.copy(q, 64, 48, 32, 16, 0, 0, 32, 16);
+
+
+  bup1= new PImage(16, 16, ARGB);
+  bup1.copy(q, 32+96, 0, 16, 16, 0, 0, 16, 16);
+  bup2= new PImage(16, 16, ARGB);
+  bup2.copy(q, 32+96, 16, 16, 16, 0, 0, 16, 16);
+  bup3= new PImage(16, 32, ARGB);
+  bup3.copy(q, 64+96, 0, 16, 32, 0, 0, 16, 32);
+
+  bdown1= new PImage(16, 16, ARGB);
+  bdown1.copy(q, 0+96, 0, 16, 16, 0, 0, 16, 16);
+  bdown2= new PImage(16, 16, ARGB);
+  bdown2.copy(q, 0+96, 16, 16, 16, 0, 0, 16, 16);
+  bdown3= new PImage(16, 32, ARGB);
+  bdown3.copy(q, 80+96, 0, 16, 32, 0, 0, 16, 32);
+
+  bleft1= new PImage(16, 16, ARGB);
+  bleft1.copy(q, 16+96, 0, 16, 16, 0, 0, 16, 16);
+  bleft2= new PImage(16, 16, ARGB);
+  bleft2.copy(q, 16+96, 16, 16, 16, 0, 0, 16, 16);
+  bleft3= new PImage(32, 16, ARGB);
+  bleft3.copy(q, 64+96, 32, 32, 16, 0, 0, 32, 16);
+
+  bright1= new PImage(16, 16, ARGB);
+  bright1.copy(q, 48+96, 0, 16, 16, 0, 0, 16, 16);
+  bright2= new PImage(16, 16, ARGB);
+  bright2.copy(q, 48+96, 16, 16, 16, 0, 0, 16, 16);
+  bright3= new PImage(32, 16, ARGB);
+  bright3.copy(q, 64+96, 48, 32, 16, 0, 0, 32, 16);
 }
 
 
@@ -736,7 +756,7 @@ void populateArrays() {
   enemiesD2.add(new ENEMY(41, 30, 28, 35, 31, 43, 1));
   enemiesD2.add(new ENEMY(42, 33, 28, 35, 31, 43, 1));
 
- // enemiesD2.add(new ENEMY(42, 33, 28, 35, 16, 28, 1));
+  // enemiesD2.add(new ENEMY(42, 33, 28, 35, 16, 28, 1));
   enemiesD2.add(new ENEMY(22, 29, 28, 35, 16, 28, 2));
   enemiesD2.add(new ENEMY(19, 30, 28, 35, 16, 28, 1));
   enemiesD2.add(new ENEMY(19, 33, 28, 35, 16, 28, 8));
@@ -796,7 +816,7 @@ void populateArrays() {
   enemiesD2.add(new ENEMY(7, 16, 10, 16, 0, 29, 3));
   enemiesD2.add(new ENEMY(9, 14, 10, 16, 0, 29, 2));
   enemiesD2.add(new ENEMY(5, 12, 10, 16, 0, 29, 8));
- // enemiesD2.add(new ENEMY(1, 10, 10, 16, 0, 29, 1));
+  // enemiesD2.add(new ENEMY(1, 10, 10, 16, 0, 29, 1));
 
   enemiesD3.add(new ENEMY(3, 31, 28, 35, 0, 13, 4));
   enemiesD3.add(new ENEMY(7, 31, 28, 35, 0, 13, 4));
