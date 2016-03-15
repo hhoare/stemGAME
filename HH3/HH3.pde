@@ -1,5 +1,8 @@
 /* @pjs preload="data/hhtitle.png, data/hhlink.png, data/hhenemies_items_chars.png, data/hhmaptiles.png"; */
 
+int soundVar = 0;
+
+
 PFont myfont;
 
 int page = 0;
@@ -37,9 +40,9 @@ void setup() {
   size(640, 480);//ASSUMING FROG VELOCITY = 40
   frameRate(30);
   noStroke();
-//  String[] fontList = PFont.list();    
-//  printArray(fontList);
-  
+  //  String[] fontList = PFont.list();    
+  //  printArray(fontList);
+
   myfont = createFont("LucidaHandwriting-Italic", 32);
 
   //  addCurley("map2num.txt");
@@ -71,18 +74,26 @@ void draw() {
 
   if (page==0) {
     drawTitle();
+    playSound(1);
   }
   if (page == 1) {
     story();
+    playSound(1);
   }
 
   if (page == 2) {
     gamePlay();
+    if (mapVar == 1){
+    playSound(2);
+    } else {
+    playSound(3);
+    }
+    
   }
-  if (page == 3){
-  win();
+  if (page == 3) {
+    win();
+    playSound(4);
   }
-  
 }
 
 
@@ -163,9 +174,9 @@ void mouseReleased() {
 //OK LOL
 int goUp, goDown, goLeft, goRight;
 void keyPressed() {
-if (key == 'o'){
-page = 3;
-}
+  if (key == 'o') {
+    page = 3;
+  }
 
   if (page==0) {
 
@@ -224,9 +235,6 @@ page = 3;
     if (key == 'g')
       dGrid = !dGrid;
   }
-  
-  
-  
 }
 
 void keyReleased() {

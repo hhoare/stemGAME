@@ -85,6 +85,9 @@ void gamePlay() {
   }
 
   if (health == 0) {
+    types = 2;
+    playSound(1);
+    console.log("bad");
     page=1;
     loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store
     completion = 0;
