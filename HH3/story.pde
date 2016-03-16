@@ -12,7 +12,7 @@ void story() {
   image(right3, 100, 150, 64*2, 32*2);
   text("As Link, you must explore your surroundings,\n clearing all 4 dungeons in order\n to rescue the princess", 300-50, 150);
   text("Use the arrow keys to move,\nand SPACE or Z to attack. \nDon't forget to visit the shop to upgrade your health", 20, 270); 
-  image(shop,425,235,48*2,32*2);
+  image(shop,440,235,48*2,32*2);
   textSize(75);
   text("GOOD LUCK", 85-50, 400);
   textSize(25);
