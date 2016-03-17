@@ -250,7 +250,7 @@ void gamePlay() {
 
 
   if (mapVar == 1 &&  gx == 116 && gy == 39) {
-    //  playSound(3);
+   //   playSound(3);
     mapVar = 3;
     storeVar=3;
     loadLevelFromText("d4.txt");    
@@ -265,7 +265,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  gx == 2 && gy == 48) {
-    //  playSound(3);
+   //   playSound(3);
     mapVar = 4;
     storeVar=4;
     loadLevelFromText("d2.txt");    
@@ -280,7 +280,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  gx == 19 && gy == 9) {
-    //   playSound(3);
+  //     playSound(3);
     mapVar = 5;
     storeVar=5;
     loadLevelFromText("d3.txt");    
@@ -295,7 +295,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  (gx == 106 ||gx == 107 ||gx == 108 ||gx == 109) && gy == 4) {   // this is the boss dungeon 
-    //   playSound(3);
+  //     playSound(3);
     mapVar = 6;
     storeVar=6;
     loadLevelFromText("d1.txt");    
@@ -369,7 +369,7 @@ void gamePlay() {
   ////////////////////////////////////// DUNGEON EXITS
 
   if (mapVar == 3 &&  gx == 1 && gy == 11) {   
-    //  playSound(2);
+   //   playSound(2);
 
     completion++;
     d1=1;
@@ -415,7 +415,7 @@ void gamePlay() {
   }
 
   if (mapVar == 5 &&  gx == 19 && gy == 43) { 
-    //  playSound(2);
+   //   playSound(2);
 
     completion++;
     d3=1;

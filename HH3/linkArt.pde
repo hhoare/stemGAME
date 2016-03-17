@@ -39,10 +39,10 @@ void drawLink() {
   if (types==1) {
     if (u<3) {
       image(up1, frogX - cameraX, frogY - cameraY, 32, 32);
-      image(bup2, frogX - cameraX, frogY - cameraY+32, 32, 32);
+    //  image(bup2, frogX - cameraX, frogY - cameraY+32, 32, 32);
     } else {
       image(up2, frogX - cameraX, frogY - cameraY, 32, 32);
-      image(bup1, frogX - cameraX, frogY - cameraY+32, 32, 32);
+  //    image(bup1, frogX - cameraX, frogY - cameraY+32, 32, 32);
     }
   }
 
@@ -50,10 +50,10 @@ void drawLink() {
   if (types==2) {
     if (d<3) {
       image(down1, frogX - cameraX, frogY - cameraY, 32, 32);
-      image(bdown2, frogX - cameraX, frogY - cameraY-32, 32, 32);
+    //  image(bdown2, frogX - cameraX, frogY - cameraY-32, 32, 32);
     } else {
       image(down2, frogX - cameraX, frogY - cameraY, 32, 32);
-      image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);
+  //    image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);
     }
   }
 
@@ -61,7 +61,7 @@ void drawLink() {
   if (types==3) {
     if (l<3) {
       image(left1, frogX - cameraX, frogY - cameraY, 32, 32);
-      image(bleft2, frogX - cameraX+32, frogY - cameraY, 32, 32);
+ //     image(bleft2, frogX - cameraX+32, frogY - cameraY, 32, 32);
     } else {
       image(left2, frogX - cameraX, frogY - cameraY, 32, 32);
       image(bleft1, frogX - cameraX+32, frogY - cameraY, 32, 32);

@@ -57,7 +57,7 @@ void setup() {
 
   populateArrays();
 
- // playSound(1);
+//  playSound(1);
 }
 float healthmax = 3;
 float health = healthmax;
@@ -85,7 +85,7 @@ void draw() {
     gamePlay();
   }
   if (page == 3) {
-  //  playSound(4);
+   // playSound(4);
     win();
   }
 }

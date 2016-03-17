@@ -435,16 +435,16 @@ class ENEMY {
       enhealth = 1;
     }
     if (type == 5) {
-      enhealth = 2;
+      enhealth = 1;
     }
     if (type == 6) {
-      enhealth = 4;
+      enhealth = 1;
     }
     if (type == 7) {
-      enhealth = 5;
+      enhealth = 1;
     }
     if (type == 8) {
-      enhealth = 2;
+      enhealth = 1;
     }
   }
 
