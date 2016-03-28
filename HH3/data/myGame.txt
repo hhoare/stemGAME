@@ -542,7 +542,7 @@ void gamePlay() \{\
     l=0;\
   \}\
   if (mapVar == 1 &&  gx == 19 && gy == 9) \{\
-       playSound(3);\
+      playSound(3);\
     mapVar = 5;\
     storeVar=5;\
     loadLevelFromText("d3.txt");    \
@@ -677,7 +677,7 @@ void gamePlay() \{\
   \}\
 \
   if (mapVar == 5 &&  gx == 19 && gy == 43) \{ \
-      playSound(2);\
+     playSound(2);\
 \
     completion++;\
     d3=1;\
@@ -759,14 +759,7 @@ void loadLinkSprites() \{\
     mt[r].copy(q, 1+17* ((int)(r%18)), 1 + 17* ((int)(r/18)), 16, 16, 0, 0, 16, 16);   //this loads sprite sheet\
   \}\
 \
-\
-\
-\
-\
-\
   q= loadImage("data/hhlink.png");\
-\
-\
 \
   // qqq.updatePixels();\
 \
@@ -2459,7 +2452,7 @@ void drawLink() \{\
       image(bdown2, frogX - cameraX, frogY - cameraY-32, 32, 32);\
     \} else \{\
       image(down2, frogX - cameraX, frogY - cameraY, 32, 32);\
-  /   image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);\
+      image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);\
     \}\
   \}\
 \
