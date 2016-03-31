@@ -14,7 +14,7 @@ float speed=8;
 
 int cameraX;
 int cameraY;
-
+//kutfityf
 
 //ASSUMING FROG VELOCITY = 40
 int mapWidth, mapHeight;
