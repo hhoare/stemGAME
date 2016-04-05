@@ -26,17 +26,10 @@ int d=0;
 
 int type=8;
 
-
-
-
-
 int mapVar;
 
-
-
-
-
 void setup() {
+  surface.setResizable(true);
   size(640, 480);//ASSUMING FROG VELOCITY = 40
   frameRate(30);
   noStroke();
@@ -57,7 +50,7 @@ void setup() {
 
   populateArrays();
 
-//  playSound(1);
+  //  playSound(1);
 }
 float healthmax = 3;
 float health = healthmax;
@@ -72,6 +65,9 @@ boolean dGrid;
 
 int gx, gy;
 
+boolean talk = false;   // var for drawing dialogue box at the bottom of the screen
+int conversation = 1;
+
 void draw() {
 
   if (page==0) {
@@ -85,8 +81,26 @@ void draw() {
     gamePlay();
   }
   if (page == 3) {
-   // playSound(4);
+    // playSound(4);
     win();
+  }
+
+  if ( talk == false) {
+    surface.setSize(640, 480);
+    //    dialogue.remove(this);
+  }
+
+  if ( talk == true) {
+    surface.setSize(640, 680);
+    di0.update();
+    if ( conversation == 1) {
+      di1.update();
+      di2.update();
+      di3.update();
+      di4.update();
+    }
+    
+    
   }
 }
 
@@ -168,6 +182,12 @@ void mouseReleased() {
 //OK LOL
 int goUp, goDown, goLeft, goRight;
 void keyPressed() {
+  if (key == 'l') {
+    talk = true;
+  }
+  if (key == 'k') {
+    talk = false;
+  }
   if (key == 'o') {
     page = 3;
   }
@@ -190,14 +210,14 @@ void keyPressed() {
       cameraY = 1120;
       cameraX = 1440;
       //bordersAndCamera();
-    //  playSound(2);
+      //  playSound(2);
     }
   }
 
 
   if (page == 2) {
 
-    if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 ) {
+    if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
       types+=4;
     }
 
@@ -212,18 +232,18 @@ void keyPressed() {
     }
 
 
-    if (key == 'w' || keyCode == UP) {
+    if ((key == 'w' || keyCode == UP) && talk == false) {
       goUp = 1;
     }
 
-    if (key == 's'|| keyCode == DOWN) {
+    if ((key == 's'|| keyCode == DOWN) && talk == false) {
       goDown = 1;
     }
 
-    if (key == 'a'|| keyCode == LEFT) {
+    if ((key == 'a'|| keyCode == LEFT) && talk == false) {
       goLeft = 1;
     }
-    if (key == 'd'|| keyCode == RIGHT) {
+    if ((key == 'd'|| keyCode == RIGHT) && talk == false) {
       goRight = 1;
     }
 
