@@ -94,10 +94,7 @@ void draw() {
     surface.setSize(640, 780);
     di0.update();
     if ( conversation == 1) {
-      di1.update();
-      di2.update();
-      di3.update();
-      di4.update();
+
     }
     
     
