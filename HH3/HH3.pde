@@ -91,7 +91,7 @@ void draw() {
   }
 
   if ( talk == true) {
-    surface.setSize(640, 680);
+    surface.setSize(640, 780);
     di0.update();
     if ( conversation == 1) {
       di1.update();
