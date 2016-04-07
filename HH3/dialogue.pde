@@ -63,26 +63,42 @@ class dialogue {
     if ( dtype == 1) {     // first set of dialogue options
       fill(255);
       textSize(25);
-      text("mook", dx+50, dy+50);
-      //   println("yes");
+      text("mook1", 20+50, 490+50);
+      text("mook2", 340+50, 490+50);
+      text("mook3", 20+50, 630+50);
+      text("mook4", 340+50, 630+50);
     }
 
 
     if ( mouseX > 20 && mouseX < 20+275 && mouseY>490 && mouseY < 490 + 125) {
       select = 1;
+      if ( mousePressed) {
+        //companion response 1
+        //       println("one");
+      }
     } 
 
     if ( mouseX > 340 && mouseX < 340+275 && mouseY>490 && mouseY < 490 + 125) {
       select = 2;
+      if ( mousePressed) {
+        //companion response 2
+        //      println("two");
+      }
     } 
 
     if ( mouseX > 20 && mouseX < 20+275 && mouseY>630 && mouseY < 630 + 125) {
       select = 3;
+      if ( mousePressed) {
+        //companion response 3
+        //     println("three");
+      }
     } 
     if ( mouseX > 340 && mouseX < 340+275 && mouseY>630 && mouseY < 630 + 125) {
       select = 4;
-    } 
-    
-    
+      if ( mousePressed) {
+        //companion response 4
+        //    println("four");
+      }
+    }
   }
 }
