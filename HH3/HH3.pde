@@ -90,7 +90,7 @@ void draw() {
   }
 
   if ( talk == true) {
-    surface.setSize(640, 780);
+    surface.setSize(640, 980);
     di0.update();
     if ( conversation == 1) {
     }
