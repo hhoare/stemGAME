@@ -40,7 +40,6 @@ void setup() {
 
   //  addCurley("map2num.txt");
 
-  loadLinkSprites();
   loadImages2(); // enemies
 
 
@@ -66,8 +65,13 @@ int gx, gy;
 
 boolean talk = false;   // var for drawing dialogue box at the bottom of the screen
 int conversation = 1;
+int comp;
+boolean companion = false;
+
 
 void draw() {
+
+  loadLinkSprites();
 
   if (page==0) {
     drawTitle();
@@ -175,6 +179,14 @@ void mouseReleased() {
 //OK LOL
 int goUp, goDown, goLeft, goRight;
 void keyPressed() {
+  if ( key == 'm') {
+    companion = true;
+  }
+
+  if ( key == 'n') {
+    companion = false;
+  }
+
   if (key == 'l') {
     talk = true;
   }

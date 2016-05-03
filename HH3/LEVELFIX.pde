@@ -490,6 +490,11 @@ void drawTitle() {
   text("By Henry Hoare", 265-25, 245);
 }
 
+
+
+
+
+
 void loadLinkSprites() {
   PImage q = loadImage("data/hhmaptiles.png");
   for (int r = 0; r < mt.length; r++) {
@@ -499,7 +504,11 @@ void loadLinkSprites() {
 
 
 
-
+  if (companion == true) {
+    comp = 65;
+  } else if (companion == false) {
+    comp = 0;
+  }
 
 
   q= loadImage("data/hhlink.png");
@@ -510,32 +519,32 @@ void loadLinkSprites() {
 
 
   up1= new PImage(16, 16, ARGB);
-  up1.copy(q, 32, 0, 16, 16, 0, 0, 16, 16);
+  up1.copy(q, 32, 0+comp, 16, 16, 0, 0, 16, 16);
   up2= new PImage(16, 16, ARGB);
-  up2.copy(q, 32, 16, 16, 16, 0, 0, 16, 16);
+  up2.copy(q, 32, 16+comp, 16, 16, 0, 0, 16, 16);
   up3= new PImage(16, 32, ARGB);
-  up3.copy(q, 64, 0, 16, 32, 0, 0, 16, 32);
+  up3.copy(q, 64, 0+comp, 16, 32, 0, 0, 16, 32);
 
   down1= new PImage(16, 16, ARGB);
-  down1.copy(q, 0, 0, 16, 16, 0, 0, 16, 16);
+  down1.copy(q, 0, 0+comp, 16, 16, 0, 0, 16, 16);
   down2= new PImage(16, 16, ARGB);
-  down2.copy(q, 0, 16, 16, 16, 0, 0, 16, 16);
+  down2.copy(q, 0, 16+comp, 16, 16, 0, 0, 16, 16);
   down3= new PImage(16, 32, ARGB);
-  down3.copy(q, 80, 0, 16, 32, 0, 0, 16, 32);
+  down3.copy(q, 80, 0+comp, 16, 32, 0, 0, 16, 32);
 
   left1= new PImage(16, 16, ARGB);
-  left1.copy(q, 16, 0, 16, 16, 0, 0, 16, 16);
+  left1.copy(q, 16, 0+comp, 16, 16, 0, 0, 16, 16);
   left2= new PImage(16, 16, ARGB);
-  left2.copy(q, 16, 16, 16, 16, 0, 0, 16, 16);
+  left2.copy(q, 16, 16+comp, 16, 16, 0, 0, 16, 16);
   left3= new PImage(32, 16, ARGB);
-  left3.copy(q, 64, 32, 32, 16, 0, 0, 32, 16);
+  left3.copy(q, 64, 32+comp, 32, 16, 0, 0, 32, 16);
 
   right1= new PImage(16, 16, ARGB);
-  right1.copy(q, 48, 0, 16, 16, 0, 0, 16, 16);
+  right1.copy(q, 48, 0+comp, 16, 16, 0, 0, 16, 16);
   right2= new PImage(16, 16, ARGB);
-  right2.copy(q, 48, 16, 16, 16, 0, 0, 16, 16);
+  right2.copy(q, 48, 16+comp, 16, 16, 0, 0, 16, 16);
   right3= new PImage(32, 16, ARGB);
-  right3.copy(q, 64, 48, 32, 16, 0, 0, 32, 16);
+  right3.copy(q, 64, 48+comp, 32, 16, 0, 0, 32, 16);
 
 
   bup1= new PImage(16, 16, ARGB);
