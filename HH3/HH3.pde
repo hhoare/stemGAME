@@ -7,8 +7,8 @@ PFont myfont;
 
 int page = 0;
 
-int frogX = 32*5;
-int frogY = 32*8;
+int frogX = 32*1;
+int frogY = 32*1;
 
 float speed=8;
 
@@ -71,6 +71,8 @@ boolean companion = false;
 
 void draw() {
 
+  
+ // println(frogX);
   loadLinkSprites();
 
   if (page==0) {
@@ -82,6 +84,7 @@ void draw() {
 
   if (page == 2) {
     gamePlay();
+
   }
   if (page == 3) {
     // playSound(4);
@@ -211,10 +214,11 @@ void keyPressed() {
       page=2;
       mapVar=1;
       loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store
-      frogX = 56*32;
-      frogY = 46*32;
+      frogX = 56*32;//56
+      frogY = 46*32;//46
       cameraY = 1120;
       cameraX = 1440;
+      setCompArray();
       //bordersAndCamera();
       //  playSound(2);
     }
