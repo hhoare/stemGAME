@@ -189,6 +189,7 @@ void keyPressed() {
 
   if (key == 'l') {
     talk = true;
+    types = 4;
   }
   if (key == 'k') {
     talk = false;
