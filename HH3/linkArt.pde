@@ -92,11 +92,11 @@ void drawLink() {
       if (r<3) {
         image(right1, frogX - cameraX, frogY - cameraY, 32, 32);
         if (companion == true)
-          image(bleft2, frogX - cameraX-32+15, frogY - cameraY, 32, 32);
+          image(bleft2, frogX - cameraX-32+70, frogY - cameraY, 32, 32);
       } else {
         image(right2, frogX - cameraX, frogY - cameraY, 32, 32);
         if (companion == true)
-          image(bleft1, frogX - cameraX-32+15, frogY - cameraY, 32, 32);
+          image(bleft1, frogX - cameraX-32+70, frogY - cameraY, 32, 32);
       }
     }
   }
