@@ -7,7 +7,7 @@ int oldp;
 
 int frogox, frogoy;
 
-int framesBehind = 6;
+int framesBehind = 5;
 
 int hFrame = 0;
 

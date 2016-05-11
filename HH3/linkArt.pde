@@ -35,8 +35,8 @@ PImage bright3; //sword
 
 
 
-void drawGreenLink(){
-  
+void drawGreenLink() {
+
   if (healthcounter%2 == 0) {
     if (types==1) {
       if (u<3) {
@@ -159,14 +159,9 @@ void drawGreenLink(){
     //ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16); //left
     //ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);  //right
   }
-
-  
 }
 
 void drawLink() {
-
-
-
 
 
   if (frogX != frogox || frogY != frogoy) {//you are moving
@@ -197,55 +192,55 @@ void drawLink() {
     tempPP = 9;
   }
 
+  if ( companion == true) {
 
-  if (oldy[tempP] >    oldy[tempPP ]     ) {
-    if (hFrame < 2)
-      image(bdown2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-    else
-      image(bdown1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-  } else if (oldy[tempP] <    oldy[tempPP ]     ) {
-    if (hFrame < 2)
-      image(bup2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-    else
-      image(bup1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-  } else  if (oldx[tempP] >    oldx[tempPP ]     ) {
+    if (oldy[tempP] >    oldy[tempPP ]     ) {
+      if (hFrame < 2)
+        image(bdown2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bdown1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else if (oldy[tempP] <    oldy[tempPP ]     ) {
+      if (hFrame < 2)
+        image(bup2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bup1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else  if (oldx[tempP] >    oldx[tempPP ]     ) {
 
-    if (hFrame < 2)
-      image(bright1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-    else
-      image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-  } else  if (oldx[tempP] <    oldx[tempPP ] ) {
-    if (hFrame < 2)
-      image(bleft1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-    else
-      image(bleft2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-  } else {
+      if (hFrame < 2)
+        image(bright1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else  if (oldx[tempP] <    oldx[tempPP ] ) {
+      if (hFrame < 2)
+        image(bleft1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bleft2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else {
 
-    if (types==1)
-      image(bup2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      if (types==1)
+        image(bup2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
 
-    if (types==2)
-      image(bdown2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      if (types==2)
+        image(bdown2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
 
-    if (types==3)
-      image(bleft2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      if (types==3)
+        image(bleft2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
 
-    if (types==4)
-      image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-      
-      
-     // image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
-      
+      if (types==4)
+        image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+
+
+      // image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    }
+    //}
   }
-  //}
-
   //image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
 
   frogox = frogX;
   frogoy = frogY;
 
   //  println(frogX + "  " + oldx[tempP] + "  " + oldy[tempP]);
-  
-  
+
+
   drawGreenLink();
 }
