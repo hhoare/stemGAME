@@ -17,6 +17,18 @@ var winmusic = new buzz.sound("/data/triforce.wav");
 var dgnmusic = new buzz.sound("/data/labyrinth.wav");
 
 
+var diemusic = new buzz.sound("/data/Die.wav");
+var entermusic = new buzz.sound("/data/Enter.wav");
+var heartmusic = new buzz.sound("/data/GetHeart.wav");
+var rupeemusic = new buzz.sound("/data/GetRupee.wav");
+var hitmusic = new buzz.sound("/data/Hit.wav");
+var hurtmusic = new buzz.sound("/data/Hurt.wav");
+var killmusic = new buzz.sound("/data/Kill.wav");
+var lowhealthmusic = new buzz.sound("/data/LowHealth.wav");
+var swordmusic = new buzz.sound("/data/Sword.wav");
+
+
+
 var muzic = 0;
 
 
@@ -24,7 +36,15 @@ function stopAll(){
 startmusic.stop();
     OWmusic.stop();
     dgnmusic.stop();
-
+    diemusic.stop();
+entermusic.stop();
+heartmusic.stop();
+rupeemusic.stop();
+hitmusic.stop();
+hurtmusic.stop();
+killmusic.stop();
+lowhealthmusic.stop();
+swordmusic.stop();
 
 
 }
@@ -34,6 +54,16 @@ function pauseAll(){
 startmusic.pause();
     OWmusic.pause();
     dgnmusic.pause();
+diemusic.stop();
+entermusic.stop();
+heartmusic.stop();
+rupeemusic.stop();
+hitmusic.stop();
+hurtmusic.stop();
+killmusic.stop();
+lowhealthmusic.stop();
+swordmusic.stop();
+
 }
 
 function playSound(q){
@@ -51,6 +81,40 @@ if (q == 3){
 if (q == 4){
     winmusic.play();
 }
+
+
+if (q == 5){
+    diemusic.play();
+}
+if (q == 6){
+    entermusic.play();
+}
+if (q == 7){
+    heartmusic.play();
+}
+if (q == 8){
+    rupeemusic.play();
+}
+if (q == 9){
+    hitmusic.play();
+}
+if (q == 10){
+    hurtmusic.play();
+}
+if (q == 11){
+    killmusic.play();
+}
+if (q == 12){
+    lowhealthmusic.play();
+}
+if (q == 13){
+    swordmusic.play();
+}
+
+
+
+
+
 muzic = q;
 
 }
@@ -64,7 +128,7 @@ console.log('blur');
 window.onfocus = function() {
     console.log('focused');
 if(muzic == 1){
-	starmusic.play();
+	startmusic.play();
 }
 
 if(muzic == 2){
@@ -78,6 +142,35 @@ if(muzic == 3){
 if(muzic == 4){
 	winmusic.play();
 }
+
+if (muzic == 5){
+    diemusic.play();
+}
+if (muzic == 6){
+    entermusic.play();
+}
+if (muzic == 7){
+    heartmusic.play();
+}
+if (muzic == 8){
+    rupeemusic.play();
+}
+if (muzic == 9){
+    hitmusic.play();
+}
+if (muzic == 10){
+    hurtmusic.play();
+}
+if (muzic == 11){
+    killmusic.play();
+}
+if (muzic == 12){
+    lowhealthmusic.play();
+}
+if (muzic == 13){
+    swordmusic.play();
+}
+
 
 
 };
