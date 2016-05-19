@@ -398,7 +398,7 @@ class ENEMY {
   int upBound, downBound, leftBound, rightBound;
 
 
-  int enhealth;
+  float enhealth;
 
   int stopMe;
 
@@ -653,16 +653,15 @@ class ENEMY {
     if (type == 8) {
       drawEnemy8(ex1-cameraX, ey1-cameraY, skin);
     }
-/*
+    /*
     if (health == 0) {
-      enemies.remove(this);
-      enemiesD1.remove(this);
-      enemiesD2.remove(this);
-      enemiesD3.remove(this);
-      enemiesD4.remove(this);
-    }
- */   
-    
+     enemies.remove(this);
+     enemiesD1.remove(this);
+     enemiesD2.remove(this);
+     enemiesD3.remove(this);
+     enemiesD4.remove(this);
+     }
+     */
   }
 
 
@@ -670,7 +669,14 @@ class ENEMY {
     ///println("hi" + types);
 
     stopMe = 1;
-    enhealth-=1;
+    if (companion==false) {
+      enhealth-=.5;
+    }
+    if (companion==true) {
+      enhealth-=1;
+    }
+
+
     types-=4;
     //  println("yes");
     keyReleased();

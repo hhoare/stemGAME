@@ -4,7 +4,13 @@ void ouch() {
 
   if (healthcounter == 0) {
     healthcounter = 1;
-    health-=.5;
+
+    if (companion == true) {
+      health-=.5;
+    }
+    if (companion == false) {
+      health-=1;
+    }
   }
 }
 
