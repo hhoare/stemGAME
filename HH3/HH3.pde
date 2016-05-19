@@ -29,8 +29,8 @@ int type=8;
 int mapVar;
 
 void setup() {
-  surface.setResizable(true);
-  size(640, 480);//ASSUMING FROG VELOCITY = 40
+  // surface.setResizable(true);
+  size(640, 800);//ASSUMING FROG VELOCITY = 40
   frameRate(30);
   noStroke();
   //  String[] fontList = PFont.list();    
@@ -68,11 +68,16 @@ int conversation = 1;
 int comp;
 boolean companion = false;
 
+int wx = 0, wy = 480, wo = 255;
+
+
+
 
 void draw() {
 
-  
- // println(frogX);
+
+
+  // println(frogX);
   loadLinkSprites();
 
   if (page==0) {
@@ -84,20 +89,22 @@ void draw() {
 
   if (page == 2) {
     gamePlay();
-
   }
   if (page == 3) {
     // playSound(4);
     win();
   }
+  fill(255, wo);
+  rect(wx, wy-5, 640, 500);
 
   if ( talk == false) {
-    surface.setSize(640, 480);
+    wo = 255;
     //    dialogue.remove(this);
   }
 
   if ( talk == true) {
-    surface.setSize(640, 980);
+    wo = 0;
+    //   surface.setSize(640, 980);
     di0.update();
     if ( conversation == 1) {
     }
@@ -138,7 +145,7 @@ void bordersAndCamera() {
     cameraX = frogX - 32*8;
   }
   //vertical camera 
-  if (frogY > cameraY + 32*10 && cameraY < (mapHeight - height)) {//ASSUMING FROG VELOCITY = 40
+  if (frogY > cameraY + 32*10 && cameraY < (mapHeight - 480)) {//ASSUMING FROG VELOCITY = 40
     cameraY = frogY - 32*10;
   }
   if (frogY < cameraY + 32*8 && cameraY > 0) {//ASSUMING FROG VELOCITY = 40

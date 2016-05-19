@@ -481,9 +481,9 @@ void drawTitle() {
   text("STORY", 195, 210);
   //stroke(80);
   textSize(20);
-  text("PRESS SPACE TO BEGIN", 210-25, 300);
+  text("PRESS SPACE TO BEGIN", 210-25, 320);
   textSize(15);
-  text("By Henry Hoare", 265-25, 245);
+  text("By Henry Hoare and Eduardo Guzman", 265-25-25-75, 240);
 }
 
 

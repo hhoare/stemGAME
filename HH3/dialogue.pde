@@ -1,5 +1,5 @@
 
-dialogue di0 = new dialogue (0, 480, 640, 300+210, 1, 1, 0);
+dialogue di0 = new dialogue (0, 480-5, 640, 300+210, 1, 1, 0);
 
 
 
@@ -126,6 +126,7 @@ class dialogue {
 
         ///////////////////
       }
+      ////////////// put next set of reponses here
     }
 
 
@@ -149,7 +150,7 @@ class dialogue {
     if ( dtype == 1) {     // first set of dialogue options
       fill(255);
       textSize(20);
-      text("Hi, my name's Chin Sung. Let's travel together", 50, 525);
+      text("Hi, my name's Owen. Let's travel together", 50, 525);
       textSize(25);
       text("Sure.", 20+50, 490+50+60);
       text("Sounds great!\n Nice to meet you", 340+15, 490+40+60);
