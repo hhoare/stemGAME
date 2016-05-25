@@ -126,6 +126,35 @@ class dialogue {
 
         ///////////////////
       }
+
+      if (rtype == 3) {
+        //  println(mouseY);
+        fill(255);
+        textSize(25);
+        if ( ctype == 1) {        
+          text("Dialogue 3 Response 1", 80+50, 490+50);
+        }
+        if ( ctype == 2) {        
+          text("Dialogue 3 Response 2", 80+50, 490+50);
+        }        
+        if ( ctype == 3) {        
+          text("Dialogue 3 Response 3", 80+50, 490+50);
+        }        
+        if ( ctype == 4) {        
+          text("Dialogue 2 Response 4", 80+50, 490+50);
+        }        
+        if ( mouseY > 480) {
+          if ( keyPressed) {
+            if ( key == 'u') {
+              talk = false;
+              dtype =4;
+            }
+          }
+        }
+
+        ///////////////////
+      }
+
       ////////////// put next set of reponses here
     }
 

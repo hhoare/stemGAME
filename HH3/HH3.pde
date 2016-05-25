@@ -68,7 +68,7 @@ int conversation = 1;
 int comp;
 boolean companion = false;
 
-int wx = 0, wy = 480, wo = 255;
+int wx = -3, wy = 474, wo = 255;
 
 
 
@@ -96,7 +96,7 @@ void draw() {
     win();
   }
   fill(255, wo);
-  rect(wx, wy-5, 640, 500);
+  rect(wx, wy, 645, 500);
 
   if ( talk == false) {
     wo = 255;
