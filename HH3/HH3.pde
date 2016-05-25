@@ -89,6 +89,7 @@ void draw() {
 
   if (page == 2) {
     gamePlay();
+    
   }
   if (page == 3) {
     // playSound(4);
@@ -235,10 +236,12 @@ void keyPressed() {
   if (page == 2) {
 
     if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
+    //playSound(13);
       types+=4;
     }
 
     if (mapVar==2 && key == 'b' && gx==11 && gy ==12 && coins>=1000) {
+      //playSound(7);
       healthmax++;
       health=healthmax;
       coins-=1000;

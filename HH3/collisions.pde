@@ -1,6 +1,7 @@
 
 
 void ouch() {
+  //playSound(10);
 
   if (healthcounter == 0) {
     healthcounter = 1;

@@ -50,19 +50,22 @@ class DROPS {
     if (dist(ix+16, iy+16, frogX+16, frogY+16)  < 30) { // item hits you
       drops.remove(this);
       if (itypes== 1) {
+        //playSound(8);
         coins+=50;
       }
       if (itypes==2) {
         health=healthmax;
       }
       if (itypes== 3) {
+        //playSound(8);
         coins+=20;
       }
       if (itypes== 4) {
+        //playSound(8);
         coins+=5;
       }
     }
-  //  println(coins);
+    //  println(coins);
   }
 }
 

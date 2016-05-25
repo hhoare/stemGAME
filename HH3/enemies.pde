@@ -598,6 +598,7 @@ class ENEMY {
 
       enouch();
       if (enhealth==0) {
+        //playSound(11);
 
         if (random(1) <= .1) {  //gold rupee
           drops.add(new DROPS(egx1, egy1, 1));
@@ -667,7 +668,7 @@ class ENEMY {
 
   void enouch() {  //enemy health
     ///println("hi" + types);
-
+  //playSound(9);
     stopMe = 1;
     if (companion==false) {
       enhealth-=.5;

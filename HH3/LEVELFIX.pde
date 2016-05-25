@@ -11,6 +11,11 @@ int cheapFix;
 
 void gamePlay() {
 
+  
+  if(healthcounter<=1){
+  //playSound(12);
+  
+  }
 
   if (page == 2) {
     background(-206680);
@@ -85,7 +90,7 @@ void gamePlay() {
 
 
   if (health == 0) {
-
+    //playsound(5);
     //  populateArrays();
     types = 2;
     // playSound(1);
@@ -154,6 +159,7 @@ void gamePlay() {
   textSize(30);
 
   if ((mapVar == 1 || mapVar == 7) &&  gx == 52 && gy == 37) {
+    //playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    //change to store.txt to load the store
     coincolor=255;
@@ -170,6 +176,7 @@ void gamePlay() {
     setCompArray();
   }
   if (mapVar == 2 && gx == 6 && gy ==17 ) {            /////////////////STORE EXIT
+    //playSound(6);
     if (storeVar==1) {
       mapVar = 1;
       if ((d1+d2+d3)<3) {
@@ -246,6 +253,7 @@ void gamePlay() {
 
 
   if (mapVar == 1 &&  gx == 116 && gy == 39) {
+    //playSound(6);
     //   playSound(3);
     mapVar = 3;
     storeVar=3;
@@ -261,6 +269,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  gx == 2 && gy == 48) {
+    //playSound(6);
     //   playSound(3);
     mapVar = 4;
     storeVar=4;
@@ -276,6 +285,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  gx == 19 && gy == 9) {
+    //playSound(6);
     //     playSound(3);
     mapVar = 5;
     storeVar=5;
@@ -291,6 +301,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  (gx == 106 ||gx == 107 ||gx == 108 ||gx == 109) && gy == 4) {   // this is the boss dungeon 
+    //playSound(6);
     //     playSound(3);
     mapVar = 6;
     storeVar=6;
@@ -306,7 +317,8 @@ void gamePlay() {
     l=0;
   }
 
-  if (mapVar == 3 &&  gx == 18 && gy == 39) {    
+  if (mapVar == 3 &&  gx == 18 && gy == 39) {   
+    //playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -320,7 +332,8 @@ void gamePlay() {
     l=0;
   }
 
-  if (mapVar == 5 &&  gx == 3 && gy == 39) {    
+  if (mapVar == 5 &&  gx == 3 && gy == 39) {
+    //playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -335,7 +348,8 @@ void gamePlay() {
   }
 
 
-  if (mapVar == 6 &&  gx == 23 && gy == 63) {    
+  if (mapVar == 6 &&  gx == 23 && gy == 63) {
+    //playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -348,7 +362,8 @@ void gamePlay() {
     r=0;
     l=0;
   }
-  if (mapVar == 4 &&  gx == 18 && gy == 39) {    
+  if (mapVar == 4 &&  gx == 18 && gy == 39) {
+    //playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -364,9 +379,9 @@ void gamePlay() {
 
   ////////////////////////////////////// DUNGEON EXITS
 
-  if (mapVar == 3 &&  gx == 1 && gy == 11) {   
-    //   playSound(2);
-
+  if (mapVar == 3 &&  gx == 1 && gy == 11) {
+    //playSound(6);
+    //playSound(2);
     completion++;
     d1=1;
     mapVar = 1;
@@ -388,8 +403,8 @@ void gamePlay() {
   }
 
   if (mapVar == 4 &&  gx == 1 && gy == 16) { 
-    //  playSound(2);
-
+    //playSound(6);
+    //playSound(2);
     completion++;
     d2=1;
     mapVar = 1;
@@ -411,8 +426,8 @@ void gamePlay() {
   }
 
   if (mapVar == 5 &&  gx == 19 && gy == 43) { 
-    //   playSound(2);
-
+    //playSound(6);
+    //playSound(2);
     completion++;
     d3=1;
     mapVar = 1;
