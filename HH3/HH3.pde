@@ -96,6 +96,7 @@ void draw() {
     win();
   }
   fill(255, wo);
+  noStroke();
   rect(wx, wy, 645, 500);
 
   if ( talk == false) {
