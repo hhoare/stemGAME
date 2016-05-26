@@ -68,7 +68,7 @@ int conversation = 1;
 int comp;
 boolean companion = false;
 
-int wx = -3, wy = 474, wo = 255;
+int wx = -3, wy = 480, wo = 255;
 
 
 
