@@ -89,7 +89,7 @@ void draw() {
 
   if (page == 2) {
     gamePlay();
-    
+    drawRhealth();
   }
   if (page == 3) {
     // playSound(4);
@@ -238,7 +238,7 @@ void keyPressed() {
   if (page == 2) {
 
     if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
-    //playSound(13);
+      //playSound(13);
       types+=4;
     }
 

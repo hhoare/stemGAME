@@ -37,6 +37,25 @@ void drawHealth() {
   }
 }
 
+
+int rhealth = 50;
+//int rx,ry,rw;
+
+void drawRhealth() {
+  fill(255);
+  noStroke();
+  rect(30,5,110,50,8);
+  fill(#FF0000);
+  textSize(50);
+  // stroke(0);
+  // strokeWeight(5);
+  text(rhealth + "%", 25, 50);
+}
+
+
+
+
+
 int coincolor=0;
 void drawCoins() {
   image(grRupee, 540-20, 420, 32, 32);
