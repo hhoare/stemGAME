@@ -10,7 +10,7 @@ int d3;
 int cheapFix;
 
 void gamePlay() {
-  println(gx, gy);
+  // println(gx, gy);
 
   if (healthcounter<=1) {
     //playSound(12);
@@ -120,7 +120,7 @@ void gamePlay() {
     for (int i=0; i < enemies.size (); i++) {
       enemies.get(i).update();
     }
-    if (gx == 56 && gy == 46) {
+    if (gx == 56 && gy == 46 && dialogue < 1) {
       talk = true;
     }
   }

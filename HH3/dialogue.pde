@@ -5,6 +5,8 @@ dialogue di0 = new dialogue (0, 480-5, 640, 300+210, 1, 1, 0);
 
 int select;
 
+int dialogue=0;
+
 
 
 class dialogue {
@@ -61,6 +63,9 @@ class dialogue {
      rect (340, 630+210, 275, 125);
      
      */
+
+ 
+
     if ( dtype == 0) {
       fill(0);
       rect(dx, dy, dw, dh);
@@ -91,6 +96,7 @@ class dialogue {
             if ( key == 'u') {
               talk = false;
               dtype =2;
+              dialogue++;
             }
           }
         }
