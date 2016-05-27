@@ -192,7 +192,7 @@ void drawLink() {
     tempPP = 9;
   }
 
-  if ( companion == true) {
+  if ( companion == true && talk == false) {
 
     if (oldy[tempP] >    oldy[tempPP ]     ) {
       if (hFrame < 2)
@@ -234,6 +234,12 @@ void drawLink() {
     }
     //}
   }
+
+  if (talk == true) {
+    image(bleft2, frogX+35-cameraX, frogY-cameraY, 32, 32);
+   // println(frogX,frogY);
+  }
+
   //image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
 
   frogox = frogX;

@@ -105,6 +105,7 @@ void draw() {
   }
 
   if ( talk == true) {
+
     wo = 0;
     //   surface.setSize(640, 980);
     di0.update();
