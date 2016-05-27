@@ -668,17 +668,22 @@ class ENEMY {
 
   void enouch() {  //enemy health
     ///println("hi" + types);
-  //playSound(9);
+    //playSound(9);
     stopMe = 1;
     if (companion==false) {
       enhealth-=.5;
     }
     if (companion==true) {
-      enhealth-=1;
+      if (rhealth<100) {
+        enhealth-=1;
+      }
+      if (rhealth == 100) {
+        enhealth-=10;
+      }
     }
 
 
-    types-=4;
+      types-=4;
     //  println("yes");
     keyReleased();
   }

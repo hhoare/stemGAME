@@ -66,7 +66,7 @@ int gx, gy;
 boolean talk = false;   // var for drawing dialogue box at the bottom of the screen
 int conversation = 1;
 int comp;
-boolean companion = false;
+boolean companion = true;
 
 int wx = -3, wy = 480, wo = 255;
 
