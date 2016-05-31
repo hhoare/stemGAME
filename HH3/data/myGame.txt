@@ -1,2888 +1,3159 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\margl1440\margr1440\vieww13560\viewh15240\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+/* @pjs preload="data/hhtitle.png, data/hhlink.png, data/hhenemies_items_chars.png, data/hhmaptiles.png"; */
 
-\f0\fs24 \cf0 /* @pjs preload="data/hhtitle.png, data/hhlink.png, data/hhenemies_items_chars.png, data/hhmaptiles.png"; */\
-\
-int soundVar = 0;\
-\
-\
-PFont myfont;\
-\
-int page = 0;\
-\
-int frogX = 32*5;\
-int frogY = 32*8;\
-\
-float speed=8;\
-\
-int cameraX;\
-int cameraY;\
-//kutfityf\
-\
-//ASSUMING FROG VELOCITY = 40\
-int mapWidth, mapHeight;\
-//\
-int r=0;\
-int l=0;\
-int u=0;\
-int d=0;\
-\
-int type=8;\
-\
-int mapVar;\
-\
-void setup() \{\
-  surface.setResizable(true);\
-  size(640, 480);//ASSUMING FROG VELOCITY = 40\
-  frameRate(30);\
-  noStroke();\
-  //  String[] fontList = PFont.list();    \
-  //  printArray(fontList);\
-\
-  myfont = createFont("LucidaHandwriting-Italic", 32);\
-\
-  //  addCurley("map2num.txt");\
-\
-  loadLinkSprites();\
-  loadImages2(); // enemies\
-\
-\
-\
-\
-\
-  populateArrays();\
-\
-    playSound(1);\
-\}\
-float healthmax = 3;\
-float health = healthmax;\
-int healthcounter = 0;\
-//if healthcounter is 0 and you collide, then health -=.5 and health counter = 1;\
-\
-long tick;\
-\
-\
-boolean dGrid;\
-\
-\
-int gx, gy;\
-\
-boolean talk = false;   // var for drawing dialogue box at the bottom of the screen\
-int conversation = 1;\
-\
-void draw() \{\
-\
-  if (page==0) \{\
-    drawTitle();\
-  \}\
-  if (page == 1) \{\
-    story();\
-  \}\
-\
-  if (page == 2) \{\
-    gamePlay();\
-  \}\
-  if (page == 3) \{\
-     playSound(4);\
-    win();\
-  \}\
-\
-  if ( talk == false) \{\
-    surface.setSize(640, 480);\
-    //    dialogue.remove(this);\
-  \}\
-\
-  if ( talk == true) \{\
-    surface.setSize(640, 980);\
-    di0.update();\
-    if ( conversation == 1) \{\
-    \}\
-  \}\
-\}\
-\
-\
-\
-\
-\
-\
-int types =2;\
-\
-void bordersAndCamera() \{\
-  //left\
-  if (frogX < 0) \{\
-    frogX = 0;\
-  \}\
-  //right       \
-  if (frogX > mapWidth - 40) \{\
-    frogX = mapWidth - 40;\
-  \}\
-  //top      \
-  if (frogY < 0) \{\
-    frogY = 0;\
-  \}\
-  //bottom     \
-  if (frogY > mapHeight - 40) \{\
-    frogY = mapHeight - 40;\
-  \}\
-\
-  //horizontal camera \
-  if (frogX > cameraX + 32*12 && cameraX < (mapWidth - width)) \{//ASSUMING FROG VELOCITY = 40\
-    cameraX = frogX - 32*12;\
-  \}\
-\
-  if (frogX < cameraX + 32*8 && cameraX > 0) \{//ASSUMING FROG VELOCITY = 40\
-    cameraX = frogX - 32*8;\
-  \}\
-  //vertical camera \
-  if (frogY > cameraY + 32*10 && cameraY < (mapHeight - height)) \{//ASSUMING FROG VELOCITY = 40\
-    cameraY = frogY - 32*10;\
-  \}\
-  if (frogY < cameraY + 32*8 && cameraY > 0) \{//ASSUMING FROG VELOCITY = 40\
-    cameraY = frogY - 32*8;\
-  \}\
-  // println(cameraX);\
-\}\
-\
-\
-\
-\
-\
-//PUT ALL THIS STUFF IN THE INPUT TAB\
-\
-\
-\
-\
-void mouseReleased() \{\
-  //?\
-\}\
-\
-\
-\
-//PUT ALL THIS STUFF IN THE ART TAB\
-\
-\
-\
-\
-\
-\
-\
-//  KEYBOARD STUFF GOES HERE\
-\
-\
-\
-\
-\
-\
-\
-\
-//OK LOL\
-int goUp, goDown, goLeft, goRight;\
-void keyPressed() \{\
-  if (key == 'l') \{\
-    talk = true;\
-  \}\
-  if (key == 'k') \{\
-    talk = false;\
-  \}\
-  if (key == 'o') \{\
-    page = 3;\
-  \}\
-\
-  if (page==0) \{\
-\
-    if (key == ' ' ) \{\
-      page=1;\
-    \}\
-  \} \
-\
-\
-  if (page == 1) \{\
-    if (key == ENTER ) \{\
-      page=2;\
-      mapVar=1;\
-      loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store\
-      frogX = 56*32;\
-      frogY = 46*32;\
-      cameraY = 1120;\
-      cameraX = 1440;\
-      //bordersAndCamera();\
-        playSound(2);\
-    \}\
-  \}\
-\
-\
-  if (page == 2) \{\
-\
-    if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) \{\
-      types+=4;\
-    \}\
-\
-    if (mapVar==2 && key == 'b' && gx==11 && gy ==12 && coins>=1000) \{\
-      healthmax++;\
-      health=healthmax;\
-      coins-=1000;\
-    \}\
-    if (key == '5') \{\
-\
-      coins+=500;\
-    \}\
-\
-\
-    if ((key == 'w' || keyCode == UP) && talk == false) \{\
-      goUp = 1;\
-    \}\
-\
-    if ((key == 's'|| keyCode == DOWN) && talk == false) \{\
-      goDown = 1;\
-    \}\
-\
-    if ((key == 'a'|| keyCode == LEFT) && talk == false) \{\
-      goLeft = 1;\
-    \}\
-    if ((key == 'd'|| keyCode == RIGHT) && talk == false) \{\
-      goRight = 1;\
-    \}\
-\
-    if (key == 'g')\
-      dGrid = !dGrid;\
-  \}\
-\}\
-\
-void keyReleased() \{\
-\
-  if ((key == 'z' || key == 'Z' || key == ' ') && types> 4 ) \{\
-    types-=4;\
-  \}\
-\
-  if (key == 'w' || keyCode == UP) \{\
-    goUp = 0;\
-  \}\
-\
-  if (key == 's'|| keyCode == DOWN) \{\
-    goDown = 0;\
-  \}\
-\
-  if (key == 'a'|| keyCode == LEFT) \{\
-    goLeft = 0;\
-  \}\
-  if (key == 'd'|| keyCode == RIGHT) \{\
-    goRight = 0;\
-  \}\
-\}\
-\
-int storeVar=1;\
-\
-int completion=0;\
-\
-int d1;\
-int d2;\
-int d3;\
-\
-\
-int cheapFix;\
-\
-void gamePlay() \{\
-\
-\
-  if (page == 2) \{\
-    background(-206680);\
-  \}\
-\
-  gx = (int)((frogX+16)/32);\
-  gy = (int)((frogY+16)/32);\
-\
-\
-  if (goUp == 1) \{\
-\
-    if (u == 0 && checkDir(gx, gy, 1)) \{\
-      u = 1;\
-      types=1;\
-    \}\
-  \} else if (goDown == 1) \{\
-\
-    if (d == 0 && checkDir(gx, gy, 2)) \{\
-      d = 1;\
-      types =2;\
-    \}\
-  \} else if (goLeft== 1) \{\
-    if (l == 0 && checkDir(gx, gy, 3)) \{\
-      l = 1;\
-      types =3;\
-    \}\
-  \} else if (goRight== 1) \{\
-    if (r == 0 && checkDir(gx, gy, 4)) \{\
-      r = 1;\
-      types =4;\
-    \}\
-  \}\
-\
-\
-\
-\
-\
-\
-\
-\
-  //if (keyPressed) \{\
-  // keyPressed1();\
-  // \}//\} else if (uFix == 1 || dFix == 1 | lFix == 1 || rFix == 1) \{\
-  //   keyPressed2();\
-  /// \}\
-\
-  moveFrog();\
-  if (cheapFix>1) \{\
-    bordersAndCamera();\
-  \}\
-\
-  if (dGrid)\
-    drawGrid();\
-\
-\
-  map1();//draw any map \
-\
-\
-  if (mapVar == 2) \{\
-    // coins=1000;\
-    image(heartfull, 11*32-cameraX, 8*32-cameraY, 32, 32);\
-    fill(255);\
-    textSize(25);\
-    text("1000", 10.5*32-cameraX, 10.75*32-cameraY);\
-    text("One more heart", 8.5*32-cameraX, 9.75*32-cameraY);\
-    image(grRupee, 125.*32-cameraX, 10*32-cameraY, 32, 32);\
-    text("'B' to purchase", 8.5*32-cameraX, 11.5*32-cameraY);\
-  \}\
-\
-  if (healthcounter%2 == 0) \{\
-    drawLink();\
-  \}\
-\
-  if (health == 0) \{\
-\
-    //  populateArrays();\
-    types = 2;\
-     playSound(1);\
-    // console.log("bad");\
-    page=1;\
-    loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store\
-    completion = 0;\
-    d1=0;\
-    d2=0;\
-    d3=0;\
-    healthmax=3;\
-    health=healthmax;\
-    coins=0;\
-    mapVar=1;\
-    frogX = 56*32;\
-    frogY = 46*32;\
-    // cameraY = 1120;\
-    // cameraX = 1440;\
-    cheapFix=0;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-\
-  if (mapVar == 1 ) \{                               //OVERWORLD\
-    for (int i=0; i < enemies.size (); i++) \{\
-      enemies.get(i).update();\
-    \}\
-  \}\
-\
-  if (mapVar == 3) \{                               //dungeon 1 to the right \
-    for (int i=0; i < enemiesD1.size (); i++) \{\
-      enemiesD1.get(i).update();\
-    \}\
-  \}\
-  if (mapVar == 4) \{                               //dungeon 1 to the right \
-    for (int i=0; i < enemiesD2.size (); i++) \{\
-      enemiesD2.get(i).update();\
-    \}\
-  \}\
-  if (mapVar == 5) \{                               //dungeon 1 to the right \
-    for (int i=0; i < enemiesD3.size (); i++) \{\
-      enemiesD3.get(i).update();\
-    \}\
-  \}\
-  if (mapVar == 6) \{                               //dungeon 1 to the right \
-    for (int i=0; i < enemiesD4.size (); i++) \{\
-      enemiesD4.get(i).update();\
-    \}\
-  \}\
-\
-  //////////////////////// ADD REST OF CALLING ENEMY CLASSES\
-\
-\
-\
-  for (int i=0; i < drops.size (); i++) \{\
-    drops.get(i).update();\
-  \}\
-\
-  drawHealth();\
-  drawCoins();\
-\
-  fill(0);\
-  textSize(30);\
- // text(gx, 500, 200);\
- // text(gy, 500, 250);\
-  //  fill(255);\
-  //  text(types, 500, 200);\
-  //  text(completion, 500, 250);\
-\
-\
-  if ((mapVar == 1 || mapVar == 7) &&  gx == 52 && gy == 37) \{\
-    mapVar = 2;\
-    loadLevelFromText("store.txt");    //change to store.txt to load the store\
-    coincolor=255;\
-    frogX = 32*6;\
-    frogY = 32*16;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    //  bordersAndCamera();\
-    cheapFix = 0;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-  if (mapVar == 2 && gx == 6 && gy ==17 ) \{            /////////////////STORE EXIT\
-    if (storeVar==1) \{\
-      mapVar = 1;\
-      if ((d1+d2+d3)<3) \{\
-        loadLevelFromText("OVERWORLD.txt");\
-      \} else \{\
-        loadLevelFromText("OVERWORLD2.txt");\
-      \}\
-      frogX = 52*32;\
-      frogY = 38*32;\
-      cameraX = 0;//32*2;\
-      cameraY = 0;//32*5;\
-      u=0;\
-      d=0;\
-      r=0;\
-      l=0;\
-    \}\
-    if (storeVar==3) \{\
-      mapVar = 3;\
-      loadLevelFromText("d4.txt"); \
-      frogX = 18*32;\
-      frogY = 40*32;\
-      cameraX = 0;//32*2;\
-      cameraY = 0;//32*5;\
-      coincolor=0;\
-      u=0;\
-      d=0;\
-      r=0;\
-      l=0;\
-    \}\
-    if (storeVar==4) \{\
-      mapVar = 4;\
-      loadLevelFromText("d2.txt"); \
-      frogX = 18*32;\
-      frogY = 40*32;\
-      cameraX = 0;//32*2;\
-      cameraY = 0;//32*5;\
-      coincolor=0;\
-      u=0;\
-      d=0;\
-      r=0;\
-      l=0;\
-    \}\
-    if (storeVar==5) \{\
-      mapVar = 5;\
-      loadLevelFromText("d3.txt"); \
-      frogX = 3*32;\
-      frogY = 40*32;\
-      cameraX = 0;//32*2;\
-      cameraY = 0;//32*5;\
-      coincolor=0;\
-      u=0;\
-      d=0;\
-      r=0;\
-      l=0;\
-    \}\
-    if (storeVar==6) \{\
-      mapVar = 6;\
-      loadLevelFromText("d1.txt"); \
-      frogX = 23*32;\
-      frogY = 64*32;\
-      cameraX = 0;//32*2;\
-      cameraY = 0;//32*5;\
-      coincolor=0;\
-      u=0;\
-      d=0;\
-      r=0;\
-      l=0;\
-    \}\
-  \}\
-\
-\
-\
-\
-\
-  if (mapVar == 1 &&  gx == 116 && gy == 39) \{\
-      playSound(3);\
-    mapVar = 3;\
-    storeVar=3;\
-    loadLevelFromText("d4.txt");    \
-    coincolor=0;\
-    frogX = 32*22;\
-    frogY = 32*42;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-  if (mapVar == 1 &&  gx == 2 && gy == 48) \{\
-      playSound(3);\
-    mapVar = 4;\
-    storeVar=4;\
-    loadLevelFromText("d2.txt");    \
-    coincolor=0;\
-    frogX = 32*22;\
-    frogY = 32*42;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-  if (mapVar == 1 &&  gx == 19 && gy == 9) \{\
-       playSound(3);\
-    mapVar = 5;\
-    storeVar=5;\
-    loadLevelFromText("d3.txt");    \
-    coincolor=0;\
-    frogX = 32*7;\
-    frogY = 32*42;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0; \
-    l=0;\
-  \}\
-  if (mapVar == 1 &&  (gx == 106 ||gx == 107 ||gx == 108 ||gx == 109) && gy == 4) \{   // this is the boss dungeon \
-       playSound(3);\
-    mapVar = 6;\
-    storeVar=6;\
-    loadLevelFromText("d1.txt");    \
-    coincolor=0;\
-    frogX = 32*27;\
-    frogY = 32*67;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  if (mapVar == 3 &&  gx == 18 && gy == 39) \{    \
-    mapVar = 2;\
-    loadLevelFromText("store.txt");    \
-    coincolor=255;\
-    frogX = 32*6;\
-    frogY = 32*16;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  if (mapVar == 5 &&  gx == 3 && gy == 39) \{    \
-    mapVar = 2;\
-    loadLevelFromText("store.txt");    \
-    coincolor=255;\
-    frogX = 32*6;\
-    frogY = 32*16;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-\
-  if (mapVar == 6 &&  gx == 23 && gy == 63) \{    \
-    mapVar = 2;\
-    loadLevelFromText("store.txt");    \
-    coincolor=255;\
-    frogX = 32*6;\
-    frogY = 32*16;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-  if (mapVar == 4 &&  gx == 18 && gy == 39) \{    \
-    mapVar = 2;\
-    loadLevelFromText("store.txt");    \
-    coincolor=255;\
-    frogX = 32*6;\
-    frogY = 32*16;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  ////////////////////////////////////// DUNGEON EXITS\
-\
-  if (mapVar == 3 &&  gx == 1 && gy == 11) \{   \
-      playSound(2);\
-\
-    completion++;\
-    d1=1;\
-    mapVar = 1;\
-    storeVar=1;\
-    if ((d1+d2+d3)<3) \{\
-      loadLevelFromText("OVERWORLD.txt");\
-    \} else \{\
-      loadLevelFromText("OVERWORLD2.txt");\
-    \}\
-    coincolor=255;\
-    frogX = 32*116;\
-    frogY = 32*40;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  if (mapVar == 4 &&  gx == 1 && gy == 16) \{ \
-      playSound(2);\
-\
-    completion++;\
-    d2=1;\
-    mapVar = 1;\
-    storeVar=1;\
-    if ((d1+d2+d3)<3) \{\
-      loadLevelFromText("OVERWORLD.txt");\
-    \} else \{\
-      loadLevelFromText("OVERWORLD2.txt");\
-    \}   \
-    coincolor=255;\
-    frogX = 32*1;\
-    frogY = 32*48;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  if (mapVar == 5 &&  gx == 19 && gy == 43) \{ \
-      playSound(2);\
-\
-    completion++;\
-    d3=1;\
-    mapVar = 1;\
-    storeVar=1;\
-    if ((d1+d2+d3)<3) \{\
-      loadLevelFromText("OVERWORLD.txt");\
-    \} else \{\
-      loadLevelFromText("OVERWORLD2.txt");\
-    \}   \
-    coincolor=255;\
-    frogX = 32*19;\
-    frogY = 32*10;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  if (mapVar == 6 &&  gx == 1 && gy == 1) \{    \
-    completion++;\
-\
-    mapVar = 1;\
-    storeVar=1;\
-    if (completion>3) \{\
-      page =3;\
-    \}    \
-    coincolor=255;\
-    frogX = 32*108;\
-    frogY = 32*5;\
-    cameraX = 0;//32*2;\
-    cameraY = 0;//32*5;\
-    u=0;\
-    d=0;\
-    r=0;\
-    l=0;\
-  \}\
-\
-  cheapFix++;\
-\}\
-\
-\
-\
-//\
-void map1() \{\
-  int q = -1;\
-  for (int r = 0; r < mapData.length; r++) \{\
-    for (int c = 0; c < mapData[0].length; c++) \{    \
-      q = mapData[r][c];\
-      if (q!= 2 && c*grid-cameraX < 32*20   &&   c*grid-cameraX> -32   && r*grid-cameraY < 32*15   &&   r*grid-cameraY> -32)\
-        image(mt[q], c*grid-cameraX, r*grid-cameraY, grid, grid); //first 30 is columns, second is rows\
-    \}\
-  \}\
-\}\
-//Pfont titlefont = createFont("lucidahandwriting.ttf",32);\
-\
-void drawTitle() \{\
-  mapVar=0;\
-  background(260, 207, 203);\
-  image(title, 0, 0, 320*2, 240*2);\
-  fill(0);\
-  textSize(50);\
-  textFont(myfont, 64);\
-  text("LINK'S", 200, 150);\
-  text("STORY", 195, 210);\
-  //stroke(80);\
-  textSize(20);\
-  text("PRESS SPACE TO BEGIN", 210-25, 300);\
-  textSize(15);\
-  text("By Henry Hoare", 265-25, 245);\
-\}\
-\
-void loadLinkSprites() \{\
-  PImage q = loadImage("data/hhmaptiles.png");\
-  for (int r = 0; r < mt.length; r++) \{\
-    mt[r] = new PImage(16, 16);\
-    mt[r].copy(q, 1+17* ((int)(r%18)), 1 + 17* ((int)(r/18)), 16, 16, 0, 0, 16, 16);   //this loads sprite sheet\
-  \}\
-\
-\
-\
-\
-\
-\
-  q= loadImage("data/hhlink.png");\
-\
-\
-\
-  // qqq.updatePixels();\
-\
-\
-  up1= new PImage(16, 16, ARGB);\
-  up1.copy(q, 32, 0, 16, 16, 0, 0, 16, 16);\
-  up2= new PImage(16, 16, ARGB);\
-  up2.copy(q, 32, 16, 16, 16, 0, 0, 16, 16);\
-  up3= new PImage(16, 32, ARGB);\
-  up3.copy(q, 64, 0, 16, 32, 0, 0, 16, 32);\
-\
-  down1= new PImage(16, 16, ARGB);\
-  down1.copy(q, 0, 0, 16, 16, 0, 0, 16, 16);\
-  down2= new PImage(16, 16, ARGB);\
-  down2.copy(q, 0, 16, 16, 16, 0, 0, 16, 16);\
-  down3= new PImage(16, 32, ARGB);\
-  down3.copy(q, 80, 0, 16, 32, 0, 0, 16, 32);\
-\
-  left1= new PImage(16, 16, ARGB);\
-  left1.copy(q, 16, 0, 16, 16, 0, 0, 16, 16);\
-  left2= new PImage(16, 16, ARGB);\
-  left2.copy(q, 16, 16, 16, 16, 0, 0, 16, 16);\
-  left3= new PImage(32, 16, ARGB);\
-  left3.copy(q, 64, 32, 32, 16, 0, 0, 32, 16);\
-\
-  right1= new PImage(16, 16, ARGB);\
-  right1.copy(q, 48, 0, 16, 16, 0, 0, 16, 16);\
-  right2= new PImage(16, 16, ARGB);\
-  right2.copy(q, 48, 16, 16, 16, 0, 0, 16, 16);\
-  right3= new PImage(32, 16, ARGB);\
-  right3.copy(q, 64, 48, 32, 16, 0, 0, 32, 16);\
-\
-\
-  bup1= new PImage(16, 16, ARGB);\
-  bup1.copy(q, 32+96, 0, 16, 16, 0, 0, 16, 16);\
-  bup2= new PImage(16, 16, ARGB);\
-  bup2.copy(q, 32+96, 16, 16, 16, 0, 0, 16, 16);\
-  bup3= new PImage(16, 32, ARGB);\
-  bup3.copy(q, 64+96, 0, 16, 32, 0, 0, 16, 32);\
-\
-  bdown1= new PImage(16, 16, ARGB);\
-  bdown1.copy(q, 0+96, 0, 16, 16, 0, 0, 16, 16);\
-  bdown2= new PImage(16, 16, ARGB);\
-  bdown2.copy(q, 0+96, 16, 16, 16, 0, 0, 16, 16);\
-  bdown3= new PImage(16, 32, ARGB);\
-  bdown3.copy(q, 80+96, 0, 16, 32, 0, 0, 16, 32);\
-\
-  bleft1= new PImage(16, 16, ARGB);\
-  bleft1.copy(q, 16+96, 0, 16, 16, 0, 0, 16, 16);\
-  bleft2= new PImage(16, 16, ARGB);\
-  bleft2.copy(q, 16+96, 16, 16, 16, 0, 0, 16, 16);\
-  bleft3= new PImage(32, 16, ARGB);\
-  bleft3.copy(q, 64+96, 32, 32, 16, 0, 0, 32, 16);\
-\
-  bright1= new PImage(16, 16, ARGB);\
-  bright1.copy(q, 48+96, 0, 16, 16, 0, 0, 16, 16);\
-  bright2= new PImage(16, 16, ARGB);\
-  bright2.copy(q, 48+96, 16, 16, 16, 0, 0, 16, 16);\
-  bright3= new PImage(32, 16, ARGB);\
-  bright3.copy(q, 64+96, 48, 32, 16, 0, 0, 32, 16);\
-\}\
-\
-\
-\
-void populateArrays() \{\
-  enemies.add(new ENEMY(25, 35, 31, 48, 22, 44, 1)); //grid x, grid y, ub, db, lb, rb, skin\
-  enemies.add(new ENEMY(36, 35, 31, 48, 22, 44, 1));\
-  enemies.add(new ENEMY(36, 47, 31, 48, 22, 44, 1));\
-  enemies.add(new ENEMY(25, 47, 31, 48, 22, 44, 1));\
-  enemies.add(new ENEMY(23, 41, 31, 48, 22, 44, 2));\
-  enemies.add(new ENEMY(77, 38, 36, 48, 70, 87, 1));\
-  enemies.add(new ENEMY(82, 41, 36, 48, 70, 87, 1));\
-  enemies.add(new ENEMY(77, 45, 36, 48, 70, 87, 1));\
-  enemies.add(new ENEMY(93, 42, 36, 48, 88, 93, 1));\
-  enemies.add(new ENEMY(105, 42, 36, 48, 100, 106, 1));\
-  enemies.add(new ENEMY(113, 46, 36, 48, 109, 118, 1));\
-\
-  enemies.add(new ENEMY(16, 47, 31, 48, 1, 17, 1));\
-  enemies.add(new ENEMY(5, 47, 31, 48, 1, 17, 2));\
-  enemies.add(new ENEMY(2, 37, 31, 48, 1, 17, 1));\
-  enemies.add(new ENEMY(15, 32, 31, 48, 1, 17, 1));\
-\
-  enemies.add(new ENEMY(14, 26, 23, 31, 1, 15, 1));\
-  enemies.add(new ENEMY(8, 29, 23, 31, 1, 15, 1));\
-  enemies.add(new ENEMY(2, 26, 23, 31, 1, 15, 2));\
-\
-  enemies.add(new ENEMY(1, 15, 0, 22, 0, 30, 1));\
-  enemies.add(new ENEMY(5, 11, 0, 22, 0, 30, 1));\
-  enemies.add(new ENEMY(2, 8, 0, 22, 0, 30, 1));\
-  enemies.add(new ENEMY(2, 1, 0, 22, 0, 30, 2));\
-  enemies.add(new ENEMY(5, 5, 0, 22, 0, 30, 1));\
-  enemies.add(new ENEMY(5, 11, 0, 22, 0, 30, 1));\
-  enemies.add(new ENEMY(18, 0, 0, 22, 0, 30, 1));\
-  enemies.add(new ENEMY(18, 1, 0, 22, 0, 30, 2));\
-  enemies.add(new ENEMY(18, 2, 0, 22, 0, 30, 1));\
-\
-  enemies.add(new ENEMY(18, 12, 6, 15, 14, 24, 2));\
-  enemies.add(new ENEMY(20, 12, 6, 15, 14, 24, 2));\
-\
-  enemies.add(new ENEMY(22, 27, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(22, 24, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(27, 26, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(31, 25, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(33, 21, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(37, 25, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(40, 22, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(41, 22, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(42, 26, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(47, 25, 20, 29, 21, 51, 1));\
-  enemies.add(new ENEMY(49, 22, 20, 29, 21, 51, 1));\
-\
-  enemies.add(new ENEMY(56, 24, 20, 31, 53, 66, 1));\
-  enemies.add(new ENEMY(56, 25, 20, 31, 53, 66, 1));\
-  enemies.add(new ENEMY(59, 28, 20, 31, 53, 66, 1));\
-  enemies.add(new ENEMY(59, 21, 20, 31, 53, 66, 1));\
-  enemies.add(new ENEMY(62, 24, 20, 31, 53, 66, 1));\
-  enemies.add(new ENEMY(62, 25, 20, 31, 53, 66, 1));\
-\
-  enemies.add(new ENEMY(78, 21, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(78, 25, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(78, 29, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(82, 22, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(82, 25, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(82, 28, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(86, 24, 20, 31, 68, 89, 1));\
-  enemies.add(new ENEMY(86, 25, 20, 31, 68, 89, 1));\
-\
-  enemies.add(new ENEMY(38, 14, 0, 18, 32, 54, 2));\
-  enemies.add(new ENEMY(38, 8, 0, 18, 32, 54, 2));\
-  enemies.add(new ENEMY(42, 17, 0, 18, 32, 54, 2));\
-  enemies.add(new ENEMY(42, 5, 0, 18, 32, 54, 2));\
-  enemies.add(new ENEMY(46, 8, 0, 18, 32, 54, 2));\
-  enemies.add(new ENEMY(46, 14, 0, 18, 32, 54, 2));\
-  enemies.add(new ENEMY(51, 1, 0, 18, 32, 54, 3));\
-\
-  enemies.add(new ENEMY(64, 11, 0, 17, 56, 82, 1));\
-  enemies.add(new ENEMY(70, 11, 0, 17, 56, 82, 3));\
-  enemies.add(new ENEMY(76, 11, 0, 17, 56, 82, 1));\
-  enemies.add(new ENEMY(70, 15, 0, 17, 56, 82, 1));\
-  enemies.add(new ENEMY(70, 7, 0, 17, 56, 82, 1));\
-  enemies.add(new ENEMY(79, 1, 0, 17, 56, 82, 1));\
-\
-  enemies.add(new ENEMY(87, 1, 0, 18, 84, 95, 3));\
-  enemies.add(new ENEMY(89, 5, 0, 18, 84, 95, 1));\
-  enemies.add(new ENEMY(93, 4, 0, 18, 84, 95, 1));\
-  enemies.add(new ENEMY(95, 1, 0, 18, 84, 95, 3));\
-  enemies.add(new ENEMY(89, 11, 0, 18, 84, 95, 2));\
-  enemies.add(new ENEMY(92, 11, 0, 18, 84, 95, 1));\
-  enemies.add(new ENEMY(89, 14, 0, 18, 84, 95, 1));\
-  enemies.add(new ENEMY(92, 14, 0, 18, 84, 95, 2));\
-\
-  enemies.add(new ENEMY(106, 7, 2, 9, 98, 95, 117));\
-  enemies.add(new ENEMY(109, 7, 2, 9, 98, 95, 117));\
-\
-  enemies.add(new ENEMY(93, 23, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(93, 26, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(97, 19, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(99, 16, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(99, 30, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(99, 33, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(100, 24, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(103, 20, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(106, 17, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(107, 17, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(108, 17, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(109, 17, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(107, 20, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(108, 20, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(107, 28, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(108, 27, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(112, 20, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(112, 33, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(115, 25, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(116, 23, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(116, 30, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(116, 17, 15, 35, 89, 119, 1));\
-  enemies.add(new ENEMY(117, 18, 15, 35, 89, 119, 1));\
-\
-\
-  enemiesD1.add(new ENEMY(33, 40, 37, 44, 31, 44, 2));\
-  enemiesD1.add(new ENEMY(39, 40, 37, 44, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(40, 37, 37, 44, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(40, 43, 37, 44, 31, 44, 1));\
-\
-  enemiesD1.add(new ENEMY(35, 34, 28, 35, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(35, 31, 28, 35, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(35, 28, 28, 35, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(41, 31, 28, 35, 31, 44, 2));\
-\
-  enemiesD1.add(new ENEMY(39, 22, 19, 26, 31, 44, 2));\
-  enemiesD1.add(new ENEMY(35, 22, 19, 26, 31, 44, 2));\
-  enemiesD1.add(new ENEMY(34, 19, 19, 26, 31, 44, 3));\
-  enemiesD1.add(new ENEMY(40, 19, 19, 26, 31, 44, 3));\
-\
-  enemiesD1.add(new ENEMY(31, 14, 10, 17, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(35, 13, 10, 17, 31, 44, 2));\
-  enemiesD1.add(new ENEMY(35, 10, 10, 17, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(39, 10, 10, 17, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(39, 13, 10, 17, 31, 44, 2));\
-  enemiesD1.add(new ENEMY(43, 14, 10, 17, 31, 44, 1));\
-\
-  enemiesD1.add(new ENEMY(33, 3, 1, 8, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(35, 5, 1, 8, 31, 44, 1));\
-  enemiesD1.add(new ENEMY(38, 2, 1, 8, 31, 44, 8));\
-  enemiesD1.add(new ENEMY(39, 6, 1, 8, 31, 44, 8));\
-  enemiesD1.add(new ENEMY(42, 3, 1, 8, 31, 44, 1));\
-\
-  enemiesD1.add(new ENEMY(25, 3, 1, 8, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(22, 2, 1, 8, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(21, 5, 1, 8, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(16, 4, 1, 8, 16, 28, 3));\
-\
-  enemiesD1.add(new ENEMY(19, 11, 10, 17, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(17, 15, 10, 17, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(22, 13, 10, 17, 16, 28, 3));\
-  enemiesD1.add(new ENEMY(22, 15, 10, 17, 16, 28, 8));\
-  enemiesD1.add(new ENEMY(25, 11, 10, 17, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(27, 15, 10, 17, 16, 28, 8));\
-\
-  enemiesD1.add(new ENEMY(18, 21, 19, 26, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(18, 23, 19, 26, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(22, 22, 19, 26, 16, 28, 3));\
-  enemiesD1.add(new ENEMY(26, 21, 19, 26, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(26, 23, 19, 26, 16, 28, 1));\
-\
-  enemiesD1.add(new ENEMY(19, 29, 28, 35, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(20, 32, 28, 35, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(22, 34, 28, 35, 16, 28, 3));\
-  enemiesD1.add(new ENEMY(24, 32, 28, 35, 16, 28, 1));\
-  enemiesD1.add(new ENEMY(25, 29, 28, 35, 16, 28, 1));\
-\
-  enemiesD1.add(new ENEMY(4, 31, 28, 35, 1, 13, 3));\
-  enemiesD1.add(new ENEMY(7, 31, 28, 35, 1, 13, 2));\
-  enemiesD1.add(new ENEMY(7, 29, 28, 35, 1, 13, 8));\
-  enemiesD1.add(new ENEMY(7, 33, 28, 35, 1, 13, 8));\
-  enemiesD1.add(new ENEMY(10, 33, 28, 35, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(10, 29, 28, 35, 1, 13, 1));\
-\
-  enemiesD1.add(new ENEMY(5, 24, 11, 26, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(9, 24, 11, 26, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(3, 22, 11, 26, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(11, 22, 11, 26, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(7, 21, 11, 26, 1, 13, 8));\
-  enemiesD1.add(new ENEMY(3, 19, 11, 26, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(11, 19, 11, 26, 1, 13, 1));\
-  enemiesD1.add(new ENEMY(3, 12, 11, 26, 1, 13, 3));\
-  enemiesD1.add(new ENEMY(5, 14, 11, 26, 1, 13, 2));\
-  enemiesD1.add(new ENEMY(7, 12, 11, 26, 1, 13, 3));\
-  enemiesD1.add(new ENEMY(9, 14, 11, 26, 1, 13, 2));\
-  enemiesD1.add(new ENEMY(11, 12, 11, 26, 1, 13, 3));\
-\
-\
-  enemiesD2.add(new ENEMY(33, 37, 37, 44, 31, 43, 8));\
-  // enemiesD2.add(new ENEMY(31, 37, 37, 44, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(31, 43, 37, 44, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(37, 39, 37, 44, 31, 43, 6));\
-  enemiesD2.add(new ENEMY(41, 37, 37, 44, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(43, 42, 37, 44, 31, 43, 8));\
-\
-  enemiesD2.add(new ENEMY(32, 33, 28, 35, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(33, 30, 28, 35, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(37, 31, 28, 35, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(37, 28, 28, 35, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(41, 30, 28, 35, 31, 43, 1));\
-  enemiesD2.add(new ENEMY(42, 33, 28, 35, 31, 43, 1));\
-\
-  // enemiesD2.add(new ENEMY(42, 33, 28, 35, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(22, 29, 28, 35, 16, 28, 2));\
-  enemiesD2.add(new ENEMY(19, 30, 28, 35, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(19, 33, 28, 35, 16, 28, 8));\
-\
-  enemiesD2.add(new ENEMY(19, 24, 19, 26, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(17, 21, 19, 26, 16, 28, 8));\
-  enemiesD2.add(new ENEMY(22, 21, 19, 26, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(25, 23, 19, 26, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(28, 21, 19, 26, 16, 28, 2));\
-\
-\
-  enemiesD2.add(new ENEMY(22, 13, 10, 17, 16, 28, 2));\
-  enemiesD2.add(new ENEMY(17, 13, 10, 17, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(27, 14, 10, 17, 16, 28, 1));\
-  enemiesD2.add(new ENEMY(22, 10, 10, 17, 16, 28, 8));\
-\
-  enemiesD2.add(new ENEMY(34, 11, 10, 17, 31, 48, 8));\
-  enemiesD2.add(new ENEMY(34, 15, 10, 17, 31, 48, 1));\
-  enemiesD2.add(new ENEMY(37, 13, 10, 17, 31, 48, 2));\
-  enemiesD2.add(new ENEMY(40, 11, 10, 17, 31, 48, 1));\
-  enemiesD2.add(new ENEMY(40, 15, 10, 17, 31, 48, 8));\
-\
-  enemiesD2.add(new ENEMY(41, 4, 0, 8, 31, 48, 8));\
-  enemiesD2.add(new ENEMY(37, 4, 0, 8, 31, 48, 8));\
-  enemiesD2.add(new ENEMY(33, 4, 0, 8, 31, 48, 8));\
-  enemiesD2.add(new ENEMY(37, 1, 0, 8, 31, 48, 2));\
-\
-  enemiesD2.add(new ENEMY(1, 1, 0, 8, 0, 29, 2));\
-  enemiesD2.add(new ENEMY(2, 2, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(3, 3, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(4, 4, 0, 8, 0, 29, 2));\
-  enemiesD2.add(new ENEMY(3, 5, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(2, 6, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(1, 7, 0, 8, 0, 29, 2));\
-  enemiesD2.add(new ENEMY(8, 4, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(9, 4, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(10, 4, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(11, 4, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(12, 4, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(13, 4, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(11, 2, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(11, 6, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(18, 1, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(18, 2, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(18, 3, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(18, 4, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(18, 5, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(18, 6, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(18, 7, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(22, 4, 0, 8, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(25, 2, 0, 8, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(25, 6, 0, 8, 0, 29, 8));\
-\
-  enemiesD2.add(new ENEMY(7, 10, 10, 16, 0, 29, 1));\
-  enemiesD2.add(new ENEMY(9, 12, 10, 16, 0, 29, 8));\
-  enemiesD2.add(new ENEMY(5, 14, 10, 16, 0, 29, 2));\
-  enemiesD2.add(new ENEMY(7, 16, 10, 16, 0, 29, 3));\
-  enemiesD2.add(new ENEMY(9, 14, 10, 16, 0, 29, 2));\
-  enemiesD2.add(new ENEMY(5, 12, 10, 16, 0, 29, 8));\
-  // enemiesD2.add(new ENEMY(1, 10, 10, 16, 0, 29, 1));\
-\
-  enemiesD2.add(new ENEMY(11, 30, 28, 34, 0, 14, 1));\
-  enemiesD2.add(new ENEMY(1, 31, 28, 34, 0, 14, 3));\
-  enemiesD2.add(new ENEMY(2, 31, 28, 34, 0, 14, 2));\
-  enemiesD2.add(new ENEMY(5, 30, 28, 34, 0, 14, 2));\
-  enemiesD2.add(new ENEMY(5, 32, 28, 34, 0, 14, 2));\
-  enemiesD2.add(new ENEMY(7, 31, 28, 34, 0, 14, 8));\
-  enemiesD2.add(new ENEMY(8, 31, 28, 34, 0, 14, 8));\
-  enemiesD2.add(new ENEMY(9, 31, 28, 34, 0, 14, 8));\
-  enemiesD2.add(new ENEMY(9, 30, 28, 34, 0, 14, 8));\
-  enemiesD2.add(new ENEMY(9, 32, 28, 34, 0, 14, 8));\
-  enemiesD2.add(new ENEMY(11, 30, 28, 34, 0, 14, 1));\
-  enemiesD2.add(new ENEMY(11, 32, 28, 34, 0, 14, 1));\
-  enemiesD2.add(new ENEMY(13, 31, 28, 34, 0, 14, 3));\
-\
-\
-\
-  enemiesD3.add(new ENEMY(3, 31, 28, 35, 0, 13, 4));\
-  enemiesD3.add(new ENEMY(7, 31, 28, 35, 0, 13, 5));\
-  enemiesD3.add(new ENEMY(11, 31, 28, 35, 0, 13, 4));\
-  enemiesD3.add(new ENEMY(7, 28, 28, 35, 0, 13, 4));\
-\
-  enemiesD3.add(new ENEMY(4, 20, 19, 26, 0, 13, 5));\
-  enemiesD3.add(new ENEMY(5, 23, 19, 26, 0, 13, 7));\
-  enemiesD3.add(new ENEMY(6, 23, 19, 26, 0, 13, 7));\
-  enemiesD3.add(new ENEMY(7, 23, 19, 26, 0, 13, 7));\
-  enemiesD3.add(new ENEMY(8, 23, 19, 26, 0, 13, 7));\
-  enemiesD3.add(new ENEMY(9, 23, 19, 26, 0, 13, 7));\
-  enemiesD3.add(new ENEMY(10, 20, 19, 26, 0, 13, 5));\
-\
-  enemiesD3.add(new ENEMY(3, 16, 10, 17, 0, 13, 5));\
-  enemiesD3.add(new ENEMY(4, 13, 10, 17, 0, 13, 4));\
-  enemiesD3.add(new ENEMY(7, 14, 10, 17, 0, 13, 6));\
-  enemiesD3.add(new ENEMY(10, 13, 10, 17, 0, 13, 4));\
-  enemiesD3.add(new ENEMY(11, 16, 10, 17, 0, 13, 5));\
-\
-  enemiesD3.add(new ENEMY(3, 3, 1, 8, 0, 13, 4));\
-  enemiesD3.add(new ENEMY(4, 7, 1, 8, 0, 13, 8));\
-  enemiesD3.add(new ENEMY(10, 7, 1, 8, 0, 13, 8));\
-  enemiesD3.add(new ENEMY(7, 5, 1, 8, 0, 13, 5));\
-  enemiesD3.add(new ENEMY(7, 2, 1, 8, 0, 13, 4));\
-  enemiesD3.add(new ENEMY(11, 3, 1, 8, 0, 13, 4));\
-\
-  enemiesD3.add(new ENEMY(19, 2, 1, 8, 16, 28, 8));\
-  enemiesD3.add(new ENEMY(19, 6, 1, 8, 16, 28, 4));\
-  enemiesD3.add(new ENEMY(22, 3, 1, 8, 16, 28, 5));\
-  enemiesD3.add(new ENEMY(25, 2, 1, 8, 16, 28, 8));\
-  enemiesD3.add(new ENEMY(25, 6, 1, 8, 16, 28, 4));\
-\
-  enemiesD3.add(new ENEMY(22, 11, 10, 17, 16, 28, 6));\
-  enemiesD3.add(new ENEMY(19, 12, 10, 17, 16, 28, 4));\
-  enemiesD3.add(new ENEMY(18, 15, 10, 17, 16, 28, 4));\
-  enemiesD3.add(new ENEMY(25, 12, 10, 17, 16, 28, 4));\
-  enemiesD3.add(new ENEMY(26, 15, 10, 17, 16, 28, 4));\
-\
-  enemiesD3.add(new ENEMY(17, 23, 19, 26, 16, 28, 4));\
-  enemiesD3.add(new ENEMY(19, 20, 19, 26, 16, 28, 8));\
-  enemiesD3.add(new ENEMY(22, 22, 19, 26, 16, 28, 5));\
-  enemiesD3.add(new ENEMY(25, 20, 19, 26, 16, 28, 8));\
-  enemiesD3.add(new ENEMY(27, 23, 19, 26, 16, 28, 4));\
-\
-  enemiesD3.add(new ENEMY(22, 29, 28, 35, 16, 28, 8));\
-  enemiesD3.add(new ENEMY(19, 31, 28, 35, 16, 28, 4));\
-  enemiesD3.add(new ENEMY(25, 31, 28, 35, 16, 28, 5));\
-  enemiesD3.add(new ENEMY(22, 33, 28, 35, 16, 28, 8));\
-\
-  enemiesD3.add(new ENEMY(33, 6, 1, 8, 31, 44, 8));\
-  enemiesD3.add(new ENEMY(36, 6, 1, 8, 31, 44, 7));\
-  enemiesD3.add(new ENEMY(38, 6, 1, 8, 31, 44, 7));\
-  enemiesD3.add(new ENEMY(41, 6, 1, 8, 31, 44, 8));\
-  enemiesD3.add(new ENEMY(36, 3, 1, 8, 31, 44, 8));\
-  enemiesD3.add(new ENEMY(38, 3, 1, 8, 31, 44, 8));\
-\
-  enemiesD3.add(new ENEMY(34, 11, 10, 17, 31, 44, 5));\
-  enemiesD3.add(new ENEMY(32, 13, 10, 17, 31, 44, 5));\
-  enemiesD3.add(new ENEMY(35, 16, 10, 17, 31, 44, 5));\
-  enemiesD3.add(new ENEMY(39, 11, 10, 17, 31, 44, 5));\
-  enemiesD3.add(new ENEMY(42, 10, 10, 17, 31, 44, 5));\
-\
-  enemiesD3.add(new ENEMY(32, 23, 19, 26, 31, 44, 8));\
-  enemiesD3.add(new ENEMY(35, 21, 19, 26, 31, 44, 5));\
-  enemiesD3.add(new ENEMY(37, 24, 19, 26, 31, 44, 6));\
-  enemiesD3.add(new ENEMY(39, 21, 19, 26, 31, 44, 5));\
-  enemiesD3.add(new ENEMY(42, 23, 19, 26, 31, 44, 8));\
-\
-  enemiesD3.add(new ENEMY(20, 39, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(22, 41, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(25, 40, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(28, 38, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(28, 42, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(31, 40, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(34, 41, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(37, 39, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(37, 42, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(41, 39, 37, 44, 19, 45, 7));\
-  enemiesD3.add(new ENEMY(41, 42, 37, 44, 19, 45, 7));\
-\
-\
-  enemiesD4.add(new ENEMY(6, 64, 61, 69, 6, 18, 1));\
-  enemiesD4.add(new ENEMY(8, 62, 61, 69, 6, 18, 1));\
-  enemiesD4.add(new ENEMY(12, 62, 61, 69, 6, 18, 1));\
-  enemiesD4.add(new ENEMY(16, 62, 61, 69, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(10, 64, 61, 69, 6, 18, 1));\
-  enemiesD4.add(new ENEMY(14, 64, 61, 69, 6, 18, 4));\
-  enemiesD4.add(new ENEMY(8, 66, 61, 69, 6, 18, 4));\
-  enemiesD4.add(new ENEMY(12, 6, 61, 69, 6, 18, 4));\
-  enemiesD4.add(new ENEMY(16, 66, 61, 69, 6, 18, 5));\
-\
-  enemiesD4.add(new ENEMY(15, 54, 53, 55, 14, 20, 3));\
-  enemiesD4.add(new ENEMY(39, 54, 53, 55, 34, 40, 3));\
-\
-  enemiesD4.add(new ENEMY(6, 47, 41, 49, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(6, 43, 41, 49, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(8, 45, 41, 49, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(8, 41, 41, 49, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(10, 48, 41, 49, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(11, 45, 41, 49, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(11, 41, 41, 49, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(14, 48, 41, 49, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(14, 44, 41, 49, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(14, 41, 41, 49, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(16, 44, 41, 49, 6, 18, 5));\
-\
-  enemiesD4.add(new ENEMY(7, 35, 31, 39, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(8, 31, 31, 39, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(10, 37, 31, 39, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(12, 32, 31, 39, 6, 18, 2));\
-  enemiesD4.add(new ENEMY(18, 38, 31, 39, 6, 18, 5));\
-  enemiesD4.add(new ENEMY(17, 32, 31, 39, 6, 18, 2));\
-\
-  enemiesD4.add(new ENEMY(21, 58, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(21, 51, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(33, 58, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(33, 51, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(25, 53, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(25, 55, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(29, 53, 51, 59, 21, 33, 5));\
-  enemiesD4.add(new ENEMY(29, 55, 51, 59, 21, 33, 5));\
-\
-  enemiesD4.add(new ENEMY(23, 46, 41, 49, 21, 33, 3));\
-  enemiesD4.add(new ENEMY(23, 41, 41, 49, 21, 33, 3));\
-  enemiesD4.add(new ENEMY(31, 42, 41, 49, 21, 33, 3));\
-  enemiesD4.add(new ENEMY(31, 46, 41, 49, 21, 33, 3));\
-\
-\
-  enemiesD4.add(new ENEMY(23, 38, 31, 39, 21, 33, 7));\
-  enemiesD4.add(new ENEMY(24, 34, 31, 39, 21, 33, 7));\
-  enemiesD4.add(new ENEMY(27, 36, 31, 39, 21, 33, 7));\
-  enemiesD4.add(new ENEMY(27, 32, 31, 39, 21, 33, 7));\
-  enemiesD4.add(new ENEMY(30, 34, 31, 39, 21, 33, 7));\
-  enemiesD4.add(new ENEMY(31, 38, 31, 39, 21, 33, 7));\
-\
-  enemiesD4.add(new ENEMY(39, 66, 61, 69, 36, 48, 7));\
-  enemiesD4.add(new ENEMY(39, 63, 61, 69, 36, 48, 7));\
-  enemiesD4.add(new ENEMY(42, 63, 61, 69, 36, 48, 7));\
-  enemiesD4.add(new ENEMY(43, 65, 61, 69, 36, 48, 7));\
-  enemiesD4.add(new ENEMY(47, 63, 61, 69, 36, 48, 7));\
-  enemiesD4.add(new ENEMY(47, 66, 61, 69, 36, 48, 7));\
-\
-  enemiesD4.add(new ENEMY(40, 47, 41, 49, 36, 48, 2));\
-  enemiesD4.add(new ENEMY(40, 42, 41, 49, 36, 48, 2));\
-  enemiesD4.add(new ENEMY(44, 45, 41, 49, 36, 48, 5));\
-  enemiesD4.add(new ENEMY(44, 44, 41, 49, 36, 48, 5));\
-\
-  enemiesD4.add(new ENEMY(36, 35, 31, 39, 36, 48, 3));\
-  enemiesD4.add(new ENEMY(39, 33, 31, 39, 36, 48, 6));\
-  enemiesD4.add(new ENEMY(40, 33, 31, 39, 36, 48, 3));\
-  enemiesD4.add(new ENEMY(42, 36, 31, 39, 36, 48, 6));\
-  enemiesD4.add(new ENEMY(44, 33, 31, 39, 36, 48, 3));\
-  enemiesD4.add(new ENEMY(45, 33, 31, 39, 36, 48, 6));\
-  enemiesD4.add(new ENEMY(48, 35, 31, 39, 36, 48, 3));\
-\
-  enemiesD4.add(new ENEMY(5, 5, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(6, 13, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(7, 20, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(18, 20, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(18, 13, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(20, 5, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(29, 8, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(31, 13, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(31, 20, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(42, 20, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(43, 13, 1, 26, 1, 48, 6));\
-  enemiesD4.add(new ENEMY(44, 8, 1, 26, 1, 48, 6));\
-\}\
-\
-\
-\
-\
-void loadLevelFromText(String s) \{\
-  //s is the name of the text file\
-  String[] q = loadStrings("data/hh" + s);\
-\
-\
-\
-  //get width and height of map\
-  int rows = q.length;\
-  int cols = q[0].length()/2;//since there are 2 digits per tile\
-\
-  mapData = new int[rows][cols];\
-\
-  for (int j =0; j < rows; j++) \{\
-    for (int i =0; i < cols; i++) \{\
-      mapData[j][i] = parseInt(q[j].substring(2*i, 2*i+2));\
-    \}\
-  \}\
-\
-\
-  mapWidth = mapData[0].length*32;\
-  mapHeight = mapData.length*32;\
-\}\
-\
-void addCurley(String s) \{\
-  String[] q = loadStrings("data/" + s);\
-\
-  String[] output = new String[q.length];\
-\
-  for (int i = 0; i < q.length; i++) \{\
-    output[i] = "\{"+q[i] + "\},";\
-  \}\
-\
-  saveStrings("data/OVERWORLD2.txt", output); //change this to dungeon 1 once i make the dungeon map and save the numbers as a txt\
-\}\
-\
-\
-void mousePressed() \{     //this is just to test the new map loading\
-\
-\
-//draw heart inside black area. have it so that you need to press 'b' to buy the thing you're standing in front of\
-\
-\
-  //println(cameraX);\
-\}\
-\
-\
-\
-void ouch() \{\
-\
-  if (healthcounter == 0) \{\
-    healthcounter = 1;\
-    health-=.5;\
-  \}\
-\}\
-\
-\
-\
-\
-\
-\
-void drawHealth() \{\
-  if ( healthcounter > 0) \{\
-    healthcounter++;\
-    if (healthcounter == 30) \{\
-      healthcounter = 0;\
-    \}\
-  \}\
-\
-  for ( int i = 0; i < (int)health; i++) \{\
-    image(heartfull, 565-40*i, 3, 32, 32);\
-  \}\
-\
-  if ((health - (int)health) == .5) \{\
-    image(hearthalf, 565-40*((int)health), 3, 32, 32);\
-  \}\
-\}\
-\
-int coincolor=0;\
-void drawCoins() \{\
-  image(grRupee, 540-20, 420, 32, 32);\
-  fill(coincolor);\
-  stroke(20);\
-  textSize(20);\
-  text("x", 565-20, 440);\
-  textSize(25);\
-  text(coins, 585-20, 443);\
-\}\
-\
-\
-\
-void moveFrog() \{\
-  if (u > 0) \{\
-    frogY-=speed;\
-    u++;\
-    if (u > 4)\
-      u = 0;\
-  \}\
-\
-  if (d > 0) \{\
-    frogY+=speed;\
-    d++;\
-    if (d > 4)\
-      d = 0;\
-  \}\
-\
-\
-  if (l > 0) \{\
-    frogX-=speed;\
-    l++;\
-    if (l > 4)\
-      l = 0;\
-  \}\
-\
-\
-  if (r > 0) \{\
-    frogX+=speed;\
-    r++;\
-    if (r > 4)\
-      r = 0;\
-  \}\
-\}\
-\
-\
-dialogue di0 = new dialogue (0, 480, 640, 300+210, 1, 1, 0);\
-\
-\
-\
-int select;\
-\
-\
-\
-class dialogue \{\
-  float dx, dy, dw, dh, dtype, rtype, ctype;\
-\
-  dialogue(float x, float y, float w, float h, float type, float _rtype, float _ctype) \{\
-    dx = x;\
-    dy = y;\
-    dw = w;\
-    dh = h;\
-    dtype = type;\
-    rtype = _rtype;\
-    ctype = _ctype;\
-  \}\
-\
-\
-  void update() \{\
-    color b1 = 255;\
-    color b2 = 255;\
-    color b3 = 255;\
-    color b4 = 255;\
-\
-\
-    noStroke();\
-    fill(0);\
-    rect(dx, dy, dw, dh);\
-\
-    strokeWeight(5);\
-\
-    if ( select == 1 && dtype > 0) \{\
-      b1 = #FF0000;\
-    \}\
-    if ( select == 2 && dtype > 0) \{\
-      b2 = #FF0000;\
-    \}    \
-    if ( select == 3 && dtype > 0) \{\
-      b3 = #FF0000;\
-    \}    \
-    if ( select == 4 && dtype > 0) \{\
-      b4 = #FF0000;\
-    \}\
-\
-    /*\
-    stroke(b1);\
-     rect (20, 490+210, 275, 125);\
-     \
-     stroke(b3);\
-     rect (20, 630+210, 275, 125);\
-     \
-     stroke(b2);\
-     rect (340, 490+210, 275, 125);\
-     \
-     stroke(b4);\
-     rect (340, 630+210, 275, 125);\
-     \
-     */\
-    if ( dtype == 0) \{\
-      fill(0);\
-      rect(dx, dy, dw, dh);\
-      fill(0);\
-      stroke(0);\
-\
-      if (rtype == 1) \{\
-        //  println(mouseY);\
-        fill(255);\
-        textSize(25);\
-\
-        if ( ctype == 1) \{        \
-          text("Okay", 80+50, 490+50);\
-        \}\
-        if ( ctype == 2) \{        \
-          text("It's nice to meet you too!\\nLet's get going", 80+50, 490+50);\
-        \}        \
-        if ( ctype == 3) \{        \
-          text("Okay...\\n *leaves*", 80+50, 490+50);\
-        \}        \
-        if ( ctype == 4) \{        \
-          text("Okay, I'll do my best...", 80+50, 490+50);\
-        \}\
-\
-\
-        if ( mouseY > 480) \{\
-          if ( keyPressed) \{\
-            if ( key == 'u') \{\
-              talk = false;\
-              dtype =2;\
-            \}\
-          \}\
-        \}\
-\
-\
-        ////\
-      \}\
-\
-      if (rtype == 2) \{\
-        //  println(mouseY);\
-        fill(255);\
-        textSize(25);\
-        if ( ctype == 1) \{        \
-          text("Dialogue 2 Response 1", 80+50, 490+50);\
-        \}\
-        if ( ctype == 2) \{        \
-          text("Dialogue 2 Response 2", 80+50, 490+50);\
-        \}        \
-        if ( ctype == 3) \{        \
-          text("Dialogue 2 Response 3", 80+50, 490+50);\
-        \}        \
-        if ( ctype == 4) \{        \
-          text("Dialogue 2 Response 4", 80+50, 490+50);\
-        \}        \
-        if ( mouseY > 480) \{\
-          if ( keyPressed) \{\
-            if ( key == 'u') \{\
-              talk = false;\
-              dtype =3;\
-            \}\
-          \}\
-        \}\
-\
-        ///////////////////\
-      \}\
-    \}\
-\
-\
-\
-\
-    if ( dtype > 0) \{\
-      stroke(b1);\
-      rect (20, 490+60, 275, 100);\
-\
-      stroke(b3);\
-      rect (20, 630+60, 275, 100);\
-\
-      stroke(b2);\
-      rect (340, 490+60, 275, 100);\
-\
-      stroke(b4);\
-      rect (340, 630+60, 275, 100);\
-    \}\
-\
-\
-    if ( dtype == 1) \{     // first set of dialogue options\
-      fill(255);\
-      textSize(20);\
-      text("Hi, my name's Chin Sung. Let's travel together", 50, 525);\
-      textSize(25);\
-      text("Sure.", 20+50, 490+50+60);\
-      text("Sounds great!\\n Nice to meet you", 340+15, 490+40+60);\
-      text("No, \\nleave me alone", 20+15, 630+40+60);\
-      text("Fine, but don't \\n get in my way", 340+10, 630+40+60);\
-    \}\
-\
-    if ( dtype == 2) \{     // first set of dialogue options\
-      fill(255);\
-      textSize(25);\
-      text("Question 2", 250, 525);\
-      text("choice5", 20+50, 490+50+60);\
-      text("choice6", 340+50, 490+50+60);\
-      text("choice7", 20+50, 630+50+60);\
-      text("choice8", 340+50, 630+50+60);\
-    \}\
-\
-\
-    if ( mouseX > 20 && mouseX < 20+275 && mouseY>490+60 && mouseY < 490+60 + 100) \{\
-      select = 1;\
-      if ( mousePressed) \{\
-        ctype = 1;\
-        if ( dtype == 1) \{\
-          dtype = 0;\
-          rtype = 1;\
-        \}\
-        if ( dtype == 2) \{\
-          dtype = 0;\
-          rtype = 2;\
-        \}\
-        if ( dtype == 3) \{\
-          dtype = 0;\
-          rtype = 3;\
-        \}\
-        if ( dtype == 4) \{\
-          dtype = 0;\
-          rtype = 4;\
-        \}\
-      \}\
-    \} \
-\
-    if ( mouseX > 340 && mouseX < 340+275 && mouseY>490+60 && mouseY < 490+60 + 100) \{\
-      select = 2;\
-      if ( mousePressed) \{\
-        ctype = 2;\
-        if ( dtype == 1) \{\
-          dtype = 0;\
-          rtype = 1;\
-        \}\
-        if ( dtype == 2) \{\
-          dtype = 0;\
-          rtype = 2;\
-        \}\
-        if ( dtype == 3) \{\
-          dtype = 0;\
-          rtype = 3;\
-        \}\
-        if ( dtype == 4) \{\
-          dtype = 0;\
-          rtype = 4;\
-        \}\
-      \}\
-    \} \
-\
-    if ( mouseX > 20 && mouseX < 20+275 && mouseY>630+60 && mouseY < 630+60 + 100) \{\
-      select = 3;\
-      if ( mousePressed) \{\
-        ctype = 3;\
-        if ( dtype == 1) \{\
-          dtype = 0;\
-          rtype = 1;\
-        \}\
-        if ( dtype == 2) \{\
-          dtype = 0;\
-          rtype = 2;\
-        \}\
-        if ( dtype == 3) \{\
-          dtype = 0;\
-          rtype = 3;\
-        \}\
-        if ( dtype == 4) \{\
-          dtype = 0;\
-          rtype = 4;\
-        \}\
-      \}\
-    \} \
-    if ( mouseX > 340 && mouseX < 340+275 && mouseY>630+60 && mouseY < 630+60 + 100) \{\
-      select = 4;\
-      if ( mousePressed) \{\
-        ctype = 4;\
-        if ( dtype == 1) \{\
-          dtype = 0;\
-          rtype = 1;\
-        \}\
-        if ( dtype == 2) \{\
-          dtype = 0;\
-          rtype = 2;\
-        \}\
-        if ( dtype == 3) \{\
-          dtype = 0;\
-          rtype = 3;\
-        \}\
-        if ( dtype == 4) \{\
-          dtype = 0;\
-          rtype = 4;\
-        \}\
-      \}\
-    \}\
-  \}\
-\}\
-\
-int[] badTiles = \{12, 02, 64, 22, 18, 00, 24, 58, 14, 34, 51, 30\};  \
-\
-boolean checkDir(int x, int y, int q) \{\
- // println("hi");\
-  int i = 0;\
-\
-  while (i < badTiles.length) \{\
-\
-    if (q == 1) \{\
-      if (y > 0   && mapData[y-1][x] == badTiles[i]    ) \{\
-        return true;\
-      \}\
-    \}\
-\
-    if (q == 2) \{\
-      if (y < mapData.length-1  && mapData[y+1][x] == badTiles[i]    ) \{\
-        return true;\
-      \}\
-    \}\
-\
-    if (q == 3) \{\
-      if (x > 0   && mapData[y][x - 1] == badTiles[i]    ) \{\
-        return true;\
-      \}\
-    \}\
-\
-    if (q == 4) \{\
-      //println(mapData[y][x + 1]);\
-      if (x < mapData[0].length-1  && mapData[y][x + 1] == badTiles[i]    ) \{\
-\
-        return true;\
-      \}\
-    \}\
-\
-\
-\
-\
-    i++;\
-  \}\
-\
-  return false;\
-\}\
-\
-ArrayList<DROPS> drops  = new ArrayList<DROPS>();\
-\
-\
-void drawItems(int x, int y, int type) \{\
-  // fill(#FF0000);\
-  //rect(x,y,50,50);\
-  //println("hi");\
-  if (type == 1) \{\
-    image(goldRupee, x, y, 32, 32);\
-    //image(grRupee, x, y, 32, 32);\
-  \}\
-  if (type ==2) \{\
-    image(potion, x, y, 32, 32);\
-  \}\
-  if (type ==3) \{\
-    image(bRupee, x, y, 32, 32);\
-  \}\
-  if (type ==4) \{\
-    image(grRupee, x, y, 32, 32);\
-  \}\
-\}\
-\
-\
-\
-class DROPS \{\
-  int ix=96, iy=96;\
-  int itypes;\
-  int igx;\
-  int igy;\
-  int edir1;\
-  int ecount1;\
-\
-\
-  DROPS(int gx, int gy, int types) \{ //grid x, grid y, ub, db, lb, rb, skin\
-\
-    ix = gx*32;\
-    iy = gy*32;\
-\
-\
-    itypes=types;\
-  \}\
-\
-  void update() \{\
-    igx=(int) ((ix+16)/32);\
-    igy=(int)((iy+16)/32);\
-\
-\
-    drawItems(ix-cameraX, iy-cameraY, itypes);\
-\
-    if (dist(ix+16, iy+16, frogX+16, frogY+16)  < 30) \{ // item hits you\
-      drops.remove(this);\
-      if (itypes== 1) \{\
-        coins+=50;\
-      \}\
-      if (itypes==2) \{\
-        health=healthmax;\
-      \}\
-      if (itypes== 3) \{\
-        coins+=20;\
-      \}\
-      if (itypes== 4) \{\
-        coins+=5;\
-      \}\
-    \}\
-  //  println(coins);\
-  \}\
-\}\
-\
-int coins= 000;\
-\
-ArrayList<ENEMY> enemies  = new ArrayList<ENEMY>();\
-ArrayList<ENEMY> enemiesD1  = new ArrayList<ENEMY>();\
-ArrayList<ENEMY> enemiesD2  = new ArrayList<ENEMY>();\
-ArrayList<ENEMY> enemiesD3  = new ArrayList<ENEMY>();\
-ArrayList<ENEMY> enemiesD4  = new ArrayList<ENEMY>();\
-ArrayList<ENEMY> enemies2  = new ArrayList<ENEMY>(); // overworld 2\
-\
-\
-\
-void drawEnemy(int x, int y, int skin ) \{\
-  // red ball guy\
-  if (skin == 1) \{\
-    image(en1u1, x, y, 32, 32);\
-    //  enhealth = 1;\
-  \} \
-  if (skin == -1) \{\
-    image(en1u2, x, y, 32, 32);\
-    //  enhealth = 1;\
-  \} \
-  if (skin == 2) \{\
-    image(en1d1, x, y, 32, 32);\
-    // enhealth = 1;\
-  \} \
-  if (skin == -2) \{\
-    image(en1d2, x, y, 32, 32);\
-    // enhealth = 1;\
-  \} \
-  if (skin == 3) \{\
-    image(en1l1, x, y, 32, 32);\
-    /// enhealth = 1;\
-  \} \
-  if (skin == -3) \{\
-    image(en1l2, x, y, 32, 32);\
-    ///  enhealth = 1;\
-  \} \
-  if (skin == 4) \{\
-    image(en1r1, x, y, 32, 32);\
-    /// enhealth = 1;\
-  \} \
-  if (skin == -4) \{\
-    image(en1r2, x, y, 32, 32);\
-    /// enhealth = 1;\
-  \} \
-  /*\
-  noStroke();\
-   fill(#00FF00, 250);\
-   ellipse(x+16, y+16, 16, 16);\
-   fill(#0000FF, 100);\
-   ellipse(x+16, y+16, 60, 60);\
-   */\
-\}\
-\
-void drawEnemy2(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en2u1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en2u2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en2d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en2d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en2l1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en2l2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en2r1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en2r2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-void drawEnemy3(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en3u1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en3u2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en3d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en3d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en3l1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en3l2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en3r1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en3r2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-void drawEnemy4(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en4u1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en4u2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en4d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en4d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en4l1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en4l2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en4r1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en4r2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-void drawEnemy5(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en5u1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en5u2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en5d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en5d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en5l1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en5l2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en5r1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en5r2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-\
-void drawEnemy6(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en6u1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en6u2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en6d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en6d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en6l1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en6l2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en6r1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en6r2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-\
-void drawEnemy7(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en7u1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en7u2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en7d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en7d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en7l1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en7l2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en7r1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en7r2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-\
-void drawEnemy8(int x, int y, int skin ) \{\
-\
-  // red dude\
-  if (skin == 1) \{\
-    image(en8d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -1) \{\
-    image(en8d2, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == 2) \{\
-    image(en8d1, x, y, 32, 32);\
-    //enhealth = 2;\
-  \} \
-  if (skin == -2) \{\
-    image(en8d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}   \
-  if (skin == 3) \{\
-    image(en8d1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -3) \{\
-    image(en8d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-  if (skin == 4) \{\
-    image(en8d1, x, y, 32, 32);\
-    // enhealth = 2;\
-  \} \
-  if (skin == -4) \{\
-    image(en8d2, x, y, 32, 32);\
-    // enhealth = 2;\
-  \}\
-\}\
-\
-\
-// enemy PImages\
-\
-PImage en1r1;  // red ball guy\
-PImage en1r2;\
-PImage en1l1;\
-PImage en1l2;\
-PImage en1u1;\
-PImage en1u2;\
-PImage en1d1;\
-PImage en1d2;\
-\
-PImage en2r1;   // blue ball guy\
-PImage en2r2;\
-PImage en2l1;\
-PImage en2l2;\
-PImage en2u1;\
-PImage en2u2;\
-PImage en2d1;\
-PImage en2d2;\
-\
-PImage en3r1;  // red guy\
-PImage en3r2;\
-PImage en3l1;\
-PImage en3l2;\
-PImage en3u1;\
-PImage en3u2;\
-PImage en3d1;\
-PImage en3d2;\
-\
-PImage en4r1;   // blue guy \
-PImage en4r2;\
-PImage en4l1;\
-PImage en4l2;\
-PImage en4u1;\
-PImage en4u2;\
-PImage en4d1;\
-PImage en4d2;\
-\
-PImage en5r1;   // dog guy \
-PImage en5r2;\
-PImage en5l1;\
-PImage en5l2;\
-PImage en5u1;\
-PImage en5u2;\
-PImage en5d1;\
-PImage en5d2;\
-\
-PImage en6r1;   // red knight \
-PImage en6r2;\
-PImage en6l1;\
-PImage en6l2;\
-PImage en6u1;\
-PImage en6u2;\
-PImage en6d1;\
-PImage en6d2;\
-\
-PImage en7r1;   // blue knight \
-PImage en7r2;\
-PImage en7l1;\
-PImage en7l2;\
-PImage en7u1;\
-PImage en7u2;\
-PImage en7d1;\
-PImage en7d2;\
-\
-PImage en8d1; // skeleton\
-PImage en8d2;\
-\
-\
-\
-class ENEMY \{\
-  int ex1=96, ey1=96;\
-  int etypes1;\
-  int egx1;\
-  int egy1;\
-  int edir1;\
-  int ecount1;\
-  int skin = 1;\
-  ;\
-\
-  int type;\
-\
-  int upBound, downBound, leftBound, rightBound;\
-\
-\
-  int enhealth;\
-\
-  int stopMe;\
-\
-  ENEMY(int _gx, int _gy, int ub, int db, int lb, int rb, int type) \{ //grid x, grid y, ub, db, lb, rb, skin\
-\
-    ex1 = _gx*32;\
-    ey1 = _gy*32;\
-    upBound = ub-1;\
-    downBound = db-1;\
-    leftBound = lb-1;\
-    rightBound = rb+1;\
-\
-\
-\
-\
-    this.type = type;\
-\
-    //   if (type > 0) \{\
-    //    enhealth = 1;\
-    // \}\
-\
-    if (type == 1) \{\
-      enhealth = 1;\
-    \}\
-\
-    if (type == 2) \{\
-      enhealth = 2;                                                           // IT DOESNT WORK IF HEALTH IS MORE THAN 1\
-    \}\
-\
-    if (type == 3) \{\
-      enhealth = 3;\
-    \}\
-    if (type == 4) \{\
-      enhealth = 1;\
-    \}\
-    if (type == 5) \{\
-      enhealth = 1;\
-    \}\
-    if (type == 6) \{\
-      enhealth = 1;\
-    \}\
-    if (type == 7) \{\
-      enhealth = 1;\
-    \}\
-    if (type == 8) \{\
-      enhealth = 1;\
-    \}\
-  \}\
-\
-\
-  void update() \{\
-    egx1=(int)((ex1+16)/32);\
-    egy1=(int)((ey1+16)/32);\
-\
-\
-    if (stopMe > 0) \{\
-\
-      stopMe++;\
-      if (stopMe == 10) \{\
-        stopMe = 0;\
-      \}\
-    \}\
-\
-\
-    if ( stopMe == 0 && (   (dist(ex1, ey1, frogX+16, frogY+16 ) < 32*4 ) &&  egx1<=rightBound && egx1>=leftBound && egy1>=upBound && egy1<=downBound) ) \{//) \{\
-\
-      if (edir1 == 0) \{\
-\
-        //    if (random(1) < 2) \{\
-\
-        if (ex1<frogX && checkDir(egx1, egy1, 4) &&  egx1<rightBound ) \{\
-          edir1 = 4;\
-          ecount1 = 0;\
-          etypes1 = 4;\
-        \} else if (ex1 > frogX&& checkDir(egx1, egy1, 3) &&  egx1>leftBound) \{\
-          edir1 = 3;\
-          ecount1 = 0;\
-        \} else if (ey1<frogY && checkDir(egx1, egy1, 2 )&&  egy1<downBound ) \{\
-          edir1 = 2;\
-          ecount1 = 0;\
-        \} else if (ey1>frogY  && checkDir(egx1, egy1, 1) &&  egy1>upBound) \{\
-          edir1 = 1;\
-          ecount1 = 0;\
-        \}\
-        //\} else \{\
-        if (ey1<frogY && checkDir(egx1, egy1, 2 ) &&  egy1<downBound ) \{\
-          edir1 = 2;\
-          ecount1 = 0;\
-        \} else if (ey1>frogY  && checkDir(egx1, egy1, 1) &&  egy1>upBound) \{\
-          edir1 = 1;\
-          ecount1 = 0;\
-        \} else if (ex1<frogX && checkDir(egx1, egy1, 4) &&  egx1<rightBound  ) \{\
-          edir1 = 4;\
-          ecount1 = 0;\
-          etypes1 = 4;\
-        \} else if (ex1 > frogX&& checkDir(egx1, egy1, 3) &&  egx1>leftBound) \{\
-          edir1 = 3;\
-          ecount1 = 0;\
-        \}\
-      \}\
-    \}\
-\
-\
-\
-\
-\
-\
-    if (edir1 == 4) \{\
-      ecount1++;\
-      ex1 += 4;\
-\
-      if (ecount1 < 4) \{\
-\
-        skin=4;\
-      \} else \{\
-        skin=-4;\
-      \}\
-\
-\
-\
-\
-      if (ecount1 > 7) \{\
-        ecount1 = 0;\
-        edir1 = 0;\
-      \}\
-    \}\
-\
-\
-    if (edir1 == 3) \{\
-      ecount1++;\
-      ex1 -= 4;\
-      if (ecount1 < 4) \{\
-\
-        skin=3;\
-      \} else \{\
-        skin=-3;\
-      \}\
-      if (ecount1 > 7) \{\
-        ecount1 = 0;\
-        edir1 = 0;\
-      \}\
-    \}\
-\
-\
-    if (edir1 == 1) \{\
-      ecount1++;\
-      ey1 -= 4;\
-      if (ecount1 < 4) \{\
-        skin=1;\
-      \} else \{\
-        skin=-1;\
-      \}\
-      if (ecount1 > 7) \{\
-        ecount1 = 0;\
-        edir1 = 0;\
-      \}\
-    \}\
-\
-\
-    if (edir1 == 2) \{\
-      ecount1++;\
-      ey1 += 4;\
-      if (ecount1 < 4) \{\
-        skin=2;\
-      \} else \{\
-        skin=-2;\
-      \}\
-      if (ecount1 > 7) \{\
-        ecount1 = 0;\
-        edir1 = 0;\
-      \}\
-    \}\
-\
-\
-    //collision with sword\
-    //collision with link\
-\
-    if (dist(ex1+16, ey1+16, frogX+16, frogY+16)  < 20) \{ // enemy hits you\
-\
-      // println(types);\
-\
-      ouch();\
-    \}\
-\
-\
-    //fill(#0000FF, 150);\
-    //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16); // up\
-    //ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16); //down\
-    //ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16); //left\
-    ///ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);  //right\
-    //below is sword hits enemy \
-    if ((types == 8 &&  dist(ex1+16, ey1+16, frogX+48, frogY+16) < 26)  ||  (types == 6 &&  dist(ex1+16, ey1+16, frogX+18, frogY+48)  < 26) ||  (types == 7 &&  dist(ex1+16, ey1+16, frogX-20, frogY+16)  < 26) ||  (types == 5 &&  dist(ex1+16, ey1+16, frogX+14, frogY-20) < 26)  )    \
-    \{\
-      //   println("yes");\
-\
-\
-\
-      enouch();\
-      if (enhealth==0) \{\
-\
-        if (random(1) <= .1) \{  //gold rupee\
-          drops.add(new DROPS(egx1, egy1, 1));\
-        \} else if ( random(1)<= .2) \{            //image for potion\
-          drops.add(new DROPS(egx1, egy1, 2));\
-        \} else if (random(1)<= .40) \{            // image for blue\
-          drops.add(new DROPS(egx1, egy1, 3));\
-        \} else if ( random(1)<=1) \{            // image for green rupee\
-          drops.add(new DROPS(egx1, egy1, 4));\
-        \}\
-\
-        if (mapVar == 1) \{\
-          enemies.remove(this);\
-        \}\
-        if (mapVar == 3) \{\
-          enemiesD1.remove(this);\
-        \}\
-        if (mapVar == 4) \{\
-          enemiesD2.remove(this);\
-        \}\
-        if (mapVar == 5) \{\
-          enemiesD3.remove(this);\
-        \}\
-        if (mapVar == 6) \{\
-          enemiesD4.remove(this);\
-        \}\
-      \}\
-    \}\
-\
-\
-    if (type == 1) \{\
-      drawEnemy(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-\
-    if (type == 2) \{\
-      drawEnemy2(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-    if (type == 3) \{\
-      drawEnemy3(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-    if (type == 4) \{\
-      drawEnemy4(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-    if (type == 5) \{\
-      drawEnemy5(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-    if (type == 6) \{\
-      drawEnemy6(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-    if (type == 7) \{\
-      drawEnemy7(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-    if (type == 8) \{\
-      drawEnemy8(ex1-cameraX, ey1-cameraY, skin);\
-    \}\
-/*\
-    if (health == 0) \{\
-      enemies.remove(this);\
-      enemiesD1.remove(this);\
-      enemiesD2.remove(this);\
-      enemiesD3.remove(this);\
-      enemiesD4.remove(this);\
-    \}\
- */   \
-    \
-  \}\
-\
-\
-  void enouch() \{  //enemy health\
-    ///println("hi" + types);\
-\
-    stopMe = 1;\
-    enhealth-=1;\
-    types-=4;\
-    //  println("yes");\
-    keyReleased();\
-  \}\
-\}\
-\
-PImage heartfull;\
-PImage hearthalf;\
-PImage grRupee;\
-PImage bRupee;\
-PImage goldRupee;\
-PImage potion;\
-PImage title;\
-PImage princess;\
-PImage princess2;\
-\
-PImage t1;\
-\
-PImage shop;\
-\
-\
-\
-\
-\
-\
-\
-void loadImages2() \{\
-  PImage q = loadImage("data/hhtitle.png");\
-  title= new PImage(255, 239);\
-  title.copy(q, 0, 0, 255, 239, 0, 0, 255, 239);\
-\
-  q = loadImage("data/hhenemies_items_chars.png");\
-\
-  en1r1= new PImage(16, 16, ARGB);    //en1's are the red ball guy\
-  en1r1.copy(q, 48, 0, 16, 16, 0, 0, 16, 16); \
-  en1r2= new PImage(16, 16, ARGB);\
-  en1r2.copy(q, 48, 16, 16, 16, 0, 0, 16, 16);\
-\
-  en1l1= new PImage(16, 16, ARGB);\
-  en1l1.copy(q, 16, 0, 16, 16, 0, 0, 16, 16);\
-  en1l2= new PImage(16, 16, ARGB);\
-  en1l2.copy(q, 16, 16, 16, 16, 0, 0, 16, 16);\
-\
-  en1u1= new PImage(16, 16, ARGB);\
-  en1u1.copy(q, 32, 0, 16, 16, 0, 0, 16, 16);\
-  en1u2= new PImage(16, 16, ARGB);\
-  en1u2.copy(q, 32, 16, 16, 16, 0, 0, 16, 16);\
-\
-  en1d1= new PImage(16, 16, ARGB);\
-  en1d1.copy(q, 0, 0, 16, 16, 0, 0, 16, 16);\
-  en1d2= new PImage(16, 16, ARGB);\
-  en1d2.copy(q, 0, 16, 16, 16, 0, 0, 16, 16);\
-\
-\
-  en2r1= new PImage(16, 16, ARGB);    //en2's are the red dude\
-  en2r1.copy(q, 48, 0+32, 16, 16, 0, 0, 16, 16); \
-  en2r2= new PImage(16, 16, ARGB);\
-  en2r2.copy(q, 48, 16+32, 16, 16, 0, 0, 16, 16);\
-\
-  en2l1= new PImage(16, 16, ARGB);\
-  en2l1.copy(q, 16, 0+32, 16, 16, 0, 0, 16, 16);\
-  en2l2= new PImage(16, 16, ARGB);\
-  en2l2.copy(q, 16, 16+32, 16, 16, 0, 0, 16, 16);\
-\
-  en2u1= new PImage(16, 16, ARGB);\
-  en2u1.copy(q, 32, 0+32, 16, 16, 0, 0, 16, 16);\
-  en2u2= new PImage(16, 16, ARGB);\
-  en2u2.copy(q, 32, 16+32, 16, 16, 0, 0, 16, 16);\
-\
-  en2d1= new PImage(16, 16, ARGB);\
-  en2d1.copy(q, 0, 0+32, 16, 16, 0, 0, 16, 16);\
-  en2d2= new PImage(16, 16, ARGB);\
-  en2d2.copy(q, 0, 16+32, 16, 16, 0, 0, 16, 16);\
-\
-\
-  en3r1= new PImage(16, 16, ARGB);    //en3's are the red knight\
-  en3r1.copy(q, 48, 0+32+32, 16, 16, 0, 0, 16, 16); \
-  en3r2= new PImage(16, 16, ARGB);\
-  en3r2.copy(q, 48, 16+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en3l1= new PImage(16, 16, ARGB);\
-  en3l1.copy(q, 16, 0+32+32, 16, 16, 0, 0, 16, 16);\
-  en3l2= new PImage(16, 16, ARGB);\
-  en3l2.copy(q, 16, 16+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en3u1= new PImage(16, 16, ARGB);\
-  en3u1.copy(q, 32, 0+32+32, 16, 16, 0, 0, 16, 16);\
-  en3u2= new PImage(16, 16, ARGB);\
-  en3u2.copy(q, 32, 16+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en3d1= new PImage(16, 16, ARGB);\
-  en3d1.copy(q, 0, 0+32+32, 16, 16, 0, 0, 16, 16);\
-  en3d2= new PImage(16, 16, ARGB);\
-  en3d2.copy(q, 0, 16+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en4r1= new PImage(16, 16, ARGB);    //en4's are the blue ball guy\
-  en4r1.copy(q, 48, 0+32+32+32, 16, 16, 0, 0, 16, 16); \
-  en4r2= new PImage(16, 16, ARGB);\
-  en4r2.copy(q, 48+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);\
-\
-  en4l1= new PImage(16, 16, ARGB);\
-  en4l1.copy(q, 16, 0+32+32+32, 16, 16, 0, 0, 16, 16);\
-  en4l2= new PImage(16, 16, ARGB);\
-  en4l2.copy(q, 16+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);\
-\
-  en4u1= new PImage(16, 16, ARGB);\
-  en4u1.copy(q, 32, 0+32+32+32, 16, 16, 0, 0, 16, 16);\
-  en4u2= new PImage(16, 16, ARGB);\
-  en4u2.copy(q, 32+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);\
-\
-  en4d1= new PImage(16, 16, ARGB);\
-  en4d1.copy(q, 0, 0+32+32+32, 16, 16, 0, 0, 16, 16);\
-  en4d2= new PImage(16, 16, ARGB);\
-  en4d2.copy(q, 0+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);\
-\
-  en5r1= new PImage(16, 16, ARGB);    //en5's are the blue dude\
-  en5r1.copy(q, 48, 0+32+32+48, 16, 16, 0, 0, 16, 16); \
-  en5r2= new PImage(16, 16, ARGB);\
-  en5r2.copy(q, 48, 16+32+32+48, 16, 16, 0, 0, 16, 16);\
-\
-  en5l1= new PImage(16, 16, ARGB);\
-  en5l1.copy(q, 16, 0+32+32+48, 16, 16, 0, 0, 16, 16);\
-  en5l2= new PImage(16, 16, ARGB);\
-  en5l2.copy(q, 16, 16+32+32+48, 16, 16, 0, 0, 16, 16);\
-\
-  en5u1= new PImage(16, 16, ARGB);\
-  en5u1.copy(q, 32, 0+32+32+48, 16, 16, 0, 0, 16, 16);\
-  en5u2= new PImage(16, 16, ARGB);\
-  en5u2.copy(q, 32, 16+32+32+48, 16, 16, 0, 0, 16, 16);\
-\
-  en5d1= new PImage(16, 16, ARGB);\
-  en5d1.copy(q, 0, 0+32+32+48, 16, 16, 0, 0, 16, 16);\
-  en5d2= new PImage(16, 16, ARGB);\
-  en5d2.copy(q, 0, 16+32+32+48, 16, 16, 0, 0, 16, 16);\
-\
-  en6r1= new PImage(16, 16, ARGB);    //en6's are the weird guy\
-  en6r1.copy(q, 48, 0+32+32+48+32, 16, 16, 0, 0, 16, 16); \
-  en6r2= new PImage(16, 16, ARGB);\
-  en6r2.copy(q, 48, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-\
-  en6l1= new PImage(16, 16, ARGB);\
-  en6l1.copy(q, 16, 0+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-  en6l2= new PImage(16, 16, ARGB);\
-  en6l2.copy(q, 16, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-\
-  en6u1= new PImage(16, 16, ARGB);\
-  en6u1.copy(q, 32, 0+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-  en6u2= new PImage(16, 16, ARGB);\
-  en6u2.copy(q, 32, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-\
-  en6d1= new PImage(16, 16, ARGB);\
-  en6d1.copy(q, 0, 0+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-  en6d2= new PImage(16, 16, ARGB);\
-  en6d2.copy(q, 0, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);\
-\
-  en7r1= new PImage(16, 16, ARGB);    //en7's are the blue knight\
-  en7r1.copy(q, 48, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16); \
-  en7r2= new PImage(16, 16, ARGB);\
-  en7r2.copy(q, 48, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en7l1= new PImage(16, 16, ARGB);\
-  en7l1.copy(q, 16, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-  en7l2= new PImage(16, 16, ARGB);\
-  en7l2.copy(q, 16, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en7u1= new PImage(16, 16, ARGB);\
-  en7u1.copy(q, 32, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-  en7u2= new PImage(16, 16, ARGB);\
-  en7u2.copy(q, 32, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en7d1= new PImage(16, 16, ARGB);\
-  en7d1.copy(q, 0, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-  en7d2= new PImage(16, 16, ARGB);\
-  en7d2.copy(q, 0, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);\
-\
-  en8d1= new PImage(16, 16, ARGB);\
-  en8d1.copy(q, 64, 0, 16, 16, 0, 0, 16, 16);\
-  en8d2= new PImage(16, 16, ARGB);\
-  en8d2.copy(q, 64, 16, 16, 16, 0, 0, 16, 16);\
-\
-\
-\
-  //items\
-  heartfull= new PImage(16, 16, ARGB);\
-  heartfull.copy(q, 32, 208, 16, 16, 0, 0, 16, 16);\
-  hearthalf= new PImage(16, 16, ARGB);\
-  hearthalf.copy(q, 128+16, 208, 16, 16, 0, 0, 16, 16);\
-\
-  grRupee= new PImage(16, 16, ARGB);\
-  grRupee.copy(q, 128+32, 208, 16, 16, 0, 0, 16, 16);\
-  bRupee= new PImage(16, 16, ARGB);\
-  bRupee.copy(q, 48+16, 208, 16, 16, 0, 0, 16, 16);\
-  goldRupee= new PImage(16, 16, ARGB);\
-  goldRupee.copy(q, 48, 208, 16, 16, 0, 0, 16, 16);\
-  potion= new PImage(16, 16, ARGB);\
-  potion.copy(q, 16*6, 208, 16, 16, 0, 0, 16, 16);\
-  princess= new PImage(16, 16, ARGB);\
-  princess.copy(q, 16*7, 208, 16, 16, 0, 0, 16, 16);\
-  princess2= new PImage(16, 16, ARGB);\
-  princess2.copy(q, 16*8, 208, 16, 16, 0, 0, 16, 16);\
-\
-  t1= new PImage(20, 20, ARGB);             //the triforce\
-  t1.copy(q, 70, 185, 20, 20, 0, 0, 20, 20);\
-\
-  shop= new PImage(48, 32, ARGB);\
-  shop.copy(q, 16*4, 16*2, 48, 32, 0, 0, 48, 32);\
-\}\
-\
-//items and chars pimages\
-\
-\
-//items and chars pimages\
-\
-\
-\
-PImage up1;\
-PImage up2;\
-PImage up3; //sword\
-\
-PImage down1;\
-PImage down2;\
-PImage down3; //sword\
-\
-PImage left1;\
-PImage left2;\
-PImage left3; //sword\
-\
-PImage right1;\
-PImage right2;\
-PImage right3; //sword\
-\
-\
-PImage bup1;\
-PImage bup2;\
-PImage bup3; //sword\
-\
-PImage bdown1;\
-PImage bdown2;\
-PImage bdown3; //sword\
-\
-PImage bleft1;\
-PImage bleft2;\
-PImage bleft3; //sword\
-\
-PImage bright1;\
-PImage bright2;\
-PImage bright3; //sword\
-\
-\
-void drawLink() \{\
-\
-  if (types==1) \{\
-    if (u<3) \{\
-      image(up1, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bup2, frogX - cameraX, frogY - cameraY+32, 32, 32);\
-    \} else \{\
-      image(up2, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bup1, frogX - cameraX, frogY - cameraY+32, 32, 32);\
-    \}\
-  \}\
-\
-\
-  if (types==2) \{\
-    if (d<3) \{\
-      image(down1, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bdown2, frogX - cameraX, frogY - cameraY-32, 32, 32);\
-    \} else \{\
-      image(down2, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);\
-    \}\
-  \}\
-\
-\
-  if (types==3) \{\
-    if (l<3) \{\
-      image(left1, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bleft2, frogX - cameraX+32, frogY - cameraY, 32, 32);\
-    \} else \{\
-      image(left2, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bleft1, frogX - cameraX+32, frogY - cameraY, 32, 32);\
-    \}\
-  \}\
-\
-  if (types==4) \{\
-    if (r<3) \{\
-      image(right1, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bright2, frogX - cameraX-32, frogY - cameraY, 32, 32);\
-    \} else \{\
-      image(right2, frogX - cameraX, frogY - cameraY, 32, 32);\
-      image(bright1, frogX - cameraX-32, frogY - cameraY, 32, 32);\
-    \}\
-  \}\
-\
-\
-\
-\
-\
-\
-\
-\
-\
-  if (types==6) \{     //down sword\
-    image(down3, frogX - cameraX, frogY - cameraY, 32, 64);\
-    image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);\
-\
-    noStroke();\
-    // fill(#0000FF, 150);\
-    // ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16);\
-  \}\
-\
-  if (types==7) \{     //left sword\
-    image(left3, frogX - cameraX-32, frogY - cameraY, 64, 32);\
-    image(bleft1, frogX - cameraX-32+64, frogY - cameraY, 32, 32);\
-\
-    noStroke();\
-    //  fill(#0000FF, 150);\
-    // ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16);\
-  \}\
-  if (types==8) \{     //right sword\
-    image(right3, frogX - cameraX, frogY - cameraY, 64, 32);\
-    image(bright1, frogX - cameraX-32, frogY - cameraY, 32, 32);\
-\
-    noStroke();\
-    // fill(#0000FF, 150);\
-    // ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);\
-  \}\
-\
-  if (types==5) \{     //up sword\
-    image(up3, frogX - cameraX, frogY - cameraY-32, 32, 64);\
-    image(bup1, frogX - cameraX, frogY - cameraY-32+64, 32, 32);\
-\
-    noStroke();\
-    //fill(#0000FF, 150);\
-    //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16);\
-  \} \
-  // noStroke();\
-  // fill(#0000FF, 150);\
-  // ellipse(frogX+16-cameraX, frogY+16- cameraY, 16, 16);\
-\
-\
-  //  fill(#0000FF, 150);\
-  //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16); // up\
-  // ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16); //down\
-  //ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16); //left\
-  //ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);  //right\
-\}\
-\
-\
-PImage[] mt = new PImage[18*8];\
-\
-int[][] mapData;\
-\
-\
-\
-\
-\
-int grid = 32;\
-\
-\
-\
-\
-\
-\
-\
-void drawGrid() \{\
-  stroke(0);\
-  strokeWeight(1);\
-  for (int i = 0; i <height; i+=grid) \
-    line(0, i, width, i);//hor\
-\
-  for (int i = 0; i <width; i+=grid) \
-    line(i, 0, i, height);//ver\
-\}\
-\
-\
-\
-void fixImage(PImage q) \{\
-  for (int i=0; i < q.pixels.length; i++) \{\
-    if (q.pixels[i] == 0) \{\
-      q.pixels[i] = color(0, 1);\
-    \}\
-    //  println(q.pixels[i]);\
-  \}\
-\}\
-\
-//PImage qqq; \
-\
-//int storycounter;\
-\
-\
-void story() \{\
-  background(#1BA032);\
-  fill(0);\
-  textSize(25);\
-  text("This is Link's story, not Zelda's", 120-50, 30);\
-  textSize(15);\
-  text("Your princess has been captured, \\nbut not because she's a girl, \\nshe was outnumbered", 20, 70);\
-  image(princess, 300, 50, 32*2, 32*2);\
-  image(right3, 100, 150, 64*2, 32*2);\
-  text("As Link, you must explore your surroundings,\\n clearing all 4 dungeons in order\\n to rescue the princess", 300-50, 150);\
-  text("Use the arrow keys to move,\\nand SPACE or Z to attack. \\nDon't forget to visit the shop to upgrade your health", 20, 270); \
-  image(shop,440,235,48*2,32*2);\
-  textSize(75);\
-  text("GOOD LUCK", 85-50, 400);\
-  textSize(25);\
-  text("ENTER TO BEGIN", 200-50, 450);\
-\}\
-\
-\
-void win() \{\
-  background(#0ACB4F);\
-  fill(0);\
-  image(t1, 300-20, 50-20, 20*3, 20*3);\
-  image(princess2,298-20,110-20,32*2, 32*2);\
-  textSize(30);\
-  text("              Congratulations!\\nYou've gotten through all 4 dungeons\\n      and now the princess is free!\\nYou've been awarded three triangles!",0,200);\
-\}\
-\
+int soundVar = 0;
+
+
+PFont myfont;
+
+int page = 0;
+
+int frogX = 32*1;
+int frogY = 32*1;
+
+float speed=8;
+
+int cameraX;
+int cameraY;
+//kutfityf
+
+//ASSUMING FROG VELOCITY = 40
+int mapWidth, mapHeight;
+//
+int r=0;
+int l=0;
+int u=0;
+int d=0;
+
+int type=8;
+
+int mapVar;
+
+void setup() {
+  // surface.setResizable(true);
+  size(640, 800);//ASSUMING FROG VELOCITY = 40
+  frameRate(30);
+  noStroke();
+  //  String[] fontList = PFont.list();    
+  //  printArray(fontList);
+
+  myfont = createFont("LucidaHandwriting-Italic", 32);
+
+  //  addCurley("map2num.txt");
+
+  loadImages2(); // enemies
+
+
+
+
+
+  populateArrays();
+
+  //  playSound(1);
 }
+float healthmax = 3;
+float health = healthmax;
+float healthcounter = 0;
+//if healthcounter is 0 and you collide, then health -=.5 and health counter = 1;
+
+long tick;
+
+
+boolean dGrid;
+
+
+int gx, gy;
+
+boolean talk = false;   // var for drawing dialogue box at the bottom of the screen
+int conversation = 1;
+int comp;
+boolean companion = true;
+
+int wx = -3, wy = 480, wo = 255;
+
+
+
+
+void draw() {
+
+
+
+  // println(frogX);
+  loadLinkSprites();
+
+  if (page==0) {
+    drawTitle();
+  }
+  if (page == 1) {
+    story();
+  }
+
+  if (page == 2) {
+    gamePlay();
+    drawRhealth();
+  }
+  if (page == 3) {
+    // playSound(4);
+    win();
+  }
+  fill(255, wo);
+  noStroke();
+  rect(wx, wy, 645, 500);
+
+  if ( talk == false) {
+    wo = 255;
+    //    dialogue.remove(this);
+  }
+
+  if ( talk == true) {
+
+    wo = 0;
+    //   surface.setSize(640, 980);
+    di0.update();
+    if ( conversation == 1) {
+    }
+  }
+}
+
+
+
+
+
+
+int types =2;
+
+void bordersAndCamera() {
+  //left
+  if (frogX < 0) {
+    frogX = 0;
+  }
+  //right       
+  if (frogX > mapWidth - 40) {
+    frogX = mapWidth - 40;
+  }
+  //top      
+  if (frogY < 0) {
+    frogY = 0;
+  }
+  //bottom     
+  if (frogY > mapHeight - 40) {
+    frogY = mapHeight - 40;
+  }
+
+  //horizontal camera 
+  if (frogX > cameraX + 32*12 && cameraX < (mapWidth - width)) {//ASSUMING FROG VELOCITY = 40
+    cameraX = frogX - 32*12;
+  }
+
+  if (frogX < cameraX + 32*8 && cameraX > 0) {//ASSUMING FROG VELOCITY = 40
+    cameraX = frogX - 32*8;
+  }
+  //vertical camera 
+  if (frogY > cameraY + 32*10 && cameraY < (mapHeight - 480)) {//ASSUMING FROG VELOCITY = 40
+    cameraY = frogY - 32*10;
+  }
+  if (frogY < cameraY + 32*8 && cameraY > 0) {//ASSUMING FROG VELOCITY = 40
+    cameraY = frogY - 32*8;
+  }
+  // println(cameraX);
+}
+
+
+
+
+
+//PUT ALL THIS STUFF IN THE INPUT TAB
+
+
+
+
+void mouseReleased() {
+  //?
+}
+
+
+
+//PUT ALL THIS STUFF IN THE ART TAB
+
+
+
+
+
+
+
+//  KEYBOARD STUFF GOES HERE
+
+
+
+
+
+
+
+
+//OK LOL
+int goUp, goDown, goLeft, goRight;
+void keyPressed() {
+  if ( key == 'm') {
+    companion = true;
+  }
+
+  if ( key == 'n') {
+    companion = false;
+  }
+
+  if (key == 'l') {
+    talk = true;
+    types = 4;
+  }
+  if (key == 'k') {
+    talk = false;
+  }
+  if (key == 'o') {
+    page = 3;
+  }
+
+  if (page==0) {
+
+    if (key == ' ' ) {
+      page=1;
+    }
+  } 
+
+
+  if (page == 1) {
+    if (key == ENTER ) {
+      page=2;
+      mapVar=1;
+      loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store
+      frogX = 56*32;//56
+      frogY = 46*32;//46
+      cameraY = 1120;
+      cameraX = 1440;
+      setCompArray();
+      //bordersAndCamera();
+      //  playSound(2);
+    }
+  }
+
+
+  if (page == 2) {
+
+    if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
+      //playSound(13);
+      types+=4;
+    }
+
+    if (mapVar==2 && key == 'b' && gx==11 && gy ==12 && coins>=1000) {
+      //playSound(7);
+      healthmax++;
+      health=healthmax;
+      coins-=1000;
+    }
+    if (key == '5') {
+
+      coins+=500;
+    }
+
+
+    if ((key == 'w' || keyCode == UP) && talk == false) {
+      goUp = 1;
+    }
+
+    if ((key == 's'|| keyCode == DOWN) && talk == false) {
+      goDown = 1;
+    }
+
+    if ((key == 'a'|| keyCode == LEFT) && talk == false) {
+      goLeft = 1;
+    }
+    if ((key == 'd'|| keyCode == RIGHT) && talk == false) {
+      goRight = 1;
+    }
+
+    if (key == 'g')
+      dGrid = !dGrid;
+  }
+}
+
+void keyReleased() {
+
+  if ((key == 'z' || key == 'Z' || key == ' ') && types> 4 ) {
+    types-=4;
+  }
+
+  if (key == 'w' || keyCode == UP) {
+    goUp = 0;
+  }
+
+  if (key == 's'|| keyCode == DOWN) {
+    goDown = 0;
+  }
+
+  if (key == 'a'|| keyCode == LEFT) {
+    goLeft = 0;
+  }
+  if (key == 'd'|| keyCode == RIGHT) {
+    goRight = 0;
+  }
+}
+
+
+int storeVar=1;
+
+int completion=0;
+
+int d1;
+int d2;
+int d3;
+
+
+int cheapFix;
+
+void gamePlay() {
+  // println(gx, gy);
+
+  if (healthcounter<=1) {
+    //playSound(12);
+  }
+
+  if (page == 2) {
+    background(-206680);
+  }
+
+  gx = (int)((frogX+16)/32);
+  gy = (int)((frogY+16)/32);
+
+
+  if (goUp == 1) {
+
+    if (u == 0 && checkDir(gx, gy, 1)) {
+      u = 1;
+      types=1;
+    }
+  } else if (goDown == 1) {
+
+    if (d == 0 && checkDir(gx, gy, 2)) {
+      d = 1;
+      types =2;
+    }
+  } else if (goLeft== 1) {
+    if (l == 0 && checkDir(gx, gy, 3)) {
+      l = 1;
+      types =3;
+    }
+  } else if (goRight== 1) {
+    if (r == 0 && checkDir(gx, gy, 4)) {
+      r = 1;
+      types =4;
+    }
+  }
+
+
+
+
+
+
+
+
+  //if (keyPressed) {
+  // keyPressed1();
+  // }//} else if (uFix == 1 || dFix == 1 | lFix == 1 || rFix == 1) {
+  //   keyPressed2();
+  /// }
+
+  moveFrog();
+  if (cheapFix>1) {
+    bordersAndCamera();
+  }
+
+  if (dGrid)
+    drawGrid();
+
+
+  map1();//draw any map 
+
+
+  if (mapVar == 2) {
+    // coins=1000;
+    image(heartfull, 11*32-cameraX, 8*32-cameraY, 32, 32);
+    fill(255);
+    textSize(25);
+    text("1000", 10.5*32-cameraX, 10.75*32-cameraY);
+    text("One more heart", 8.5*32-cameraX, 9.75*32-cameraY);
+    image(grRupee, 125.*32-cameraX, 10*32-cameraY, 32, 32);
+    text("'B' to purchase", 8.5*32-cameraX, 11.5*32-cameraY);
+  }
+
+
+  drawLink();
+
+
+  if (health == 0) {
+    //playsound(5);
+    //  populateArrays();
+    types = 2;
+    // playSound(1);
+    // console.log("bad");
+    page=1;
+    loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store
+    completion = 0;
+    d1=0;
+    d2=0;
+    d3=0;
+    healthmax=3;
+    health=healthmax;
+    coins=0;
+    mapVar=1;
+    frogX = 56*32;//56
+    frogY = 46*32;//46
+    // cameraY = 1120;
+    // cameraX = 1440;
+    cheapFix=0;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+
+  if (mapVar == 1 ) {                               //OVERWORLD
+    for (int i=0; i < enemies.size (); i++) {
+      enemies.get(i).update();
+    }
+    if (gx == 56 && gy == 46 && dialogue < 1) {
+      talk = true;
+    }
+  }
+
+  if (mapVar == 3) {                               //dungeon 1 to the right 
+    for (int i=0; i < enemiesD1.size (); i++) {
+      enemiesD1.get(i).update();
+    }
+  }
+  if (mapVar == 4) {                               //dungeon 1 to the right 
+    for (int i=0; i < enemiesD2.size (); i++) {
+      enemiesD2.get(i).update();
+    }
+  }
+  if (mapVar == 5) {                               //dungeon 1 to the right 
+    for (int i=0; i < enemiesD3.size (); i++) {
+      enemiesD3.get(i).update();
+    }
+  }
+  if (mapVar == 6) {                               //dungeon 1 to the right 
+    for (int i=0; i < enemiesD4.size (); i++) {
+      enemiesD4.get(i).update();
+    }
+  }
+
+  //////////////////////// ADD REST OF CALLING ENEMY CLASSES
+
+
+
+  for (int i=0; i < drops.size (); i++) {
+    drops.get(i).update();
+  }
+
+  drawHealth();
+  drawCoins();
+
+  fill(0);
+  textSize(30);
+
+  if ((mapVar == 1 || mapVar == 7) &&  gx == 52 && gy == 37) {
+    //playSound(6);
+    mapVar = 2;
+    loadLevelFromText("store.txt");    //change to store.txt to load the store
+    coincolor=255;
+    frogX = 32*6;
+    frogY = 32*16;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    //  bordersAndCamera();
+    cheapFix = 0;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+    setCompArray();
+  }
+  if (mapVar == 2 && gx == 6 && gy ==17 ) {            /////////////////STORE EXIT
+    //playSound(6);
+    if (storeVar==1) {
+      mapVar = 1;
+      if ((d1+d2+d3)<3) {
+        loadLevelFromText("OVERWORLD.txt");
+      } else {
+        loadLevelFromText("OVERWORLD2.txt");
+      }
+      frogX = 52*32;//52
+      frogY = 38*32;//38
+      cameraX = 0;//32*2;
+      cameraY = 0;//32*5;
+      u=0;
+      d=0;
+      r=0;
+      l=0;
+      setCompArray();
+    }
+    if (storeVar==3) {
+      mapVar = 3;
+      loadLevelFromText("d4.txt"); 
+      frogX = 18*32;
+      frogY = 40*32;
+      cameraX = 0;//32*2;
+      cameraY = 0;//32*5;
+      coincolor=0;
+      u=0;
+      d=0;
+      r=0;
+      l=0;
+    }
+    if (storeVar==4) {
+      mapVar = 4;
+      loadLevelFromText("d2.txt"); 
+      frogX = 18*32;
+      frogY = 40*32;
+      cameraX = 0;//32*2;
+      cameraY = 0;//32*5;
+      coincolor=0;
+      u=0;
+      d=0;
+      r=0;
+      l=0;
+    }
+    if (storeVar==5) {
+      mapVar = 5;
+      loadLevelFromText("d3.txt"); 
+      frogX = 3*32;
+      frogY = 40*32;
+      cameraX = 0;//32*2;
+      cameraY = 0;//32*5;
+      coincolor=0;
+      u=0;
+      d=0;
+      r=0;
+      l=0;
+    }
+    if (storeVar==6) {
+      mapVar = 6;
+      loadLevelFromText("d1.txt"); 
+      frogX = 23*32;
+      frogY = 64*32;
+      cameraX = 0;//32*2;
+      cameraY = 0;//32*5;
+      coincolor=0;
+      u=0;
+      d=0;
+      r=0;
+      l=0;
+    }
+  }
+
+
+
+
+
+  if (mapVar == 1 &&  gx == 116 && gy == 39) {
+    //playSound(6);
+    //   playSound(3);
+    mapVar = 3;
+    storeVar=3;
+    loadLevelFromText("d4.txt");    
+    coincolor=0;
+    frogX = 32*22;
+    frogY = 32*42;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+  if (mapVar == 1 &&  gx == 2 && gy == 48) {
+    //playSound(6);
+    //   playSound(3);
+    mapVar = 4;
+    storeVar=4;
+    loadLevelFromText("d2.txt");    
+    coincolor=0;
+    frogX = 32*22;
+    frogY = 32*42;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+  if (mapVar == 1 &&  gx == 19 && gy == 9) {
+    //playSound(6);
+    //     playSound(3);
+    mapVar = 5;
+    storeVar=5;
+    loadLevelFromText("d3.txt");    
+    coincolor=0;
+    frogX = 32*7;
+    frogY = 32*42;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0; 
+    l=0;
+  }
+  if (mapVar == 1 &&  (gx == 106 ||gx == 107 ||gx == 108 ||gx == 109) && gy == 4) {   // this is the boss dungeon 
+    //playSound(6);
+    //     playSound(3);
+    mapVar = 6;
+    storeVar=6;
+    loadLevelFromText("d1.txt");    
+    coincolor=0;
+    frogX = 32*27;
+    frogY = 32*67;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  if (mapVar == 3 &&  gx == 18 && gy == 39) {   
+    //playSound(6);
+    mapVar = 2;
+    loadLevelFromText("store.txt");    
+    coincolor=255;
+    frogX = 32*6;
+    frogY = 32*16;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  if (mapVar == 5 &&  gx == 3 && gy == 39) {
+    //playSound(6);
+    mapVar = 2;
+    loadLevelFromText("store.txt");    
+    coincolor=255;
+    frogX = 32*6;
+    frogY = 32*16;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+
+  if (mapVar == 6 &&  gx == 23 && gy == 63) {
+    //playSound(6);
+    mapVar = 2;
+    loadLevelFromText("store.txt");    
+    coincolor=255;
+    frogX = 32*6;
+    frogY = 32*16;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+  if (mapVar == 4 &&  gx == 18 && gy == 39) {
+    //playSound(6);
+    mapVar = 2;
+    loadLevelFromText("store.txt");    
+    coincolor=255;
+    frogX = 32*6;
+    frogY = 32*16;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  ////////////////////////////////////// DUNGEON EXITS
+
+  if (mapVar == 3 &&  gx == 1 && gy == 11) {
+    //playSound(6);
+    //playSound(2);
+    completion++;
+    d1=1;
+    mapVar = 1;
+    storeVar=1;
+    if ((d1+d2+d3)<3) {
+      loadLevelFromText("OVERWORLD.txt");
+    } else {
+      loadLevelFromText("OVERWORLD2.txt");
+    }
+    coincolor=255;
+    frogX = 32*116;
+    frogY = 32*40;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  if (mapVar == 4 &&  gx == 1 && gy == 16) { 
+    //playSound(6);
+    //playSound(2);
+    completion++;
+    d2=1;
+    mapVar = 1;
+    storeVar=1;
+    if ((d1+d2+d3)<3) {
+      loadLevelFromText("OVERWORLD.txt");
+    } else {
+      loadLevelFromText("OVERWORLD2.txt");
+    }   
+    coincolor=255;
+    frogX = 32*1;
+    frogY = 32*48;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  if (mapVar == 5 &&  gx == 19 && gy == 43) { 
+    //playSound(6);
+    //playSound(2);
+    completion++;
+    d3=1;
+    mapVar = 1;
+    storeVar=1;
+    if ((d1+d2+d3)<3) {
+      loadLevelFromText("OVERWORLD.txt");
+    } else {
+      loadLevelFromText("OVERWORLD2.txt");
+    }   
+    coincolor=255;
+    frogX = 32*19;
+    frogY = 32*10;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  if (mapVar == 6 &&  gx == 1 && gy == 1) {    
+    completion++;
+
+    mapVar = 1;
+    storeVar=1;
+    if (completion>3) {
+      page =3;
+    }    
+    coincolor=255;
+    frogX = 32*108;
+    frogY = 32*5;
+    cameraX = 0;//32*2;
+    cameraY = 0;//32*5;
+    u=0;
+    d=0;
+    r=0;
+    l=0;
+  }
+
+  cheapFix++;
+}
+
+
+
+//
+void map1() {
+  int q = -1;
+  for (int r = 0; r < mapData.length; r++) {
+    for (int c = 0; c < mapData[0].length; c++) {    
+      q = mapData[r][c];
+      if (q!= 2 && c*grid-cameraX < 32*20   &&   c*grid-cameraX> -32   && r*grid-cameraY < 32*15   &&   r*grid-cameraY> -32)
+        image(mt[q], c*grid-cameraX, r*grid-cameraY, grid, grid); //first 30 is columns, second is rows
+    }
+  }
+}
+//Pfont titlefont = createFont("lucidahandwriting.ttf",32);
+
+void drawTitle() {
+  mapVar=0;
+  background(260, 207, 203);
+  image(title, 0, 0, 320*2, 240*2);
+  fill(0);
+  textSize(50);
+  textFont(myfont, 64);
+  text("LINK'S", 200, 150);
+  text("STORY", 195, 210);
+  //stroke(80);
+  textSize(20);
+  text("PRESS SPACE TO BEGIN", 210-25, 320);
+  textSize(15);
+  text("By Henry Hoare and Eduardo Guzman", 265-25-25-75, 240);
+}
+
+
+
+
+
+
+void loadLinkSprites() {
+  PImage q = loadImage("data/hhmaptiles.png");
+  for (int r = 0; r < mt.length; r++) {
+    mt[r] = new PImage(16, 16);
+    mt[r].copy(q, 1+17* ((int)(r%18)), 1 + 17* ((int)(r/18)), 16, 16, 0, 0, 16, 16);   //this loads sprite sheet
+  }
+
+
+
+  if (companion == true) {
+    comp = 65;
+  } else if (companion == false) {
+    comp = 0;
+  }
+
+
+  q= loadImage("data/hhlink.png");
+
+
+
+  // qqq.updatePixels();
+
+
+  up1= new PImage(16, 16, ARGB);
+  up1.copy(q, 32, 0+comp, 16, 16, 0, 0, 16, 16);
+  up2= new PImage(16, 16, ARGB);
+  up2.copy(q, 32, 16+comp, 16, 16, 0, 0, 16, 16);
+  up3= new PImage(16, 32, ARGB);
+  up3.copy(q, 64, 0+comp, 16, 32, 0, 0, 16, 32);
+
+  down1= new PImage(16, 16, ARGB);
+  down1.copy(q, 0, 0+comp, 16, 16, 0, 0, 16, 16);
+  down2= new PImage(16, 16, ARGB);
+  down2.copy(q, 0, 16+comp, 16, 16, 0, 0, 16, 16);
+  down3= new PImage(16, 32, ARGB);
+  down3.copy(q, 80, 0+comp, 16, 32, 0, 0, 16, 32);
+
+  left1= new PImage(16, 16, ARGB);
+  left1.copy(q, 16, 0+comp, 16, 16, 0, 0, 16, 16);
+  left2= new PImage(16, 16, ARGB);
+  left2.copy(q, 16, 16+comp, 16, 16, 0, 0, 16, 16);
+  left3= new PImage(32, 16, ARGB);
+  left3.copy(q, 64, 32+comp, 32, 16, 0, 0, 32, 16);
+
+  right1= new PImage(16, 16, ARGB);
+  right1.copy(q, 48, 0+comp, 16, 16, 0, 0, 16, 16);
+  right2= new PImage(16, 16, ARGB);
+  right2.copy(q, 48, 16+comp, 16, 16, 0, 0, 16, 16);
+  right3= new PImage(32, 16, ARGB);
+  right3.copy(q, 64, 48+comp, 32, 16, 0, 0, 32, 16);
+
+
+  bup1= new PImage(16, 16, ARGB);
+  bup1.copy(q, 32+96, 0, 16, 16, 0, 0, 16, 16);
+  bup2= new PImage(16, 16, ARGB);
+  bup2.copy(q, 32+96, 16, 16, 16, 0, 0, 16, 16);
+  bup3= new PImage(16, 32, ARGB);
+  bup3.copy(q, 64+96, 0, 16, 32, 0, 0, 16, 32);
+
+  bdown1= new PImage(16, 16, ARGB);
+  bdown1.copy(q, 0+96, 0, 16, 16, 0, 0, 16, 16);
+  bdown2= new PImage(16, 16, ARGB);
+  bdown2.copy(q, 0+96, 16, 16, 16, 0, 0, 16, 16);
+  bdown3= new PImage(16, 32, ARGB);
+  bdown3.copy(q, 80+96, 0, 16, 32, 0, 0, 16, 32);
+
+  bleft1= new PImage(16, 16, ARGB);
+  bleft1.copy(q, 16+96, 0, 16, 16, 0, 0, 16, 16);
+  bleft2= new PImage(16, 16, ARGB);
+  bleft2.copy(q, 16+96, 16, 16, 16, 0, 0, 16, 16);
+  bleft3= new PImage(32, 16, ARGB);
+  bleft3.copy(q, 64+96, 32, 32, 16, 0, 0, 32, 16);
+
+  bright1= new PImage(16, 16, ARGB);
+  bright1.copy(q, 48+96, 0, 16, 16, 0, 0, 16, 16);
+  bright2= new PImage(16, 16, ARGB);
+  bright2.copy(q, 48+96, 16, 16, 16, 0, 0, 16, 16);
+  bright3= new PImage(32, 16, ARGB);
+  bright3.copy(q, 64+96, 48, 32, 16, 0, 0, 32, 16);
+}
+
+
+
+void populateArrays() {
+  enemies.add(new ENEMY(25, 35, 31, 48, 22, 44, 1)); //grid x, grid y, ub, db, lb, rb, skin
+  enemies.add(new ENEMY(36, 35, 31, 48, 22, 44, 1));
+  enemies.add(new ENEMY(36, 47, 31, 48, 22, 44, 1));
+  enemies.add(new ENEMY(25, 47, 31, 48, 22, 44, 1));
+  enemies.add(new ENEMY(23, 41, 31, 48, 22, 44, 2));
+  enemies.add(new ENEMY(77, 38, 36, 48, 70, 87, 1));
+  enemies.add(new ENEMY(82, 41, 36, 48, 70, 87, 1));
+  enemies.add(new ENEMY(77, 45, 36, 48, 70, 87, 1));
+  enemies.add(new ENEMY(93, 42, 36, 48, 88, 93, 1));
+  enemies.add(new ENEMY(105, 42, 36, 48, 100, 106, 1));
+  enemies.add(new ENEMY(113, 46, 36, 48, 109, 118, 1));
+
+  enemies.add(new ENEMY(16, 47, 31, 48, 1, 17, 1));
+  enemies.add(new ENEMY(5, 47, 31, 48, 1, 17, 2));
+  enemies.add(new ENEMY(2, 37, 31, 48, 1, 17, 1));
+  enemies.add(new ENEMY(15, 32, 31, 48, 1, 17, 1));
+
+  enemies.add(new ENEMY(14, 26, 23, 31, 1, 15, 1));
+  enemies.add(new ENEMY(8, 29, 23, 31, 1, 15, 1));
+  enemies.add(new ENEMY(2, 26, 23, 31, 1, 15, 2));
+
+  enemies.add(new ENEMY(1, 15, 0, 22, 0, 30, 1));
+  enemies.add(new ENEMY(5, 11, 0, 22, 0, 30, 1));
+  enemies.add(new ENEMY(2, 8, 0, 22, 0, 30, 1));
+  enemies.add(new ENEMY(2, 1, 0, 22, 0, 30, 2));
+  enemies.add(new ENEMY(5, 5, 0, 22, 0, 30, 1));
+  enemies.add(new ENEMY(5, 11, 0, 22, 0, 30, 1));
+  enemies.add(new ENEMY(18, 0, 0, 22, 0, 30, 1));
+  enemies.add(new ENEMY(18, 1, 0, 22, 0, 30, 2));
+  enemies.add(new ENEMY(18, 2, 0, 22, 0, 30, 1));
+
+  enemies.add(new ENEMY(18, 12, 6, 15, 14, 24, 2));
+  enemies.add(new ENEMY(20, 12, 6, 15, 14, 24, 2));
+
+  enemies.add(new ENEMY(22, 27, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(22, 24, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(27, 26, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(31, 25, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(33, 21, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(37, 25, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(40, 22, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(41, 22, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(42, 26, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(47, 25, 20, 29, 21, 51, 1));
+  enemies.add(new ENEMY(49, 22, 20, 29, 21, 51, 1));
+
+  enemies.add(new ENEMY(56, 24, 20, 31, 53, 66, 1));
+  enemies.add(new ENEMY(56, 25, 20, 31, 53, 66, 1));
+  enemies.add(new ENEMY(59, 28, 20, 31, 53, 66, 1));
+  enemies.add(new ENEMY(59, 21, 20, 31, 53, 66, 1));
+  enemies.add(new ENEMY(62, 24, 20, 31, 53, 66, 1));
+  enemies.add(new ENEMY(62, 25, 20, 31, 53, 66, 1));
+
+  enemies.add(new ENEMY(78, 21, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(78, 25, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(78, 29, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(82, 22, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(82, 25, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(82, 28, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(86, 24, 20, 31, 68, 89, 1));
+  enemies.add(new ENEMY(86, 25, 20, 31, 68, 89, 1));
+
+  enemies.add(new ENEMY(38, 14, 0, 18, 32, 54, 2));
+  enemies.add(new ENEMY(38, 8, 0, 18, 32, 54, 2));
+  enemies.add(new ENEMY(42, 17, 0, 18, 32, 54, 2));
+  enemies.add(new ENEMY(42, 5, 0, 18, 32, 54, 2));
+  enemies.add(new ENEMY(46, 8, 0, 18, 32, 54, 2));
+  enemies.add(new ENEMY(46, 14, 0, 18, 32, 54, 2));
+  enemies.add(new ENEMY(51, 1, 0, 18, 32, 54, 3));
+
+  enemies.add(new ENEMY(64, 11, 0, 17, 56, 82, 1));
+  enemies.add(new ENEMY(70, 11, 0, 17, 56, 82, 3));
+  enemies.add(new ENEMY(76, 11, 0, 17, 56, 82, 1));
+  enemies.add(new ENEMY(70, 15, 0, 17, 56, 82, 1));
+  enemies.add(new ENEMY(70, 7, 0, 17, 56, 82, 1));
+  enemies.add(new ENEMY(79, 1, 0, 17, 56, 82, 1));
+
+  enemies.add(new ENEMY(87, 1, 0, 18, 84, 95, 3));
+  enemies.add(new ENEMY(89, 5, 0, 18, 84, 95, 1));
+  enemies.add(new ENEMY(93, 4, 0, 18, 84, 95, 1));
+  enemies.add(new ENEMY(95, 1, 0, 18, 84, 95, 3));
+  enemies.add(new ENEMY(89, 11, 0, 18, 84, 95, 2));
+  enemies.add(new ENEMY(92, 11, 0, 18, 84, 95, 1));
+  enemies.add(new ENEMY(89, 14, 0, 18, 84, 95, 1));
+  enemies.add(new ENEMY(92, 14, 0, 18, 84, 95, 2));
+
+  enemies.add(new ENEMY(106, 7, 2, 9, 98, 95, 117));
+  enemies.add(new ENEMY(109, 7, 2, 9, 98, 95, 117));
+
+  enemies.add(new ENEMY(93, 23, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(93, 26, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(97, 19, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(99, 16, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(99, 30, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(99, 33, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(100, 24, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(103, 20, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(106, 17, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(107, 17, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(108, 17, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(109, 17, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(107, 20, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(108, 20, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(107, 28, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(108, 27, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(112, 20, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(112, 33, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(115, 25, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(116, 23, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(116, 30, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(116, 17, 15, 35, 89, 119, 1));
+  enemies.add(new ENEMY(117, 18, 15, 35, 89, 119, 1));
+
+
+  enemiesD1.add(new ENEMY(33, 40, 37, 44, 31, 44, 2));
+  enemiesD1.add(new ENEMY(39, 40, 37, 44, 31, 44, 1));
+  enemiesD1.add(new ENEMY(40, 37, 37, 44, 31, 44, 1));
+  enemiesD1.add(new ENEMY(40, 43, 37, 44, 31, 44, 1));
+
+  enemiesD1.add(new ENEMY(35, 34, 28, 35, 31, 44, 1));
+  enemiesD1.add(new ENEMY(35, 31, 28, 35, 31, 44, 1));
+  enemiesD1.add(new ENEMY(35, 28, 28, 35, 31, 44, 1));
+  enemiesD1.add(new ENEMY(41, 31, 28, 35, 31, 44, 2));
+
+  enemiesD1.add(new ENEMY(39, 22, 19, 26, 31, 44, 2));
+  enemiesD1.add(new ENEMY(35, 22, 19, 26, 31, 44, 2));
+  enemiesD1.add(new ENEMY(34, 19, 19, 26, 31, 44, 3));
+  enemiesD1.add(new ENEMY(40, 19, 19, 26, 31, 44, 3));
+
+  enemiesD1.add(new ENEMY(31, 14, 10, 17, 31, 44, 1));
+  enemiesD1.add(new ENEMY(35, 13, 10, 17, 31, 44, 2));
+  enemiesD1.add(new ENEMY(35, 10, 10, 17, 31, 44, 1));
+  enemiesD1.add(new ENEMY(39, 10, 10, 17, 31, 44, 1));
+  enemiesD1.add(new ENEMY(39, 13, 10, 17, 31, 44, 2));
+  enemiesD1.add(new ENEMY(43, 14, 10, 17, 31, 44, 1));
+
+  enemiesD1.add(new ENEMY(33, 3, 1, 8, 31, 44, 1));
+  enemiesD1.add(new ENEMY(35, 5, 1, 8, 31, 44, 1));
+  enemiesD1.add(new ENEMY(38, 2, 1, 8, 31, 44, 8));
+  enemiesD1.add(new ENEMY(39, 6, 1, 8, 31, 44, 8));
+  enemiesD1.add(new ENEMY(42, 3, 1, 8, 31, 44, 1));
+
+  enemiesD1.add(new ENEMY(25, 3, 1, 8, 16, 28, 1));
+  enemiesD1.add(new ENEMY(22, 2, 1, 8, 16, 28, 1));
+  enemiesD1.add(new ENEMY(21, 5, 1, 8, 16, 28, 1));
+  enemiesD1.add(new ENEMY(16, 4, 1, 8, 16, 28, 3));
+
+  enemiesD1.add(new ENEMY(19, 11, 10, 17, 16, 28, 1));
+  enemiesD1.add(new ENEMY(17, 15, 10, 17, 16, 28, 1));
+  enemiesD1.add(new ENEMY(22, 13, 10, 17, 16, 28, 3));
+  enemiesD1.add(new ENEMY(22, 15, 10, 17, 16, 28, 8));
+  enemiesD1.add(new ENEMY(25, 11, 10, 17, 16, 28, 1));
+  enemiesD1.add(new ENEMY(27, 15, 10, 17, 16, 28, 8));
+
+  enemiesD1.add(new ENEMY(18, 21, 19, 26, 16, 28, 1));
+  enemiesD1.add(new ENEMY(18, 23, 19, 26, 16, 28, 1));
+  enemiesD1.add(new ENEMY(22, 22, 19, 26, 16, 28, 3));
+  enemiesD1.add(new ENEMY(26, 21, 19, 26, 16, 28, 1));
+  enemiesD1.add(new ENEMY(26, 23, 19, 26, 16, 28, 1));
+
+  enemiesD1.add(new ENEMY(19, 29, 28, 35, 16, 28, 1));
+  enemiesD1.add(new ENEMY(20, 32, 28, 35, 16, 28, 1));
+  enemiesD1.add(new ENEMY(22, 34, 28, 35, 16, 28, 3));
+  enemiesD1.add(new ENEMY(24, 32, 28, 35, 16, 28, 1));
+  enemiesD1.add(new ENEMY(25, 29, 28, 35, 16, 28, 1));
+
+  enemiesD1.add(new ENEMY(4, 31, 28, 35, 1, 13, 3));
+  enemiesD1.add(new ENEMY(7, 31, 28, 35, 1, 13, 2));
+  enemiesD1.add(new ENEMY(7, 29, 28, 35, 1, 13, 8));
+  enemiesD1.add(new ENEMY(7, 33, 28, 35, 1, 13, 8));
+  enemiesD1.add(new ENEMY(10, 33, 28, 35, 1, 13, 1));
+  enemiesD1.add(new ENEMY(10, 29, 28, 35, 1, 13, 1));
+
+  enemiesD1.add(new ENEMY(5, 24, 11, 26, 1, 13, 1));
+  enemiesD1.add(new ENEMY(9, 24, 11, 26, 1, 13, 1));
+  enemiesD1.add(new ENEMY(3, 22, 11, 26, 1, 13, 1));
+  enemiesD1.add(new ENEMY(11, 22, 11, 26, 1, 13, 1));
+  enemiesD1.add(new ENEMY(7, 21, 11, 26, 1, 13, 8));
+  enemiesD1.add(new ENEMY(3, 19, 11, 26, 1, 13, 1));
+  enemiesD1.add(new ENEMY(11, 19, 11, 26, 1, 13, 1));
+  enemiesD1.add(new ENEMY(3, 12, 11, 26, 1, 13, 3));
+  enemiesD1.add(new ENEMY(5, 14, 11, 26, 1, 13, 2));
+  enemiesD1.add(new ENEMY(7, 12, 11, 26, 1, 13, 3));
+  enemiesD1.add(new ENEMY(9, 14, 11, 26, 1, 13, 2));
+  enemiesD1.add(new ENEMY(11, 12, 11, 26, 1, 13, 3));
+
+
+  enemiesD2.add(new ENEMY(33, 37, 37, 44, 31, 43, 8));
+  // enemiesD2.add(new ENEMY(31, 37, 37, 44, 31, 43, 1));
+  enemiesD2.add(new ENEMY(31, 43, 37, 44, 31, 43, 1));
+  enemiesD2.add(new ENEMY(37, 39, 37, 44, 31, 43, 6));
+  enemiesD2.add(new ENEMY(41, 37, 37, 44, 31, 43, 1));
+  enemiesD2.add(new ENEMY(43, 42, 37, 44, 31, 43, 8));
+
+  enemiesD2.add(new ENEMY(32, 33, 28, 35, 31, 43, 1));
+  enemiesD2.add(new ENEMY(33, 30, 28, 35, 31, 43, 1));
+  enemiesD2.add(new ENEMY(37, 31, 28, 35, 31, 43, 1));
+  enemiesD2.add(new ENEMY(37, 28, 28, 35, 31, 43, 1));
+  enemiesD2.add(new ENEMY(41, 30, 28, 35, 31, 43, 1));
+  enemiesD2.add(new ENEMY(42, 33, 28, 35, 31, 43, 1));
+
+  // enemiesD2.add(new ENEMY(42, 33, 28, 35, 16, 28, 1));
+  enemiesD2.add(new ENEMY(22, 29, 28, 35, 16, 28, 2));
+  enemiesD2.add(new ENEMY(19, 30, 28, 35, 16, 28, 1));
+  enemiesD2.add(new ENEMY(19, 33, 28, 35, 16, 28, 8));
+
+  enemiesD2.add(new ENEMY(19, 24, 19, 26, 16, 28, 1));
+  enemiesD2.add(new ENEMY(17, 21, 19, 26, 16, 28, 8));
+  enemiesD2.add(new ENEMY(22, 21, 19, 26, 16, 28, 1));
+  enemiesD2.add(new ENEMY(25, 23, 19, 26, 16, 28, 1));
+  enemiesD2.add(new ENEMY(28, 21, 19, 26, 16, 28, 2));
+
+
+  enemiesD2.add(new ENEMY(22, 13, 10, 17, 16, 28, 2));
+  enemiesD2.add(new ENEMY(17, 13, 10, 17, 16, 28, 1));
+  enemiesD2.add(new ENEMY(27, 14, 10, 17, 16, 28, 1));
+  enemiesD2.add(new ENEMY(22, 10, 10, 17, 16, 28, 8));
+
+  enemiesD2.add(new ENEMY(34, 11, 10, 17, 31, 48, 8));
+  enemiesD2.add(new ENEMY(34, 15, 10, 17, 31, 48, 1));
+  enemiesD2.add(new ENEMY(37, 13, 10, 17, 31, 48, 2));
+  enemiesD2.add(new ENEMY(40, 11, 10, 17, 31, 48, 1));
+  enemiesD2.add(new ENEMY(40, 15, 10, 17, 31, 48, 8));
+
+  enemiesD2.add(new ENEMY(41, 4, 0, 8, 31, 48, 8));
+  enemiesD2.add(new ENEMY(37, 4, 0, 8, 31, 48, 8));
+  enemiesD2.add(new ENEMY(33, 4, 0, 8, 31, 48, 8));
+  enemiesD2.add(new ENEMY(37, 1, 0, 8, 31, 48, 2));
+
+  enemiesD2.add(new ENEMY(1, 1, 0, 8, 0, 29, 2));
+  enemiesD2.add(new ENEMY(2, 2, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(3, 3, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(4, 4, 0, 8, 0, 29, 2));
+  enemiesD2.add(new ENEMY(3, 5, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(2, 6, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(1, 7, 0, 8, 0, 29, 2));
+  enemiesD2.add(new ENEMY(8, 4, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(9, 4, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(10, 4, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(11, 4, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(12, 4, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(13, 4, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(11, 2, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(11, 6, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(18, 1, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(18, 2, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(18, 3, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(18, 4, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(18, 5, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(18, 6, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(18, 7, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(22, 4, 0, 8, 0, 29, 1));
+  enemiesD2.add(new ENEMY(25, 2, 0, 8, 0, 29, 8));
+  enemiesD2.add(new ENEMY(25, 6, 0, 8, 0, 29, 8));
+
+  enemiesD2.add(new ENEMY(7, 10, 10, 16, 0, 29, 1));
+  enemiesD2.add(new ENEMY(9, 12, 10, 16, 0, 29, 8));
+  enemiesD2.add(new ENEMY(5, 14, 10, 16, 0, 29, 2));
+  enemiesD2.add(new ENEMY(7, 16, 10, 16, 0, 29, 3));
+  enemiesD2.add(new ENEMY(9, 14, 10, 16, 0, 29, 2));
+  enemiesD2.add(new ENEMY(5, 12, 10, 16, 0, 29, 8));
+  // enemiesD2.add(new ENEMY(1, 10, 10, 16, 0, 29, 1));
+
+  enemiesD2.add(new ENEMY(11, 30, 28, 34, 0, 14, 1));
+  enemiesD2.add(new ENEMY(1, 31, 28, 34, 0, 14, 3));
+  enemiesD2.add(new ENEMY(2, 31, 28, 34, 0, 14, 2));
+  enemiesD2.add(new ENEMY(5, 30, 28, 34, 0, 14, 2));
+  enemiesD2.add(new ENEMY(5, 32, 28, 34, 0, 14, 2));
+  enemiesD2.add(new ENEMY(7, 31, 28, 34, 0, 14, 8));
+  enemiesD2.add(new ENEMY(8, 31, 28, 34, 0, 14, 8));
+  enemiesD2.add(new ENEMY(9, 31, 28, 34, 0, 14, 8));
+  enemiesD2.add(new ENEMY(9, 30, 28, 34, 0, 14, 8));
+  enemiesD2.add(new ENEMY(9, 32, 28, 34, 0, 14, 8));
+  enemiesD2.add(new ENEMY(11, 30, 28, 34, 0, 14, 1));
+  enemiesD2.add(new ENEMY(11, 32, 28, 34, 0, 14, 1));
+  enemiesD2.add(new ENEMY(13, 31, 28, 34, 0, 14, 3));
+
+
+
+  enemiesD3.add(new ENEMY(3, 31, 28, 35, 0, 13, 4));
+  enemiesD3.add(new ENEMY(7, 31, 28, 35, 0, 13, 5));
+  enemiesD3.add(new ENEMY(11, 31, 28, 35, 0, 13, 4));
+  enemiesD3.add(new ENEMY(7, 28, 28, 35, 0, 13, 4));
+
+  enemiesD3.add(new ENEMY(4, 20, 19, 26, 0, 13, 5));
+  enemiesD3.add(new ENEMY(5, 23, 19, 26, 0, 13, 7));
+  enemiesD3.add(new ENEMY(6, 23, 19, 26, 0, 13, 7));
+  enemiesD3.add(new ENEMY(7, 23, 19, 26, 0, 13, 7));
+  enemiesD3.add(new ENEMY(8, 23, 19, 26, 0, 13, 7));
+  enemiesD3.add(new ENEMY(9, 23, 19, 26, 0, 13, 7));
+  enemiesD3.add(new ENEMY(10, 20, 19, 26, 0, 13, 5));
+
+  enemiesD3.add(new ENEMY(3, 16, 10, 17, 0, 13, 5));
+  enemiesD3.add(new ENEMY(4, 13, 10, 17, 0, 13, 4));
+  enemiesD3.add(new ENEMY(7, 14, 10, 17, 0, 13, 6));
+  enemiesD3.add(new ENEMY(10, 13, 10, 17, 0, 13, 4));
+  enemiesD3.add(new ENEMY(11, 16, 10, 17, 0, 13, 5));
+
+  enemiesD3.add(new ENEMY(3, 3, 1, 8, 0, 13, 4));
+  enemiesD3.add(new ENEMY(4, 7, 1, 8, 0, 13, 8));
+  enemiesD3.add(new ENEMY(10, 7, 1, 8, 0, 13, 8));
+  enemiesD3.add(new ENEMY(7, 5, 1, 8, 0, 13, 5));
+  enemiesD3.add(new ENEMY(7, 2, 1, 8, 0, 13, 4));
+  enemiesD3.add(new ENEMY(11, 3, 1, 8, 0, 13, 4));
+
+  enemiesD3.add(new ENEMY(19, 2, 1, 8, 16, 28, 8));
+  enemiesD3.add(new ENEMY(19, 6, 1, 8, 16, 28, 4));
+  enemiesD3.add(new ENEMY(22, 3, 1, 8, 16, 28, 5));
+  enemiesD3.add(new ENEMY(25, 2, 1, 8, 16, 28, 8));
+  enemiesD3.add(new ENEMY(25, 6, 1, 8, 16, 28, 4));
+
+  enemiesD3.add(new ENEMY(22, 11, 10, 17, 16, 28, 6));
+  enemiesD3.add(new ENEMY(19, 12, 10, 17, 16, 28, 4));
+  enemiesD3.add(new ENEMY(18, 15, 10, 17, 16, 28, 4));
+  enemiesD3.add(new ENEMY(25, 12, 10, 17, 16, 28, 4));
+  enemiesD3.add(new ENEMY(26, 15, 10, 17, 16, 28, 4));
+
+  enemiesD3.add(new ENEMY(17, 23, 19, 26, 16, 28, 4));
+  enemiesD3.add(new ENEMY(19, 20, 19, 26, 16, 28, 8));
+  enemiesD3.add(new ENEMY(22, 22, 19, 26, 16, 28, 5));
+  enemiesD3.add(new ENEMY(25, 20, 19, 26, 16, 28, 8));
+  enemiesD3.add(new ENEMY(27, 23, 19, 26, 16, 28, 4));
+
+  enemiesD3.add(new ENEMY(22, 29, 28, 35, 16, 28, 8));
+  enemiesD3.add(new ENEMY(19, 31, 28, 35, 16, 28, 4));
+  enemiesD3.add(new ENEMY(25, 31, 28, 35, 16, 28, 5));
+  enemiesD3.add(new ENEMY(22, 33, 28, 35, 16, 28, 8));
+
+  enemiesD3.add(new ENEMY(33, 6, 1, 8, 31, 44, 8));
+  enemiesD3.add(new ENEMY(36, 6, 1, 8, 31, 44, 7));
+  enemiesD3.add(new ENEMY(38, 6, 1, 8, 31, 44, 7));
+  enemiesD3.add(new ENEMY(41, 6, 1, 8, 31, 44, 8));
+  enemiesD3.add(new ENEMY(36, 3, 1, 8, 31, 44, 8));
+  enemiesD3.add(new ENEMY(38, 3, 1, 8, 31, 44, 8));
+
+  enemiesD3.add(new ENEMY(34, 11, 10, 17, 31, 44, 5));
+  enemiesD3.add(new ENEMY(32, 13, 10, 17, 31, 44, 5));
+  enemiesD3.add(new ENEMY(35, 16, 10, 17, 31, 44, 5));
+  enemiesD3.add(new ENEMY(39, 11, 10, 17, 31, 44, 5));
+  enemiesD3.add(new ENEMY(42, 10, 10, 17, 31, 44, 5));
+
+  enemiesD3.add(new ENEMY(32, 23, 19, 26, 31, 44, 8));
+  enemiesD3.add(new ENEMY(35, 21, 19, 26, 31, 44, 5));
+  enemiesD3.add(new ENEMY(37, 24, 19, 26, 31, 44, 6));
+  enemiesD3.add(new ENEMY(39, 21, 19, 26, 31, 44, 5));
+  enemiesD3.add(new ENEMY(42, 23, 19, 26, 31, 44, 8));
+
+  enemiesD3.add(new ENEMY(20, 39, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(22, 41, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(25, 40, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(28, 38, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(28, 42, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(31, 40, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(34, 41, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(37, 39, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(37, 42, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(41, 39, 37, 44, 19, 45, 7));
+  enemiesD3.add(new ENEMY(41, 42, 37, 44, 19, 45, 7));
+
+
+  enemiesD4.add(new ENEMY(6, 64, 61, 69, 6, 18, 1));
+  enemiesD4.add(new ENEMY(8, 62, 61, 69, 6, 18, 1));
+  enemiesD4.add(new ENEMY(12, 62, 61, 69, 6, 18, 1));
+  enemiesD4.add(new ENEMY(16, 62, 61, 69, 6, 18, 2));
+  enemiesD4.add(new ENEMY(10, 64, 61, 69, 6, 18, 1));
+  enemiesD4.add(new ENEMY(14, 64, 61, 69, 6, 18, 4));
+  enemiesD4.add(new ENEMY(8, 66, 61, 69, 6, 18, 4));
+  enemiesD4.add(new ENEMY(12, 6, 61, 69, 6, 18, 4));
+  enemiesD4.add(new ENEMY(16, 66, 61, 69, 6, 18, 5));
+
+  enemiesD4.add(new ENEMY(15, 54, 53, 55, 14, 20, 3));
+  enemiesD4.add(new ENEMY(39, 54, 53, 55, 34, 40, 3));
+
+  enemiesD4.add(new ENEMY(6, 47, 41, 49, 6, 18, 5));
+  enemiesD4.add(new ENEMY(6, 43, 41, 49, 6, 18, 2));
+  enemiesD4.add(new ENEMY(8, 45, 41, 49, 6, 18, 5));
+  enemiesD4.add(new ENEMY(8, 41, 41, 49, 6, 18, 2));
+  enemiesD4.add(new ENEMY(10, 48, 41, 49, 6, 18, 5));
+  enemiesD4.add(new ENEMY(11, 45, 41, 49, 6, 18, 2));
+  enemiesD4.add(new ENEMY(11, 41, 41, 49, 6, 18, 5));
+  enemiesD4.add(new ENEMY(14, 48, 41, 49, 6, 18, 2));
+  enemiesD4.add(new ENEMY(14, 44, 41, 49, 6, 18, 5));
+  enemiesD4.add(new ENEMY(14, 41, 41, 49, 6, 18, 2));
+  enemiesD4.add(new ENEMY(16, 44, 41, 49, 6, 18, 5));
+
+  enemiesD4.add(new ENEMY(7, 35, 31, 39, 6, 18, 5));
+  enemiesD4.add(new ENEMY(8, 31, 31, 39, 6, 18, 2));
+  enemiesD4.add(new ENEMY(10, 37, 31, 39, 6, 18, 5));
+  enemiesD4.add(new ENEMY(12, 32, 31, 39, 6, 18, 2));
+  enemiesD4.add(new ENEMY(18, 38, 31, 39, 6, 18, 5));
+  enemiesD4.add(new ENEMY(17, 32, 31, 39, 6, 18, 2));
+
+  enemiesD4.add(new ENEMY(21, 58, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(21, 51, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(33, 58, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(33, 51, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(25, 53, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(25, 55, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(29, 53, 51, 59, 21, 33, 5));
+  enemiesD4.add(new ENEMY(29, 55, 51, 59, 21, 33, 5));
+
+  enemiesD4.add(new ENEMY(23, 46, 41, 49, 21, 33, 3));
+  enemiesD4.add(new ENEMY(23, 41, 41, 49, 21, 33, 3));
+  enemiesD4.add(new ENEMY(31, 42, 41, 49, 21, 33, 3));
+  enemiesD4.add(new ENEMY(31, 46, 41, 49, 21, 33, 3));
+
+
+  enemiesD4.add(new ENEMY(23, 38, 31, 39, 21, 33, 7));
+  enemiesD4.add(new ENEMY(24, 34, 31, 39, 21, 33, 7));
+  enemiesD4.add(new ENEMY(27, 36, 31, 39, 21, 33, 7));
+  enemiesD4.add(new ENEMY(27, 32, 31, 39, 21, 33, 7));
+  enemiesD4.add(new ENEMY(30, 34, 31, 39, 21, 33, 7));
+  enemiesD4.add(new ENEMY(31, 38, 31, 39, 21, 33, 7));
+
+  enemiesD4.add(new ENEMY(39, 66, 61, 69, 36, 48, 7));
+  enemiesD4.add(new ENEMY(39, 63, 61, 69, 36, 48, 7));
+  enemiesD4.add(new ENEMY(42, 63, 61, 69, 36, 48, 7));
+  enemiesD4.add(new ENEMY(43, 65, 61, 69, 36, 48, 7));
+  enemiesD4.add(new ENEMY(47, 63, 61, 69, 36, 48, 7));
+  enemiesD4.add(new ENEMY(47, 66, 61, 69, 36, 48, 7));
+
+  enemiesD4.add(new ENEMY(40, 47, 41, 49, 36, 48, 2));
+  enemiesD4.add(new ENEMY(40, 42, 41, 49, 36, 48, 2));
+  enemiesD4.add(new ENEMY(44, 45, 41, 49, 36, 48, 5));
+  enemiesD4.add(new ENEMY(44, 44, 41, 49, 36, 48, 5));
+
+  enemiesD4.add(new ENEMY(36, 35, 31, 39, 36, 48, 3));
+  enemiesD4.add(new ENEMY(39, 33, 31, 39, 36, 48, 6));
+  enemiesD4.add(new ENEMY(40, 33, 31, 39, 36, 48, 3));
+  enemiesD4.add(new ENEMY(42, 36, 31, 39, 36, 48, 6));
+  enemiesD4.add(new ENEMY(44, 33, 31, 39, 36, 48, 3));
+  enemiesD4.add(new ENEMY(45, 33, 31, 39, 36, 48, 6));
+  enemiesD4.add(new ENEMY(48, 35, 31, 39, 36, 48, 3));
+
+  enemiesD4.add(new ENEMY(5, 5, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(6, 13, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(7, 20, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(18, 20, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(18, 13, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(20, 5, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(29, 8, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(31, 13, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(31, 20, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(42, 20, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(43, 13, 1, 26, 1, 48, 6));
+  enemiesD4.add(new ENEMY(44, 8, 1, 26, 1, 48, 6));
+}
+
+
+
+
+void loadLevelFromText(String s) {
+  //s is the name of the text file
+  String[] q = loadStrings("data/hh" + s);
+
+
+
+  //get width and height of map
+  int rows = q.length;
+  int cols = q[0].length()/2;//since there are 2 digits per tile
+
+  mapData = new int[rows][cols];
+
+  for (int j =0; j < rows; j++) {
+    for (int i =0; i < cols; i++) {
+      mapData[j][i] = parseInt(q[j].substring(2*i, 2*i+2));
+    }
+  }
+
+
+  mapWidth = mapData[0].length*32;
+  mapHeight = mapData.length*32;
+}
+
+
+
+
+int[] oldx = new int[10];
+
+int[] oldy = new int[10];
+
+int oldp;
+
+int frogox, frogoy;
+
+int framesBehind = 5;
+
+int hFrame = 0;
+
+
+
+void setCompArray() {
+  for (int i=0; i < 10; i++) {
+    oldx[i] = frogX;
+    oldy[i] = frogY;
+  }
+}
+
+void addCurley(String s) {
+  String[] q = loadStrings("data/" + s);
+
+  String[] output = new String[q.length];
+
+  for (int i = 0; i < q.length; i++) {
+    output[i] = "{"+q[i] + "},";
+  }
+
+  saveStrings("data/OVERWORLD2.txt", output); //change this to dungeon 1 once i make the dungeon map and save the numbers as a txt
+}
+
+
+void mousePressed() {     //this is just to test the new map loading
+
+
+//draw heart inside black area. have it so that you need to press 'b' to buy the thing you're standing in front of
+
+
+  //println(cameraX);
+}
+
+
+
+
+void ouch() {
+  //playSound(10);
+
+  if (healthcounter == 0) {
+    healthcounter = 1;
+
+    if (companion == true) {
+      health-=.5;
+    }
+    if (companion == false) {
+      health-=1;
+    }
+  }
+}
+
+
+
+
+
+
+void drawHealth() {
+  if ( healthcounter > 0) {
+    healthcounter++;
+    if (healthcounter == 30) {
+      healthcounter = 0;
+    }
+  }
+
+  for ( int i = 0; i < (int)health; i++) {
+    image(heartfull, 565-40*i, 3, 32, 32);
+  }
+
+  if ((health - (int)health) == .5) {
+    image(hearthalf, 565-40*((int)health), 3, 32, 32);
+  }
+}
+
+
+int rhealth = 50;
+//int rx,ry,rw;
+
+void drawRhealth() {
+  fill(255);
+  noStroke();
+  rect(30,5,110,50,8);
+  fill(#FF0000);
+  textSize(50);
+  // stroke(0);
+  // strokeWeight(5);
+  text(rhealth + "%", 25, 50);
+}
+
+
+
+
+
+int coincolor=0;
+void drawCoins() {
+  image(grRupee, 540-20, 420, 32, 32);
+  fill(coincolor);
+  stroke(20);
+  textSize(20);
+  text("x", 565-20, 440);
+  textSize(25);
+  text(coins, 585-20, 443);
+}
+
+
+
+void moveFrog() {
+  if (u > 0) {
+    frogY-=speed;
+    u++;
+    if (u > 4)
+      u = 0;
+  }
+
+  if (d > 0) {
+    frogY+=speed;
+    d++;
+    if (d > 4)
+      d = 0;
+  }
+
+
+  if (l > 0) {
+    frogX-=speed;
+    l++;
+    if (l > 4)
+      l = 0;
+  }
+
+
+  if (r > 0) {
+    frogX+=speed;
+    r++;
+    if (r > 4)
+      r = 0;
+  }
+}
+
+
+dialogue di0 = new dialogue (0, 480-5, 640, 300+210, 1, 1, 0);
+
+
+
+int select;
+
+int dialogue=0;
+
+
+
+class dialogue {
+  float dx, dy, dw, dh, dtype, rtype, ctype;
+
+  dialogue(float x, float y, float w, float h, float type, float _rtype, float _ctype) {
+    dx = x;
+    dy = y;
+    dw = w;
+    dh = h;
+    dtype = type;
+    rtype = _rtype;
+    ctype = _ctype;
+  }
+
+
+  void update() {
+    color b1 = 255;
+    color b2 = 255;
+    color b3 = 255;
+    color b4 = 255;
+
+
+    noStroke();
+    fill(0);
+    rect(dx, dy, dw, dh);
+
+    strokeWeight(5);
+
+    if ( select == 1 && dtype > 0) {
+      b1 = #FF0000;
+    }
+    if ( select == 2 && dtype > 0) {
+      b2 = #FF0000;
+    }    
+    if ( select == 3 && dtype > 0) {
+      b3 = #FF0000;
+    }    
+    if ( select == 4 && dtype > 0) {
+      b4 = #FF0000;
+    }
+
+    /*
+    stroke(b1);
+     rect (20, 490+210, 275, 125);
+     
+     stroke(b3);
+     rect (20, 630+210, 275, 125);
+     
+     stroke(b2);
+     rect (340, 490+210, 275, 125);
+     
+     stroke(b4);
+     rect (340, 630+210, 275, 125);
+     
+     */
+
+ 
+
+    if ( dtype == 0) {
+      fill(0);
+      rect(dx, dy, dw, dh);
+      fill(0);
+      stroke(0);
+
+      if (rtype == 1) {
+        //  println(mouseY);
+        fill(255);
+        textSize(25);
+
+        if ( ctype == 1) {        
+          text("Okay", 80+50, 490+50);
+        }
+        if ( ctype == 2) {        
+          text("It's nice to meet you too!\nLet's get going", 80+50, 490+50);
+        }        
+        if ( ctype == 3) {        
+          text("Okay...\n *leaves*", 80+50, 490+50);
+        }        
+        if ( ctype == 4) {        
+          text("Okay, I'll do my best...", 80+50, 490+50);
+        }
+
+
+        if ( mouseY > 480) {
+          if ( keyPressed) {
+            if ( key == 'u') {
+              talk = false;
+              dtype =2;
+              dialogue++;
+            }
+          }
+        }
+
+
+        ////
+      }
+
+      if (rtype == 2) {
+        //  println(mouseY);
+        fill(255);
+        textSize(25);
+        if ( ctype == 1) {        
+          text("Dialogue 2 Response 1", 80+50, 490+50);
+        }
+        if ( ctype == 2) {        
+          text("Dialogue 2 Response 2", 80+50, 490+50);
+        }        
+        if ( ctype == 3) {        
+          text("Dialogue 2 Response 3", 80+50, 490+50);
+        }        
+        if ( ctype == 4) {        
+          text("Dialogue 2 Response 4", 80+50, 490+50);
+        }        
+        if ( mouseY > 480) {
+          if ( keyPressed) {
+            if ( key == 'u') {
+              talk = false;
+              dtype =3;
+            }
+          }
+        }
+
+        ///////////////////
+      }
+
+      if (rtype == 3) {
+        //  println(mouseY);
+        fill(255);
+        textSize(25);
+        if ( ctype == 1) {        
+          text("Dialogue 3 Response 1", 80+50, 490+50);
+        }
+        if ( ctype == 2) {        
+          text("Dialogue 3 Response 2", 80+50, 490+50);
+        }        
+        if ( ctype == 3) {        
+          text("Dialogue 3 Response 3", 80+50, 490+50);
+        }        
+        if ( ctype == 4) {        
+          text("Dialogue 2 Response 4", 80+50, 490+50);
+        }        
+        if ( mouseY > 480) {
+          if ( keyPressed) {
+            if ( key == 'u') {
+              talk = false;
+              dtype =4;
+            }
+          }
+        }
+
+        ///////////////////
+      }
+
+      ////////////// put next set of reponses here
+    }
+
+
+
+
+    if ( dtype > 0) {
+      stroke(b1);
+      rect (20, 490+60, 275, 100);
+
+      stroke(b3);
+      rect (20, 630+60, 275, 100);
+
+      stroke(b2);
+      rect (340, 490+60, 275, 100);
+
+      stroke(b4);
+      rect (340, 630+60, 275, 100);
+    }
+
+
+    if ( dtype == 1) {     // first set of dialogue options
+      fill(255);
+      textSize(20);
+      text("Hi, my name's Owen. Let's travel together", 50, 525);
+      textSize(25);
+      text("Sure.", 20+50, 490+50+60);
+      text("Sounds great!\n Nice to meet you", 340+15, 490+40+60);
+      text("No, \nleave me alone", 20+15, 630+40+60);
+      text("Fine, but don't \n get in my way", 340+10, 630+40+60);
+    }
+
+    if ( dtype == 2) {     // first set of dialogue options
+      fill(255);
+      textSize(25);
+      text("Question 2", 250, 525);
+      text("choice5", 20+50, 490+50+60);
+      text("choice6", 340+50, 490+50+60);
+      text("choice7", 20+50, 630+50+60);
+      text("choice8", 340+50, 630+50+60);
+    }
+
+
+    if ( mouseX > 20 && mouseX < 20+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
+      select = 1;
+      if ( mousePressed) {
+        ctype = 1;
+        if ( dtype == 1) {
+          dtype = 0;
+          rtype = 1;
+        }
+        if ( dtype == 2) {
+          dtype = 0;
+          rtype = 2;
+        }
+        if ( dtype == 3) {
+          dtype = 0;
+          rtype = 3;
+        }
+        if ( dtype == 4) {
+          dtype = 0;
+          rtype = 4;
+        }
+      }
+    } 
+
+    if ( mouseX > 340 && mouseX < 340+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
+      select = 2;
+      if ( mousePressed) {
+        ctype = 2;
+        if ( dtype == 1) {
+          dtype = 0;
+          rtype = 1;
+        }
+        if ( dtype == 2) {
+          dtype = 0;
+          rtype = 2;
+        }
+        if ( dtype == 3) {
+          dtype = 0;
+          rtype = 3;
+        }
+        if ( dtype == 4) {
+          dtype = 0;
+          rtype = 4;
+        }
+      }
+    } 
+
+    if ( mouseX > 20 && mouseX < 20+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
+      select = 3;
+      if ( mousePressed) {
+        ctype = 3;
+        if ( dtype == 1) {
+          dtype = 0;
+          rtype = 1;
+        }
+        if ( dtype == 2) {
+          dtype = 0;
+          rtype = 2;
+        }
+        if ( dtype == 3) {
+          dtype = 0;
+          rtype = 3;
+        }
+        if ( dtype == 4) {
+          dtype = 0;
+          rtype = 4;
+        }
+      }
+    } 
+    if ( mouseX > 340 && mouseX < 340+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
+      select = 4;
+      if ( mousePressed) {
+        ctype = 4;
+        if ( dtype == 1) {
+          dtype = 0;
+          rtype = 1;
+        }
+        if ( dtype == 2) {
+          dtype = 0;
+          rtype = 2;
+        }
+        if ( dtype == 3) {
+          dtype = 0;
+          rtype = 3;
+        }
+        if ( dtype == 4) {
+          dtype = 0;
+          rtype = 4;
+        }
+      }
+    }
+  }
+}
+
+int[] badTiles = {12, 02, 64, 22, 18, 00, 24, 58, 14, 34, 51, 30};  
+
+boolean checkDir(int x, int y, int q) {
+ // println("hi");
+  int i = 0;
+
+  while (i < badTiles.length) {
+
+    if (q == 1) {
+      if (y > 0   && mapData[y-1][x] == badTiles[i]    ) {
+        return true;
+      }
+    }
+
+    if (q == 2) {
+      if (y < mapData.length-1  && mapData[y+1][x] == badTiles[i]    ) {
+        return true;
+      }
+    }
+
+    if (q == 3) {
+      if (x > 0   && mapData[y][x - 1] == badTiles[i]    ) {
+        return true;
+      }
+    }
+
+    if (q == 4) {
+      //println(mapData[y][x + 1]);
+      if (x < mapData[0].length-1  && mapData[y][x + 1] == badTiles[i]    ) {
+
+        return true;
+      }
+    }
+
+
+
+
+    i++;
+  }
+
+  return false;
+}
+
+ArrayList<DROPS> drops  = new ArrayList<DROPS>();
+
+
+void drawItems(int x, int y, int type) {
+  // fill(#FF0000);
+  //rect(x,y,50,50);
+  //println("hi");
+  if (type == 1) {
+    image(goldRupee, x, y, 32, 32);
+    //image(grRupee, x, y, 32, 32);
+  }
+  if (type ==2) {
+    image(potion, x, y, 32, 32);
+  }
+  if (type ==3) {
+    image(bRupee, x, y, 32, 32);
+  }
+  if (type ==4) {
+    image(grRupee, x, y, 32, 32);
+  }
+}
+
+
+
+class DROPS {
+  int ix=96, iy=96;
+  int itypes;
+  int igx;
+  int igy;
+  int edir1;
+  int ecount1;
+
+
+  DROPS(int gx, int gy, int types) { //grid x, grid y, ub, db, lb, rb, skin
+
+    ix = gx*32;
+    iy = gy*32;
+
+
+    itypes=types;
+  }
+
+  void update() {
+    igx=(int) ((ix+16)/32);
+    igy=(int)((iy+16)/32);
+
+
+    drawItems(ix-cameraX, iy-cameraY, itypes);
+
+    if (dist(ix+16, iy+16, frogX+16, frogY+16)  < 30) { // item hits you
+      drops.remove(this);
+      if (itypes== 1) {
+        //playSound(8);
+        coins+=50;
+      }
+      if (itypes==2) {
+        health=healthmax;
+      }
+      if (itypes== 3) {
+        //playSound(8);
+        coins+=20;
+      }
+      if (itypes== 4) {
+        //playSound(8);
+        coins+=5;
+      }
+    }
+    //  println(coins);
+  }
+}
+
+int coins= 000;
+
+
+ArrayList<ENEMY> enemies  = new ArrayList<ENEMY>();
+ArrayList<ENEMY> enemiesD1  = new ArrayList<ENEMY>();
+ArrayList<ENEMY> enemiesD2  = new ArrayList<ENEMY>();
+ArrayList<ENEMY> enemiesD3  = new ArrayList<ENEMY>();
+ArrayList<ENEMY> enemiesD4  = new ArrayList<ENEMY>();
+ArrayList<ENEMY> enemies2  = new ArrayList<ENEMY>(); // overworld 2
+
+
+
+void drawEnemy(int x, int y, int skin ) {
+  // red ball guy
+  if (skin == 1) {
+    image(en1u1, x, y, 32, 32);
+    //  enhealth = 1;
+  } 
+  if (skin == -1) {
+    image(en1u2, x, y, 32, 32);
+    //  enhealth = 1;
+  } 
+  if (skin == 2) {
+    image(en1d1, x, y, 32, 32);
+    // enhealth = 1;
+  } 
+  if (skin == -2) {
+    image(en1d2, x, y, 32, 32);
+    // enhealth = 1;
+  } 
+  if (skin == 3) {
+    image(en1l1, x, y, 32, 32);
+    /// enhealth = 1;
+  } 
+  if (skin == -3) {
+    image(en1l2, x, y, 32, 32);
+    ///  enhealth = 1;
+  } 
+  if (skin == 4) {
+    image(en1r1, x, y, 32, 32);
+    /// enhealth = 1;
+  } 
+  if (skin == -4) {
+    image(en1r2, x, y, 32, 32);
+    /// enhealth = 1;
+  } 
+  /*
+  noStroke();
+   fill(#00FF00, 250);
+   ellipse(x+16, y+16, 16, 16);
+   fill(#0000FF, 100);
+   ellipse(x+16, y+16, 60, 60);
+   */
+}
+
+void drawEnemy2(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en2u1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en2u2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en2d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en2d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en2l1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en2l2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en2r1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en2r2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+void drawEnemy3(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en3u1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en3u2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en3d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en3d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en3l1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en3l2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en3r1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en3r2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+void drawEnemy4(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en4u1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en4u2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en4d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en4d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en4l1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en4l2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en4r1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en4r2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+void drawEnemy5(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en5u1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en5u2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en5d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en5d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en5l1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en5l2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en5r1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en5r2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+
+void drawEnemy6(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en6u1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en6u2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en6d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en6d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en6l1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en6l2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en6r1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en6r2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+
+void drawEnemy7(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en7u1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en7u2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en7d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en7d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en7l1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en7l2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en7r1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en7r2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+
+void drawEnemy8(int x, int y, int skin ) {
+
+  // red dude
+  if (skin == 1) {
+    image(en8d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -1) {
+    image(en8d2, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == 2) {
+    image(en8d1, x, y, 32, 32);
+    //enhealth = 2;
+  } 
+  if (skin == -2) {
+    image(en8d2, x, y, 32, 32);
+    // enhealth = 2;
+  }   
+  if (skin == 3) {
+    image(en8d1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -3) {
+    image(en8d2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+  if (skin == 4) {
+    image(en8d1, x, y, 32, 32);
+    // enhealth = 2;
+  } 
+  if (skin == -4) {
+    image(en8d2, x, y, 32, 32);
+    // enhealth = 2;
+  }
+}
+
+
+// enemy PImages
+
+PImage en1r1;  // red ball guy
+PImage en1r2;
+PImage en1l1;
+PImage en1l2;
+PImage en1u1;
+PImage en1u2;
+PImage en1d1;
+PImage en1d2;
+
+PImage en2r1;   // blue ball guy
+PImage en2r2;
+PImage en2l1;
+PImage en2l2;
+PImage en2u1;
+PImage en2u2;
+PImage en2d1;
+PImage en2d2;
+
+PImage en3r1;  // red guy
+PImage en3r2;
+PImage en3l1;
+PImage en3l2;
+PImage en3u1;
+PImage en3u2;
+PImage en3d1;
+PImage en3d2;
+
+PImage en4r1;   // blue guy 
+PImage en4r2;
+PImage en4l1;
+PImage en4l2;
+PImage en4u1;
+PImage en4u2;
+PImage en4d1;
+PImage en4d2;
+
+PImage en5r1;   // dog guy 
+PImage en5r2;
+PImage en5l1;
+PImage en5l2;
+PImage en5u1;
+PImage en5u2;
+PImage en5d1;
+PImage en5d2;
+
+PImage en6r1;   // red knight 
+PImage en6r2;
+PImage en6l1;
+PImage en6l2;
+PImage en6u1;
+PImage en6u2;
+PImage en6d1;
+PImage en6d2;
+
+PImage en7r1;   // blue knight 
+PImage en7r2;
+PImage en7l1;
+PImage en7l2;
+PImage en7u1;
+PImage en7u2;
+PImage en7d1;
+PImage en7d2;
+
+PImage en8d1; // skeleton
+PImage en8d2;
+
+
+
+class ENEMY {
+  int ex1=96, ey1=96;
+  int etypes1;
+  int egx1;
+  int egy1;
+  int edir1;
+  int ecount1;
+  int skin = 1;
+  ;
+
+  int type;
+
+  int upBound, downBound, leftBound, rightBound;
+
+
+  float enhealth;
+
+  int stopMe;
+
+  ENEMY(int _gx, int _gy, int ub, int db, int lb, int rb, int type) { //grid x, grid y, ub, db, lb, rb, skin
+
+    ex1 = _gx*32;
+    ey1 = _gy*32;
+    upBound = ub-1;
+    downBound = db-1;
+    leftBound = lb-1;
+    rightBound = rb+1;
+
+
+
+
+    this.type = type;
+
+    //   if (type > 0) {
+    //    enhealth = 1;
+    // }
+
+    if (type == 1) {
+      enhealth = 1;
+    }
+
+    if (type == 2) {
+      enhealth = 2;                                                           // IT DOESNT WORK IF HEALTH IS MORE THAN 1
+    }
+
+    if (type == 3) {
+      enhealth = 3;
+    }
+    if (type == 4) {
+      enhealth = 1;
+    }
+    if (type == 5) {
+      enhealth = 1;
+    }
+    if (type == 6) {
+      enhealth = 1;
+    }
+    if (type == 7) {
+      enhealth = 1;
+    }
+    if (type == 8) {
+      enhealth = 1;
+    }
+  }
+
+
+  void update() {
+    egx1=(int)((ex1+16)/32);
+    egy1=(int)((ey1+16)/32);
+
+
+    if (stopMe > 0) {
+
+      stopMe++;
+      if (stopMe == 10) {
+        stopMe = 0;
+      }
+    }
+
+
+    if ( stopMe == 0 && (   (dist(ex1, ey1, frogX+16, frogY+16 ) < 32*4 ) &&  egx1<=rightBound && egx1>=leftBound && egy1>=upBound && egy1<=downBound) ) {//) {
+
+      if (edir1 == 0) {
+
+        //    if (random(1) < 2) {
+
+        if (ex1<frogX && checkDir(egx1, egy1, 4) &&  egx1<rightBound ) {
+          edir1 = 4;
+          ecount1 = 0;
+          etypes1 = 4;
+        } else if (ex1 > frogX&& checkDir(egx1, egy1, 3) &&  egx1>leftBound) {
+          edir1 = 3;
+          ecount1 = 0;
+        } else if (ey1<frogY && checkDir(egx1, egy1, 2 )&&  egy1<downBound ) {
+          edir1 = 2;
+          ecount1 = 0;
+        } else if (ey1>frogY  && checkDir(egx1, egy1, 1) &&  egy1>upBound) {
+          edir1 = 1;
+          ecount1 = 0;
+        }
+        //} else {
+        if (ey1<frogY && checkDir(egx1, egy1, 2 ) &&  egy1<downBound ) {
+          edir1 = 2;
+          ecount1 = 0;
+        } else if (ey1>frogY  && checkDir(egx1, egy1, 1) &&  egy1>upBound) {
+          edir1 = 1;
+          ecount1 = 0;
+        } else if (ex1<frogX && checkDir(egx1, egy1, 4) &&  egx1<rightBound  ) {
+          edir1 = 4;
+          ecount1 = 0;
+          etypes1 = 4;
+        } else if (ex1 > frogX&& checkDir(egx1, egy1, 3) &&  egx1>leftBound) {
+          edir1 = 3;
+          ecount1 = 0;
+        }
+      }
+    }
+
+
+
+
+
+
+    if (edir1 == 4) {
+      ecount1++;
+      ex1 += 4;
+
+      if (ecount1 < 4) {
+
+        skin=4;
+      } else {
+        skin=-4;
+      }
+
+
+
+
+      if (ecount1 > 7) {
+        ecount1 = 0;
+        edir1 = 0;
+      }
+    }
+
+
+    if (edir1 == 3) {
+      ecount1++;
+      ex1 -= 4;
+      if (ecount1 < 4) {
+
+        skin=3;
+      } else {
+        skin=-3;
+      }
+      if (ecount1 > 7) {
+        ecount1 = 0;
+        edir1 = 0;
+      }
+    }
+
+
+    if (edir1 == 1) {
+      ecount1++;
+      ey1 -= 4;
+      if (ecount1 < 4) {
+        skin=1;
+      } else {
+        skin=-1;
+      }
+      if (ecount1 > 7) {
+        ecount1 = 0;
+        edir1 = 0;
+      }
+    }
+
+
+    if (edir1 == 2) {
+      ecount1++;
+      ey1 += 4;
+      if (ecount1 < 4) {
+        skin=2;
+      } else {
+        skin=-2;
+      }
+      if (ecount1 > 7) {
+        ecount1 = 0;
+        edir1 = 0;
+      }
+    }
+
+
+    //collision with sword
+    //collision with link
+
+    if (dist(ex1+16, ey1+16, frogX+16, frogY+16)  < 20) { // enemy hits you
+
+      // println(types);
+
+      ouch();
+    }
+
+
+    //fill(#0000FF, 150);
+    //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16); // up
+    //ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16); //down
+    //ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16); //left
+    ///ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);  //right
+    //below is sword hits enemy 
+    if ((types == 8 &&  dist(ex1+16, ey1+16, frogX+48, frogY+16) < 26)  ||  (types == 6 &&  dist(ex1+16, ey1+16, frogX+18, frogY+48)  < 26) ||  (types == 7 &&  dist(ex1+16, ey1+16, frogX-20, frogY+16)  < 26) ||  (types == 5 &&  dist(ex1+16, ey1+16, frogX+14, frogY-20) < 26)  )    
+    {
+      //   println("yes");
+
+
+
+      enouch();
+      if (enhealth==0) {
+        //playSound(11);
+
+        if (random(1) <= .1) {  //gold rupee
+          drops.add(new DROPS(egx1, egy1, 1));
+        } else if ( random(1)<= .2) {            //image for potion
+          drops.add(new DROPS(egx1, egy1, 2));
+        } else if (random(1)<= .40) {            // image for blue
+          drops.add(new DROPS(egx1, egy1, 3));
+        } else if ( random(1)<=1) {            // image for green rupee
+          drops.add(new DROPS(egx1, egy1, 4));
+        }
+
+        if (mapVar == 1) {
+          enemies.remove(this);
+        }
+        if (mapVar == 3) {
+          enemiesD1.remove(this);
+        }
+        if (mapVar == 4) {
+          enemiesD2.remove(this);
+        }
+        if (mapVar == 5) {
+          enemiesD3.remove(this);
+        }
+        if (mapVar == 6) {
+          enemiesD4.remove(this);
+        }
+      }
+    }
+
+
+    if (type == 1) {
+      drawEnemy(ex1-cameraX, ey1-cameraY, skin);
+    }
+
+    if (type == 2) {
+      drawEnemy2(ex1-cameraX, ey1-cameraY, skin);
+    }
+    if (type == 3) {
+      drawEnemy3(ex1-cameraX, ey1-cameraY, skin);
+    }
+    if (type == 4) {
+      drawEnemy4(ex1-cameraX, ey1-cameraY, skin);
+    }
+    if (type == 5) {
+      drawEnemy5(ex1-cameraX, ey1-cameraY, skin);
+    }
+    if (type == 6) {
+      drawEnemy6(ex1-cameraX, ey1-cameraY, skin);
+    }
+    if (type == 7) {
+      drawEnemy7(ex1-cameraX, ey1-cameraY, skin);
+    }
+    if (type == 8) {
+      drawEnemy8(ex1-cameraX, ey1-cameraY, skin);
+    }
+    /*
+    if (health == 0) {
+     enemies.remove(this);
+     enemiesD1.remove(this);
+     enemiesD2.remove(this);
+     enemiesD3.remove(this);
+     enemiesD4.remove(this);
+     }
+     */
+  }
+
+
+  void enouch() {  //enemy health
+    ///println("hi" + types);
+    //playSound(9);
+    stopMe = 1;
+    if (companion==false) {
+      enhealth-=.5;
+    }
+    if (companion==true) {
+      if (rhealth<100) {
+        enhealth-=1;
+      }
+      if (rhealth == 100) {
+        enhealth-=10;
+      }
+    }
+
+
+      types-=4;
+    //  println("yes");
+    keyReleased();
+  }
+}
+
+PImage heartfull;
+PImage hearthalf;
+PImage grRupee;
+PImage bRupee;
+PImage goldRupee;
+PImage potion;
+PImage title;
+PImage princess;
+PImage princess2;
+
+PImage t1;
+
+PImage shop;
+
+
+
+
+
+
+
+void loadImages2() {
+  PImage q = loadImage("data/hhtitle.png");
+  title= new PImage(255, 239);
+  title.copy(q, 0, 0, 255, 239, 0, 0, 255, 239);
+
+  q = loadImage("data/hhenemies_items_chars.png");
+
+  en1r1= new PImage(16, 16, ARGB);    //en1's are the red ball guy
+  en1r1.copy(q, 48, 0, 16, 16, 0, 0, 16, 16); 
+  en1r2= new PImage(16, 16, ARGB);
+  en1r2.copy(q, 48, 16, 16, 16, 0, 0, 16, 16);
+
+  en1l1= new PImage(16, 16, ARGB);
+  en1l1.copy(q, 16, 0, 16, 16, 0, 0, 16, 16);
+  en1l2= new PImage(16, 16, ARGB);
+  en1l2.copy(q, 16, 16, 16, 16, 0, 0, 16, 16);
+
+  en1u1= new PImage(16, 16, ARGB);
+  en1u1.copy(q, 32, 0, 16, 16, 0, 0, 16, 16);
+  en1u2= new PImage(16, 16, ARGB);
+  en1u2.copy(q, 32, 16, 16, 16, 0, 0, 16, 16);
+
+  en1d1= new PImage(16, 16, ARGB);
+  en1d1.copy(q, 0, 0, 16, 16, 0, 0, 16, 16);
+  en1d2= new PImage(16, 16, ARGB);
+  en1d2.copy(q, 0, 16, 16, 16, 0, 0, 16, 16);
+
+
+  en2r1= new PImage(16, 16, ARGB);    //en2's are the red dude
+  en2r1.copy(q, 48, 0+32, 16, 16, 0, 0, 16, 16); 
+  en2r2= new PImage(16, 16, ARGB);
+  en2r2.copy(q, 48, 16+32, 16, 16, 0, 0, 16, 16);
+
+  en2l1= new PImage(16, 16, ARGB);
+  en2l1.copy(q, 16, 0+32, 16, 16, 0, 0, 16, 16);
+  en2l2= new PImage(16, 16, ARGB);
+  en2l2.copy(q, 16, 16+32, 16, 16, 0, 0, 16, 16);
+
+  en2u1= new PImage(16, 16, ARGB);
+  en2u1.copy(q, 32, 0+32, 16, 16, 0, 0, 16, 16);
+  en2u2= new PImage(16, 16, ARGB);
+  en2u2.copy(q, 32, 16+32, 16, 16, 0, 0, 16, 16);
+
+  en2d1= new PImage(16, 16, ARGB);
+  en2d1.copy(q, 0, 0+32, 16, 16, 0, 0, 16, 16);
+  en2d2= new PImage(16, 16, ARGB);
+  en2d2.copy(q, 0, 16+32, 16, 16, 0, 0, 16, 16);
+
+
+  en3r1= new PImage(16, 16, ARGB);    //en3's are the red knight
+  en3r1.copy(q, 48, 0+32+32, 16, 16, 0, 0, 16, 16); 
+  en3r2= new PImage(16, 16, ARGB);
+  en3r2.copy(q, 48, 16+32+32, 16, 16, 0, 0, 16, 16);
+
+  en3l1= new PImage(16, 16, ARGB);
+  en3l1.copy(q, 16, 0+32+32, 16, 16, 0, 0, 16, 16);
+  en3l2= new PImage(16, 16, ARGB);
+  en3l2.copy(q, 16, 16+32+32, 16, 16, 0, 0, 16, 16);
+
+  en3u1= new PImage(16, 16, ARGB);
+  en3u1.copy(q, 32, 0+32+32, 16, 16, 0, 0, 16, 16);
+  en3u2= new PImage(16, 16, ARGB);
+  en3u2.copy(q, 32, 16+32+32, 16, 16, 0, 0, 16, 16);
+
+  en3d1= new PImage(16, 16, ARGB);
+  en3d1.copy(q, 0, 0+32+32, 16, 16, 0, 0, 16, 16);
+  en3d2= new PImage(16, 16, ARGB);
+  en3d2.copy(q, 0, 16+32+32, 16, 16, 0, 0, 16, 16);
+
+  en4r1= new PImage(16, 16, ARGB);    //en4's are the blue ball guy
+  en4r1.copy(q, 48, 0+32+32+32, 16, 16, 0, 0, 16, 16); 
+  en4r2= new PImage(16, 16, ARGB);
+  en4r2.copy(q, 48+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);
+
+  en4l1= new PImage(16, 16, ARGB);
+  en4l1.copy(q, 16, 0+32+32+32, 16, 16, 0, 0, 16, 16);
+  en4l2= new PImage(16, 16, ARGB);
+  en4l2.copy(q, 16+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);
+
+  en4u1= new PImage(16, 16, ARGB);
+  en4u1.copy(q, 32, 0+32+32+32, 16, 16, 0, 0, 16, 16);
+  en4u2= new PImage(16, 16, ARGB);
+  en4u2.copy(q, 32+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);
+
+  en4d1= new PImage(16, 16, ARGB);
+  en4d1.copy(q, 0, 0+32+32+32, 16, 16, 0, 0, 16, 16);
+  en4d2= new PImage(16, 16, ARGB);
+  en4d2.copy(q, 0+64, 16+32+32+16, 16, 16, 0, 0, 16, 16);
+
+  en5r1= new PImage(16, 16, ARGB);    //en5's are the blue dude
+  en5r1.copy(q, 48, 0+32+32+48, 16, 16, 0, 0, 16, 16); 
+  en5r2= new PImage(16, 16, ARGB);
+  en5r2.copy(q, 48, 16+32+32+48, 16, 16, 0, 0, 16, 16);
+
+  en5l1= new PImage(16, 16, ARGB);
+  en5l1.copy(q, 16, 0+32+32+48, 16, 16, 0, 0, 16, 16);
+  en5l2= new PImage(16, 16, ARGB);
+  en5l2.copy(q, 16, 16+32+32+48, 16, 16, 0, 0, 16, 16);
+
+  en5u1= new PImage(16, 16, ARGB);
+  en5u1.copy(q, 32, 0+32+32+48, 16, 16, 0, 0, 16, 16);
+  en5u2= new PImage(16, 16, ARGB);
+  en5u2.copy(q, 32, 16+32+32+48, 16, 16, 0, 0, 16, 16);
+
+  en5d1= new PImage(16, 16, ARGB);
+  en5d1.copy(q, 0, 0+32+32+48, 16, 16, 0, 0, 16, 16);
+  en5d2= new PImage(16, 16, ARGB);
+  en5d2.copy(q, 0, 16+32+32+48, 16, 16, 0, 0, 16, 16);
+
+  en6r1= new PImage(16, 16, ARGB);    //en6's are the weird guy
+  en6r1.copy(q, 48, 0+32+32+48+32, 16, 16, 0, 0, 16, 16); 
+  en6r2= new PImage(16, 16, ARGB);
+  en6r2.copy(q, 48, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);
+
+  en6l1= new PImage(16, 16, ARGB);
+  en6l1.copy(q, 16, 0+32+32+48+32, 16, 16, 0, 0, 16, 16);
+  en6l2= new PImage(16, 16, ARGB);
+  en6l2.copy(q, 16, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);
+
+  en6u1= new PImage(16, 16, ARGB);
+  en6u1.copy(q, 32, 0+32+32+48+32, 16, 16, 0, 0, 16, 16);
+  en6u2= new PImage(16, 16, ARGB);
+  en6u2.copy(q, 32, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);
+
+  en6d1= new PImage(16, 16, ARGB);
+  en6d1.copy(q, 0, 0+32+32+48+32, 16, 16, 0, 0, 16, 16);
+  en6d2= new PImage(16, 16, ARGB);
+  en6d2.copy(q, 0, 16+32+32+48+32, 16, 16, 0, 0, 16, 16);
+
+  en7r1= new PImage(16, 16, ARGB);    //en7's are the blue knight
+  en7r1.copy(q, 48, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16); 
+  en7r2= new PImage(16, 16, ARGB);
+  en7r2.copy(q, 48, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+
+  en7l1= new PImage(16, 16, ARGB);
+  en7l1.copy(q, 16, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+  en7l2= new PImage(16, 16, ARGB);
+  en7l2.copy(q, 16, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+
+  en7u1= new PImage(16, 16, ARGB);
+  en7u1.copy(q, 32, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+  en7u2= new PImage(16, 16, ARGB);
+  en7u2.copy(q, 32, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+
+  en7d1= new PImage(16, 16, ARGB);
+  en7d1.copy(q, 0, 0+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+  en7d2= new PImage(16, 16, ARGB);
+  en7d2.copy(q, 0, 16+32+32+48+32+32, 16, 16, 0, 0, 16, 16);
+
+  en8d1= new PImage(16, 16, ARGB);
+  en8d1.copy(q, 64, 0, 16, 16, 0, 0, 16, 16);
+  en8d2= new PImage(16, 16, ARGB);
+  en8d2.copy(q, 64, 16, 16, 16, 0, 0, 16, 16);
+
+
+
+  //items
+  heartfull= new PImage(16, 16, ARGB);
+  heartfull.copy(q, 32, 208, 16, 16, 0, 0, 16, 16);
+  hearthalf= new PImage(16, 16, ARGB);
+  hearthalf.copy(q, 128+16, 208, 16, 16, 0, 0, 16, 16);
+
+  grRupee= new PImage(16, 16, ARGB);
+  grRupee.copy(q, 128+32, 208, 16, 16, 0, 0, 16, 16);
+  bRupee= new PImage(16, 16, ARGB);
+  bRupee.copy(q, 48+16, 208, 16, 16, 0, 0, 16, 16);
+  goldRupee= new PImage(16, 16, ARGB);
+  goldRupee.copy(q, 48, 208, 16, 16, 0, 0, 16, 16);
+  potion= new PImage(16, 16, ARGB);
+  potion.copy(q, 16*6, 208, 16, 16, 0, 0, 16, 16);
+  princess= new PImage(16, 16, ARGB);
+  princess.copy(q, 16*7, 208, 16, 16, 0, 0, 16, 16);
+  princess2= new PImage(16, 16, ARGB);
+  princess2.copy(q, 16*8, 208, 16, 16, 0, 0, 16, 16);
+
+  t1= new PImage(20, 20, ARGB);             //the triforce
+  t1.copy(q, 70, 185, 20, 20, 0, 0, 20, 20);
+
+  shop= new PImage(48, 32, ARGB);
+  shop.copy(q, 16*4, 16*2, 48, 32, 0, 0, 48, 32);
+}
+
+//items and chars pimages
+
+
+//items and chars pimages
+
+
+
+PImage up1;
+PImage up2;
+PImage up3; //sword
+
+PImage down1;
+PImage down2;
+PImage down3; //sword
+
+PImage left1;
+PImage left2;
+PImage left3; //sword
+
+PImage right1;
+PImage right2;
+PImage right3; //sword
+
+
+PImage bup1;
+PImage bup2;
+PImage bup3; //sword
+
+PImage bdown1;
+PImage bdown2;
+PImage bdown3; //sword
+
+PImage bleft1;
+PImage bleft2;
+PImage bleft3; //sword
+
+PImage bright1;
+PImage bright2;
+PImage bright3; //sword
+
+
+
+void drawGreenLink() {
+
+  if (healthcounter%2 == 0) {
+    if (types==1) {
+      if (u<3) {
+        image(up1, frogX - cameraX, frogY - cameraY, 32, 32);
+        //if (companion)
+        //image(bup2, frogX - cameraX, frogY - cameraY+32, 32, 32);
+      } else {
+        image(up2, frogX - cameraX, frogY - cameraY, 32, 32);
+        //if (companion == true)
+        //image(bup1, frogX - cameraX, frogY - cameraY+32, 32, 32);
+      }
+    }
+
+
+    if (types==2) {
+      if (d<3) {
+        image(down1, frogX - cameraX, frogY - cameraY, 32, 32);
+        //if (companion == true)
+        //image(bdown2, frogX - cameraX, frogY - cameraY-32, 32, 32);
+      } else {
+        image(down2, frogX - cameraX, frogY - cameraY, 32, 32);
+        // if (companion == true)
+        // image(bdown1, frogX - cameraX, frogY - cameraY-32, 32, 32);
+      }
+    }
+
+
+    if (types==3) {
+      if (l<3) {
+        image(left1, frogX - cameraX, frogY - cameraY, 32, 32);
+        // if (companion == true)
+        // image(bleft2, frogX - cameraX+32, frogY - cameraY, 32, 32);
+      } else {
+        image(left2, frogX - cameraX, frogY - cameraY, 32, 32);
+        //  if (companion == true)
+        //  image(bleft1, frogX - cameraX+32, frogY - cameraY, 32, 32);
+      }
+    }
+
+    if (types==4) {
+
+
+      if ( talk == false) {
+        if (r<3) {
+          image(right1, frogX - cameraX, frogY - cameraY, 32, 32);
+          //if (companion == true)
+          //image(bright2, frogX - cameraX-32, frogY - cameraY, 32, 32);
+        } else {
+          image(right2, frogX - cameraX, frogY - cameraY, 32, 32);
+          // if (companion == true)
+          // image(bright1, frogX - cameraX-32, frogY - cameraY, 32, 32);
+        }
+      }
+      if ( talk == true) {
+        if (r<3) {
+          image(right1, frogX - cameraX, frogY - cameraY, 32, 32);
+          // if (companion == true)
+          // image(bleft2, frogX - cameraX-32+70, frogY - cameraY, 32, 32);
+        } else {
+          image(right2, frogX - cameraX, frogY - cameraY, 32, 32);
+          //  if (companion == true)
+          //  image(bleft1, frogX - cameraX-32+70, frogY - cameraY, 32, 32);
+        }
+      }
+    }
+
+
+
+
+
+
+
+
+
+    if (types==6) {     //down sword
+      image(down3, frogX - cameraX, frogY - cameraY, 32, 64);
+
+      noStroke();
+      // fill(#0000FF, 150);
+      // ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16);
+    }
+
+    if (types==7) {     //left sword
+      image(left3, frogX - cameraX-32, frogY - cameraY, 64, 32);
+
+
+      noStroke();
+      //  fill(#0000FF, 150);
+      // ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16);
+    }
+    if (types==8) {     //right sword
+      image(right3, frogX - cameraX, frogY - cameraY, 64, 32);
+
+
+
+
+      noStroke();
+      // fill(#0000FF, 150);
+      // ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);
+    }
+
+    if (types==5) {     //up sword
+      image(up3, frogX - cameraX, frogY - cameraY-32, 32, 64);
+
+
+
+
+      noStroke();
+      //fill(#0000FF, 150);
+      //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16);
+    } 
+    // noStroke();
+    // fill(#0000FF, 150);
+    // ellipse(frogX+16-cameraX, frogY+16- cameraY, 16, 16);
+
+
+    //  fill(#0000FF, 150);
+    //ellipse(frogX+14-cameraX, frogY-20- cameraY, 16, 16); // up
+    // ellipse(frogX+18-cameraX, frogY+48- cameraY, 16, 16); //down
+    //ellipse(frogX-20-cameraX, frogY+16- cameraY, 16, 16); //left
+    //ellipse(frogX+48-cameraX, frogY+16- cameraY, 16, 16);  //right
+  }
+}
+
+void drawLink() {
+
+
+  if (frogX != frogox || frogY != frogoy) {//you are moving
+    oldx[oldp] = frogX;
+    oldy[oldp] = frogY;
+    oldp++;
+    if (oldp == 10)
+      oldp = 0;
+
+
+    hFrame++;
+    if (hFrame == 4)
+      hFrame = 0;
+  }
+
+
+
+  //if (companion) {
+
+  int tempP = oldp-framesBehind;
+  if (tempP < 0) {
+    tempP = 10 + tempP;
+  }
+
+
+  int tempPP = tempP-1;
+  if (tempPP < 0) {
+    tempPP = 9;
+  }
+
+  if ( companion == true && talk == false) {
+
+    if (oldy[tempP] >    oldy[tempPP ]     ) {
+      if (hFrame < 2)
+        image(bdown2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bdown1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else if (oldy[tempP] <    oldy[tempPP ]     ) {
+      if (hFrame < 2)
+        image(bup2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bup1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else  if (oldx[tempP] >    oldx[tempPP ]     ) {
+
+      if (hFrame < 2)
+        image(bright1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else  if (oldx[tempP] <    oldx[tempPP ] ) {
+      if (hFrame < 2)
+        image(bleft1, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+      else
+        image(bleft2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    } else {
+
+      if (types==1)
+        image(bup2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+
+      if (types==2)
+        image(bdown2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+
+      if (types==3)
+        image(bleft2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+
+      if (types==4)
+        image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+
+
+      // image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+    }
+    //}
+  }
+
+  if (talk == true) {
+    image(bleft2, frogX+35-cameraX, frogY-cameraY, 32, 32);
+    types =  4;
+
+    // println(frogX,frogY);
+  }
+
+  //image(bright2, oldx[tempP] - cameraX, oldy[tempP]  - cameraY, 32, 32);
+
+  frogox = frogX;
+  frogoy = frogY;
+
+  //  println(frogX + "  " + oldx[tempP] + "  " + oldy[tempP]);
+
+
+  drawGreenLink();
+}
+
+
+PImage[] mt = new PImage[18*8];
+
+int[][] mapData;
+
+
+
+
+
+int grid = 32;
+
+
+
+
+
+
+
+void drawGrid() {
+  stroke(0);
+  strokeWeight(1);
+  for (int i = 0; i <height; i+=grid) 
+    line(0, i, width, i);//hor
+
+  for (int i = 0; i <width; i+=grid) 
+    line(i, 0, i, height);//ver
+}
+
+
+
+void fixImage(PImage q) {
+  for (int i=0; i < q.pixels.length; i++) {
+    if (q.pixels[i] == 0) {
+      q.pixels[i] = color(0, 1);
+    }
+    //  println(q.pixels[i]);
+  }
+}
+
+//PImage qqq; 
+
+
+//int storycounter;
+
+
+void story() {
+  background(#1BA032);
+  fill(0);
+  textSize(25);
+  text("This is Link's story, not Zelda's", 120-50, 30);
+  textSize(15);
+  text("Your princess has been captured, \nbut not because she's a girl, \nshe was outnumbered", 20, 70);
+  image(princess, 300, 50, 32*2, 32*2);
+  image(right3, 100, 150, 64*2, 32*2);
+  text("As Link, you must explore your surroundings,\n clearing all 4 dungeons in order\n to rescue the princess", 300-50, 150);
+  text("Use the arrow keys to move,\nand SPACE or Z to attack. \nDon't forget to visit the shop to upgrade your health", 20, 270); 
+  image(shop,440,235,48*2,32*2);
+  textSize(75);
+  text("GOOD LUCK", 85-50, 400);
+  textSize(25);
+  text("ENTER TO BEGIN", 200-50, 450);
+}
+
+
+void win() {
+  background(#0ACB4F);
+  fill(0);
+  image(t1, 300-20, 50-20, 20*3, 20*3);
+  image(princess2,298-20,110-20,32*2, 32*2);
+  textSize(30);
+  text("              Congratulations!\nYou've gotten through all 4 dungeons\n      and now the princess is free!\nYou've been awarded three triangles!",0,200);
+}
+
+
