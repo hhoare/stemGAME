@@ -64,7 +64,7 @@ class dialogue {
      
      */
 
- 
+
 
     if ( dtype == 0) {
       fill(0);
@@ -79,15 +79,20 @@ class dialogue {
 
         if ( ctype == 1) {        
           text("Okay", 80+50, 490+50);
+          rhealth=55;
         }
         if ( ctype == 2) {        
           text("It's nice to meet you too!\nLet's get going", 80+50, 490+50);
+          rhealth=60;
         }        
         if ( ctype == 3) {        
           text("Okay...\n *leaves*", 80+50, 490+50);
+          rhealth = 0;
+          companion = false;
         }        
         if ( ctype == 4) {        
           text("Okay, I'll do my best...", 80+50, 490+50);
+          rhealth = 40;
         }
 
 
@@ -97,6 +102,10 @@ class dialogue {
               talk = false;
               dtype =2;
               dialogue++;
+
+              if ( ctype == 3) {        
+                companion = false;
+              }
             }
           }
         }
@@ -110,16 +119,18 @@ class dialogue {
         fill(255);
         textSize(25);
         if ( ctype == 1) {        
-          text("Dialogue 2 Response 1", 80+50, 490+50);
+          text("That's terrible", 80+50, 490+50);
+          rhealth = 50;
+        //  ctype = 0;
         }
         if ( ctype == 2) {        
-          text("Dialogue 2 Response 2", 80+50, 490+50);
+          text("Good plan!", 80+50, 490+50);
         }        
         if ( ctype == 3) {        
-          text("Dialogue 2 Response 3", 80+50, 490+50);
+          text("... \n:(", 80+50, 490+50);
         }        
         if ( ctype == 4) {        
-          text("Dialogue 2 Response 4", 80+50, 490+50);
+          text("Oh okay", 80+50, 490+50);
         }        
         if ( mouseY > 480) {
           if ( keyPressed) {
@@ -196,11 +207,11 @@ class dialogue {
     if ( dtype == 2) {     // first set of dialogue options
       fill(255);
       textSize(25);
-      text("Question 2", 250, 525);
-      text("choice5", 20+50, 490+50+60);
-      text("choice6", 340+50, 490+50+60);
-      text("choice7", 20+50, 630+50+60);
-      text("choice8", 340+50, 630+50+60);
+      text("How should we handle this dungeon?", 50, 525);
+      text("Kill everyone!", 20+50, 490+50+60);
+      text("Try not to \nhurt anyone ", 340+50-20, 490+50+60-20);
+      text("Shut up", 20+50, 630+50+60);
+      text("Just follow me", 340+50, 630+50+60);
     }
 
 

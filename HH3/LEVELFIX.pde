@@ -120,14 +120,14 @@ void gamePlay() {
     for (int i=0; i < enemies.size (); i++) {
       enemies.get(i).update();
     }
-    if (gx == 56 && gy == 46 && dialogue < 1) {
-      talk = true;
-    }
   }
 
   if (mapVar == 3) {                               //dungeon 1 to the right 
     for (int i=0; i < enemiesD1.size (); i++) {
       enemiesD1.get(i).update();
+    }
+    if (gx == 56 && gy == 46 && dialogue < 2) {
+      talk = true;
     }
   }
   if (mapVar == 4) {                               //dungeon 1 to the right 

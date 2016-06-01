@@ -48,7 +48,7 @@ void setup() {
 
   populateArrays();
 
-  //  playSound(1);
+    playSound(1);
 }
 float healthmax = 3;
 float health = healthmax;
@@ -92,7 +92,7 @@ void draw() {
     drawRhealth();
   }
   if (page == 3) {
-    // playSound(4);
+     playSound(4);
     win();
   }
   fill(255, wo);
@@ -230,7 +230,7 @@ void keyPressed() {
       cameraX = 1440;
       setCompArray();
       //bordersAndCamera();
-      //  playSound(2);
+        playSound(2);
     }
   }
 
@@ -238,12 +238,12 @@ void keyPressed() {
   if (page == 2) {
 
     if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
-      //playSound(13);
+      playSound(13);
       types+=4;
     }
 
     if (mapVar==2 && key == 'b' && gx==11 && gy ==12 && coins>=1000) {
-      //playSound(7);
+      playSound(7);
       healthmax++;
       health=healthmax;
       coins-=1000;
@@ -296,7 +296,6 @@ void keyReleased() {
   }
 }
 
-
 int storeVar=1;
 
 int completion=0;
@@ -312,7 +311,7 @@ void gamePlay() {
   // println(gx, gy);
 
   if (healthcounter<=1) {
-    //playSound(12);
+    playSound(12);
   }
 
   if (page == 2) {
@@ -388,10 +387,10 @@ void gamePlay() {
 
 
   if (health == 0) {
-    //playsound(5);
+    playsound(5);
     //  populateArrays();
     types = 2;
-    // playSound(1);
+     playSound(1);
     // console.log("bad");
     page=1;
     loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store
@@ -460,7 +459,7 @@ void gamePlay() {
   textSize(30);
 
   if ((mapVar == 1 || mapVar == 7) &&  gx == 52 && gy == 37) {
-    //playSound(6);
+    playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    //change to store.txt to load the store
     coincolor=255;
@@ -477,7 +476,7 @@ void gamePlay() {
     setCompArray();
   }
   if (mapVar == 2 && gx == 6 && gy ==17 ) {            /////////////////STORE EXIT
-    //playSound(6);
+    playSound(6);
     if (storeVar==1) {
       mapVar = 1;
       if ((d1+d2+d3)<3) {
@@ -554,8 +553,8 @@ void gamePlay() {
 
 
   if (mapVar == 1 &&  gx == 116 && gy == 39) {
-    //playSound(6);
-    //   playSound(3);
+    playSound(6);
+       playSound(3);
     mapVar = 3;
     storeVar=3;
     loadLevelFromText("d4.txt");    
@@ -570,8 +569,8 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  gx == 2 && gy == 48) {
-    //playSound(6);
-    //   playSound(3);
+    playSound(6);
+       playSound(3);
     mapVar = 4;
     storeVar=4;
     loadLevelFromText("d2.txt");    
@@ -586,8 +585,8 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  gx == 19 && gy == 9) {
-    //playSound(6);
-    //     playSound(3);
+    playSound(6);
+         playSound(3);
     mapVar = 5;
     storeVar=5;
     loadLevelFromText("d3.txt");    
@@ -602,8 +601,8 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 1 &&  (gx == 106 ||gx == 107 ||gx == 108 ||gx == 109) && gy == 4) {   // this is the boss dungeon 
-    //playSound(6);
-    //     playSound(3);
+    playSound(6);
+     playSound(3);
     mapVar = 6;
     storeVar=6;
     loadLevelFromText("d1.txt");    
@@ -619,7 +618,7 @@ void gamePlay() {
   }
 
   if (mapVar == 3 &&  gx == 18 && gy == 39) {   
-    //playSound(6);
+    playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -634,7 +633,7 @@ void gamePlay() {
   }
 
   if (mapVar == 5 &&  gx == 3 && gy == 39) {
-    //playSound(6);
+    playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -650,7 +649,7 @@ void gamePlay() {
 
 
   if (mapVar == 6 &&  gx == 23 && gy == 63) {
-    //playSound(6);
+    playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -664,7 +663,7 @@ void gamePlay() {
     l=0;
   }
   if (mapVar == 4 &&  gx == 18 && gy == 39) {
-    //playSound(6);
+    playSound(6);
     mapVar = 2;
     loadLevelFromText("store.txt");    
     coincolor=255;
@@ -681,8 +680,8 @@ void gamePlay() {
   ////////////////////////////////////// DUNGEON EXITS
 
   if (mapVar == 3 &&  gx == 1 && gy == 11) {
-    //playSound(6);
-    //playSound(2);
+    playSound(6);
+    playSound(2);
     completion++;
     d1=1;
     mapVar = 1;
@@ -704,8 +703,8 @@ void gamePlay() {
   }
 
   if (mapVar == 4 &&  gx == 1 && gy == 16) { 
-    //playSound(6);
-    //playSound(2);
+    playSound(6);
+    playSound(2);
     completion++;
     d2=1;
     mapVar = 1;
@@ -727,8 +726,8 @@ void gamePlay() {
   }
 
   if (mapVar == 5 &&  gx == 19 && gy == 43) { 
-    //playSound(6);
-    //playSound(2);
+    playSound(6);
+    playSound(2);
     completion++;
     d3=1;
     mapVar = 1;
@@ -1366,8 +1365,6 @@ void loadLevelFromText(String s) {
 }
 
 
-
-
 int[] oldx = new int[10];
 
 int[] oldy = new int[10];
@@ -1413,9 +1410,8 @@ void mousePressed() {     //this is just to test the new map loading
 
 
 
-
 void ouch() {
-  //playSound(10);
+  playSound(10);
 
   if (healthcounter == 0) {
     healthcounter = 1;
@@ -1909,18 +1905,18 @@ class DROPS {
     if (dist(ix+16, iy+16, frogX+16, frogY+16)  < 30) { // item hits you
       drops.remove(this);
       if (itypes== 1) {
-        //playSound(8);
+        playSound(8);
         coins+=50;
       }
       if (itypes==2) {
         health=healthmax;
       }
       if (itypes== 3) {
-        //playSound(8);
+        playSound(8);
         coins+=20;
       }
       if (itypes== 4) {
-        //playSound(8);
+        playSound(8);
         coins+=5;
       }
     }
@@ -1929,7 +1925,6 @@ class DROPS {
 }
 
 int coins= 000;
-
 
 ArrayList<ENEMY> enemies  = new ArrayList<ENEMY>();
 ArrayList<ENEMY> enemiesD1  = new ArrayList<ENEMY>();
@@ -2531,7 +2526,7 @@ class ENEMY {
 
       enouch();
       if (enhealth==0) {
-        //playSound(11);
+        playSound(11);
 
         if (random(1) <= .1) {  //gold rupee
           drops.add(new DROPS(egx1, egy1, 1));
@@ -2601,7 +2596,7 @@ class ENEMY {
 
   void enouch() {  //enemy health
     ///println("hi" + types);
-    //playSound(9);
+    playSound(9);
     stopMe = 1;
     if (companion==false) {
       enhealth-=.5;
@@ -3124,7 +3119,6 @@ void fixImage(PImage q) {
 
 //PImage qqq; 
 
-
 //int storycounter;
 
 
@@ -3155,5 +3149,4 @@ void win() {
   textSize(30);
   text("              Congratulations!\nYou've gotten through all 4 dungeons\n      and now the princess is free!\nYou've been awarded three triangles!",0,200);
 }
-
 

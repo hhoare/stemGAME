@@ -77,7 +77,7 @@ void draw() {
 
 
 
-  // println(frogX);
+   println(gx, gy);
   loadLinkSprites();
 
   if (page==0) {
