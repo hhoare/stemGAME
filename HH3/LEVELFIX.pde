@@ -126,7 +126,7 @@ void gamePlay() {
     for (int i=0; i < enemiesD1.size (); i++) {
       enemiesD1.get(i).update();
     }
-    if (gx == 56 && gy == 46 && dialogue < 2) {
+    if (gx == 22 && gy == 41 && dialogue < 2) {
       talk = true;
     }
   }

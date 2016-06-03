@@ -1,5 +1,7 @@
 /* @pjs preload="data/hhtitle.png, data/hhlink.png, data/hhenemies_items_chars.png, data/hhmaptiles.png"; */
 
+import processing.sound.*;
+
 int soundVar = 0;
 
 
@@ -28,6 +30,17 @@ int type=8;
 
 int mapVar;
 
+
+
+SoundFile sound1;
+SoundFile sound2;//sword
+SoundFile sound3;//hit
+
+
+
+
+
+
 void setup() {
   // surface.setResizable(true);
   size(640, 800);//ASSUMING FROG VELOCITY = 40
@@ -47,6 +60,12 @@ void setup() {
 
 
   populateArrays();
+
+  sound1 = new SoundFile(this, "intro.wav");
+  sound2 = new SoundFile(this, "Sword.wav");
+  sound3 = new SoundFile(this, "Hit.wav");
+
+  sound1.loop();
 
   //  playSound(1);
 }
@@ -75,9 +94,11 @@ int wx = -3, wy = 480, wo = 255;
 
 void draw() {
 
+  //println(random(1) +  "  " + sound1);
 
 
-   println(gx, gy);
+
+  println(gx, gy);
   loadLinkSprites();
 
   if (page==0) {
@@ -95,20 +116,31 @@ void draw() {
     // playSound(4);
     win();
   }
-  fill(255, wo);
+
+
+  //500
+  fill(#666666);
   noStroke();
   rect(wx, wy, 645, 500);
+  fill(0);
+  rect(wx, wy, 645, wH);
 
-  if ( talk == false) {
-    wo = 255;
-    //    dialogue.remove(this);
+  if (!talk) {
+  
+      wH = lerp(wH, 0, .4);
+     
+    
   }
 
-  if ( talk == true) {
 
-    wo = 0;
-    //   surface.setSize(640, 980);
-    di0.update();
+
+
+  if (talk) {
+    wH = lerp(wH, 500, .2);
+
+    if (wH > 430) {
+      di0.update();
+    }
     if ( conversation == 1) {
     }
   }
@@ -116,7 +148,7 @@ void draw() {
 
 
 
-
+float wH = 0;
 
 
 int types =2;
@@ -191,6 +223,8 @@ void mouseReleased() {
 
 //OK LOL
 int goUp, goDown, goLeft, goRight;
+
+
 void keyPressed() {
   if ( key == 'm') {
     companion = true;
@@ -221,6 +255,7 @@ void keyPressed() {
 
   if (page == 1) {
     if (key == ENTER ) {
+      talk = true;
       page=2;
       mapVar=1;
       loadLevelFromText("OVERWORLD.txt");    //change to STOREMAP to load the store
@@ -238,7 +273,7 @@ void keyPressed() {
   if (page == 2) {
 
     if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
-      //playSound(13);
+      sound2.play();
       types+=4;
     }
 

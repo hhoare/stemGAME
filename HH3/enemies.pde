@@ -438,7 +438,7 @@ class ENEMY {
       enhealth = 1;
     }
     if (type == 6) {
-      enhealth = 1;
+      enhealth = 4;
     }
     if (type == 7) {
       enhealth = 1;
@@ -668,7 +668,7 @@ class ENEMY {
 
   void enouch() {  //enemy health
     ///println("hi" + types);
-    //playSound(9);
+   sound3.play();
     stopMe = 1;
     if (companion==false) {
       enhealth-=.5;

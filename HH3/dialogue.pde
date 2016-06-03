@@ -30,9 +30,9 @@ class dialogue {
     color b4 = 255;
 
 
-    noStroke();
-    fill(0);
-    rect(dx, dy, dw, dh);
+    //noStroke();
+    //fill(0);
+    //rect(dx, dy, dw, dh);
 
     strokeWeight(5);
 
@@ -76,38 +76,34 @@ class dialogue {
         //  println(mouseY);
         fill(255);
         textSize(25);
+        //textAlign(LEFT);
 
         if ( ctype == 1) {        
           text("Okay", 80+50, 490+50);
-          rhealth=55;
         }
         if ( ctype == 2) {        
           text("It's nice to meet you too!\nLet's get going", 80+50, 490+50);
-          rhealth=60;
         }        
         if ( ctype == 3) {        
           text("Okay...\n *leaves*", 80+50, 490+50);
-          rhealth = 0;
-          companion = false;
         }        
         if ( ctype == 4) {        
           text("Okay, I'll do my best...", 80+50, 490+50);
-          rhealth = 40;
         }
 
+        textSize(20);
+        textAlign(CENTER);
+        text("(press space to continue)", width/2, 640);
+        textAlign(LEFT);
 
-        if ( mouseY > 480) {
-          if ( keyPressed) {
-            if ( key == 'u') {
-              talk = false;
-              dtype =2;
-              dialogue++;
-
-              if ( ctype == 3) {        
-                companion = false;
-              }
-            }
-          }
+        //if ( mouseY > 480) {
+        // println(keyPressed + "  " + keyCode);
+        if ( keyPressed && key == ' ') {
+          talk = false;
+          ctype = 0;
+          dtype =2;
+          dialogue++;
+          return;
         }
 
 
@@ -120,8 +116,7 @@ class dialogue {
         textSize(25);
         if ( ctype == 1) {        
           text("That's terrible", 80+50, 490+50);
-          rhealth = 50;
-        //  ctype = 0;
+          //  ctype = 0;
         }
         if ( ctype == 2) {        
           text("Good plan!", 80+50, 490+50);
@@ -132,13 +127,13 @@ class dialogue {
         if ( ctype == 4) {        
           text("Oh okay", 80+50, 490+50);
         }        
-        if ( mouseY > 480) {
-          if ( keyPressed) {
-            if ( key == 'u') {
-              talk = false;
-              dtype =3;
-            }
-          }
+        
+        if ( keyPressed && key == ' ') {
+          talk = false;
+          ctype = 0;
+          dtype =2;
+          dialogue++;
+          return;
         }
 
         ///////////////////
@@ -215,13 +210,14 @@ class dialogue {
     }
 
 
-    if ( mouseX > 20 && mouseX < 20+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
+    if (ctype==0 && mouseX > 20 && mouseX < 20+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
       select = 1;
       if ( mousePressed) {
         ctype = 1;
         if ( dtype == 1) {
           dtype = 0;
           rtype = 1;
+          rhealth+=5;
         }
         if ( dtype == 2) {
           dtype = 0;
@@ -238,7 +234,7 @@ class dialogue {
       }
     } 
 
-    if ( mouseX > 340 && mouseX < 340+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
+    if (ctype==0 && mouseX > 340 && mouseX < 340+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
       select = 2;
       if ( mousePressed) {
         ctype = 2;
@@ -261,7 +257,7 @@ class dialogue {
       }
     } 
 
-    if ( mouseX > 20 && mouseX < 20+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
+    if (ctype==0 && mouseX > 20 && mouseX < 20+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
       select = 3;
       if ( mousePressed) {
         ctype = 3;
@@ -283,7 +279,7 @@ class dialogue {
         }
       }
     } 
-    if ( mouseX > 340 && mouseX < 340+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
+    if (ctype==0 && mouseX > 340 && mouseX < 340+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
       select = 4;
       if ( mousePressed) {
         ctype = 4;
