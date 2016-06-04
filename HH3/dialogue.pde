@@ -22,7 +22,7 @@ class dialogue {
   };
   String[] opt4 = {"ok", "i love u"
   };
-  String[] owenBest = {"best0", "best1"
+  String[] owenBest = {"best0 asdasd asd a dad \naasdasd", "best1\nasd asd asd asdasd"
   };
   String[] owenGood = {"good0", "good1"
   };
@@ -39,10 +39,10 @@ class dialogue {
   int res = -1;
 
 
-  int seq = 0;
+  int seq = 0;//0 1 or 2
 
 
-  float phrase = 0;
+  float phrase = 0;//used for substrings
 
 
 
@@ -56,6 +56,7 @@ class dialogue {
         if (mousePressed) {
           seq = 2;
           res = outcomes[convo*4];
+          phrase = 0;
         }
       }
       rect (20, 490+60, 275, 100);
@@ -65,6 +66,7 @@ class dialogue {
         if (mousePressed) {
           seq = 2;
           res = outcomes[1+convo*4];
+          phrase = 0;
         }
       }
       rect (340, 490+60, 275, 100);
@@ -74,6 +76,7 @@ class dialogue {
         if (mousePressed) {
           seq = 2;
           res = outcomes[2+convo*4];
+          phrase = 0;
         }
       }
       rect (20, 630+60, 275, 100);
@@ -83,6 +86,7 @@ class dialogue {
         if (mousePressed) {
           seq = 2;
           res = outcomes[3+convo*4];
+          phrase = 0;
         }
       }
 
@@ -116,28 +120,44 @@ class dialogue {
 
 
     if (seq == 2) {
+      phrase+=.8;
       fill(255);
       textSize(25);
-      if ( res == 4)        
-        text(owenBest[convo], 80+50, 490+50);
-      if ( res == 3)        
-        text(owenGood[convo], 80+50, 490+50);
-      if ( res == 2)        
-        text(owenBad[convo], 80+50, 490+50);
-      if ( res == 1)        
-        text(owenWorst[convo], 80+50, 490+50);
-        
-          fill(255);
+      if ( res == 4) {   
+        if (phrase >owenBest[convo].length()) {
+          phrase = owenBest[convo].length();
+        }
+        text(owenBest[convo].substring(0, (int)phrase), 80+50, 490+50);
+      }
+      if ( res == 3) {  
+        if (phrase >owenGood[convo].length()) {
+          phrase = owenGood[convo].length();
+        }
+        text(owenGood[convo].substring(0, (int)phrase), 80+50, 490+50);
+      }
+      if ( res == 2) {
+        if (phrase >owenBad[convo].length()) {
+          phrase = owenBad[convo].length();
+        }
+        text(owenBad[convo].substring(0, (int)phrase), 80+50, 490+50);
+      }
+      if ( res == 1) { 
+        if (phrase >owenWorst[convo].length()) {
+          phrase = owenWorst[convo].length();
+        }
+        text(owenWorst[convo].substring(0, (int)phrase), 80+50, 490+50);
+      }
+
+      fill(255);
       textSize(25);
       text("press space yo", 80+50, 590+50);
-      
-      if(keyPressed && key == ' '){
-       convo++;
-       talk = false;
-       seq = 0;
-        
+
+      if (keyPressed && key == ' ') {
+        convo++;
+        talk = false;
+        seq = 0;
+        phrase = 0;
       }
-      
     }
   }
 }
