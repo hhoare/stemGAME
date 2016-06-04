@@ -1,5 +1,5 @@
 
-dialogue di0 = new dialogue (0, 480-5, 640, 300+210, 1, 1, 0);
+dialogue di0 = new dialogue ();
 
 
 
@@ -10,296 +10,134 @@ int dialogue=0;
 
 
 class dialogue {
-  float dx, dy, dw, dh, dtype, rtype, ctype;
 
-  dialogue(float x, float y, float w, float h, float type, float _rtype, float _ctype) {
-    dx = x;
-    dy = y;
-    dw = w;
-    dh = h;
-    dtype = type;
-    rtype = _rtype;
-    ctype = _ctype;
-  }
+
+  String[] owen1 = {"Hi, my name's Owen. Let's travel together", "How should we handle this dungeon?"
+  };
+  String[] opt1 = {"sure.. i love u", "I HATE U"
+  };
+  String[] opt2 = {"na", "good"
+  };
+  String[] opt3 = {"i hate u", "i dont like u"
+  };
+  String[] opt4 = {"ok", "i love u"
+  };
+  String[] owenBest = {"best0", "best1"
+  };
+  String[] owenGood = {"good0", "good1"
+  };
+  String[] owenBad = {"bad0", "bad1"
+  };
+  String[] owenWorst = {"worst0", "worst1"
+  };
+
+  int[] outcomes = {4, 2, 1, 3, 1, 3, 2, 4, 2, 1, 4, 3};
+
+
+
+  int convo = 0;
+  int res = -1;
+
+
+  int seq = 0;
+
+
+  float phrase = 0;
+
+
 
 
   void update() {
-    color b1 = 255;
-    color b2 = 255;
-    color b3 = 255;
-    color b4 = 255;
 
-
-    //noStroke();
-    //fill(0);
-    //rect(dx, dy, dw, dh);
-
-    strokeWeight(5);
-
-    if ( select == 1 && dtype > 0) {
-      b1 = #FF0000;
-    }
-    if ( select == 2 && dtype > 0) {
-      b2 = #FF0000;
-    }    
-    if ( select == 3 && dtype > 0) {
-      b3 = #FF0000;
-    }    
-    if ( select == 4 && dtype > 0) {
-      b4 = #FF0000;
-    }
-
-    /*
-    stroke(b1);
-     rect (20, 490+210, 275, 125);
-     
-     stroke(b3);
-     rect (20, 630+210, 275, 125);
-     
-     stroke(b2);
-     rect (340, 490+210, 275, 125);
-     
-     stroke(b4);
-     rect (340, 630+210, 275, 125);
-     
-     */
-
-
-
-    if ( dtype == 0) {
-      fill(0);
-      rect(dx, dy, dw, dh);
-      fill(0);
-      stroke(0);
-
-      if (rtype == 1) {
-        //  println(mouseY);
-        fill(255);
-        textSize(25);
-        //textAlign(LEFT);
-
-        if ( ctype == 1) {        
-          text("Okay", 80+50, 490+50);
+    if ( seq == 1) {//before you choose
+      stroke(255);
+      if (mouseX > 20 && mouseX < 20+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
+        stroke(#FF0000);
+        if (mousePressed) {
+          seq = 2;
+          res = outcomes[convo*4];
         }
-        if ( ctype == 2) {        
-          text("It's nice to meet you too!\nLet's get going", 80+50, 490+50);
-        }        
-        if ( ctype == 3) {        
-          text("Okay...\n *leaves*", 80+50, 490+50);
-        }        
-        if ( ctype == 4) {        
-          text("Okay, I'll do my best...", 80+50, 490+50);
-        }
-
-        textSize(20);
-        textAlign(CENTER);
-        text("(press space to continue)", width/2, 640);
-        textAlign(LEFT);
-
-        //if ( mouseY > 480) {
-        // println(keyPressed + "  " + keyCode);
-        if ( keyPressed && key == ' ') {
-          talk = false;
-          ctype = 0;
-          dtype =2;
-          dialogue++;
-          return;
-        }
-
-
-        ////
       }
-
-      if (rtype == 2) {
-        //  println(mouseY);
-        fill(255);
-        textSize(25);
-        if ( ctype == 1) {        
-          text("That's terrible", 80+50, 490+50);
-          //  ctype = 0;
-        }
-        if ( ctype == 2) {        
-          text("Good plan!", 80+50, 490+50);
-        }        
-        if ( ctype == 3) {        
-          text("... \n:(", 80+50, 490+50);
-        }        
-        if ( ctype == 4) {        
-          text("Oh okay", 80+50, 490+50);
-        }        
-        
-        if ( keyPressed && key == ' ') {
-          talk = false;
-          ctype = 0;
-          dtype =2;
-          dialogue++;
-          return;
-        }
-
-        ///////////////////
-      }
-
-      if (rtype == 3) {
-        //  println(mouseY);
-        fill(255);
-        textSize(25);
-        if ( ctype == 1) {        
-          text("Dialogue 3 Response 1", 80+50, 490+50);
-        }
-        if ( ctype == 2) {        
-          text("Dialogue 3 Response 2", 80+50, 490+50);
-        }        
-        if ( ctype == 3) {        
-          text("Dialogue 3 Response 3", 80+50, 490+50);
-        }        
-        if ( ctype == 4) {        
-          text("Dialogue 2 Response 4", 80+50, 490+50);
-        }        
-        if ( mouseY > 480) {
-          if ( keyPressed) {
-            if ( key == 'u') {
-              talk = false;
-              dtype =4;
-            }
-          }
-        }
-
-        ///////////////////
-      }
-
-      ////////////// put next set of reponses here
-    }
-
-
-
-
-    if ( dtype > 0) {
-      stroke(b1);
       rect (20, 490+60, 275, 100);
-
-      stroke(b3);
-      rect (20, 630+60, 275, 100);
-
-      stroke(b2);
+      stroke(255);
+      if (mouseX > 340 && mouseX < 340+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
+        stroke(#FF0000);
+        if (mousePressed) {
+          seq = 2;
+          res = outcomes[1+convo*4];
+        }
+      }
       rect (340, 490+60, 275, 100);
+      stroke(255);
+      if (mouseX > 20 && mouseX < 20+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
+        stroke(#FF0000);
+        if (mousePressed) {
+          seq = 2;
+          res = outcomes[2+convo*4];
+        }
+      }
+      rect (20, 630+60, 275, 100);
+      stroke(255);
+      if (mouseX > 340 && mouseX < 340+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
+        stroke(#FF0000);
+        if (mousePressed) {
+          seq = 2;
+          res = outcomes[3+convo*4];
+        }
+      }
 
-      stroke(b4);
       rect (340, 630+60, 275, 100);
     }
 
 
-    if ( dtype == 1) {     // first set of dialogue options
+    if (seq == 1) {
+      fill(255);
+      textSize(25);
+      text(opt1[convo], 20+50, 490+50+60);
+      text(opt2[convo], 340+15, 490+40+60);
+      text(opt3[convo], 20+50, 630+40+60);
+      text(opt4[convo], 340+10, 630+40+60);
+    }
+
+    if (seq <=1) {     // first set of dialogue options
+      phrase+=.8;
+      if (phrase >owen1[convo].length()) {
+        phrase = owen1[convo].length();
+        seq = 1;
+      }
       fill(255);
       textSize(20);
-      text("Hi, my name's Owen. Let's travel together", 50, 525);
-      textSize(25);
-      text("Sure.", 20+50, 490+50+60);
-      text("Sounds great!\n Nice to meet you", 340+15, 490+40+60);
-      text("No, \nleave me alone", 20+15, 630+40+60);
-      text("Fine, but don't \n get in my way", 340+10, 630+40+60);
+      text(owen1[convo].substring(0, (int)phrase), 50, 525);
     }
 
-    if ( dtype == 2) {     // first set of dialogue options
+
+
+
+
+
+    if (seq == 2) {
       fill(255);
       textSize(25);
-      text("How should we handle this dungeon?", 50, 525);
-      text("Kill everyone!", 20+50, 490+50+60);
-      text("Try not to \nhurt anyone ", 340+50-20, 490+50+60-20);
-      text("Shut up", 20+50, 630+50+60);
-      text("Just follow me", 340+50, 630+50+60);
-    }
-
-
-    if (ctype==0 && mouseX > 20 && mouseX < 20+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
-      select = 1;
-      if ( mousePressed) {
-        ctype = 1;
-        if ( dtype == 1) {
-          dtype = 0;
-          rtype = 1;
-          rhealth+=5;
-        }
-        if ( dtype == 2) {
-          dtype = 0;
-          rtype = 2;
-        }
-        if ( dtype == 3) {
-          dtype = 0;
-          rtype = 3;
-        }
-        if ( dtype == 4) {
-          dtype = 0;
-          rtype = 4;
-        }
+      if ( res == 4)        
+        text(owenBest[convo], 80+50, 490+50);
+      if ( res == 3)        
+        text(owenGood[convo], 80+50, 490+50);
+      if ( res == 2)        
+        text(owenBad[convo], 80+50, 490+50);
+      if ( res == 1)        
+        text(owenWorst[convo], 80+50, 490+50);
+        
+          fill(255);
+      textSize(25);
+      text("press space yo", 80+50, 590+50);
+      
+      if(keyPressed && key == ' '){
+       convo++;
+       talk = false;
+       seq = 0;
+        
       }
-    } 
-
-    if (ctype==0 && mouseX > 340 && mouseX < 340+275 && mouseY>490+60 && mouseY < 490+60 + 100) {
-      select = 2;
-      if ( mousePressed) {
-        ctype = 2;
-        if ( dtype == 1) {
-          dtype = 0;
-          rtype = 1;
-        }
-        if ( dtype == 2) {
-          dtype = 0;
-          rtype = 2;
-        }
-        if ( dtype == 3) {
-          dtype = 0;
-          rtype = 3;
-        }
-        if ( dtype == 4) {
-          dtype = 0;
-          rtype = 4;
-        }
-      }
-    } 
-
-    if (ctype==0 && mouseX > 20 && mouseX < 20+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
-      select = 3;
-      if ( mousePressed) {
-        ctype = 3;
-        if ( dtype == 1) {
-          dtype = 0;
-          rtype = 1;
-        }
-        if ( dtype == 2) {
-          dtype = 0;
-          rtype = 2;
-        }
-        if ( dtype == 3) {
-          dtype = 0;
-          rtype = 3;
-        }
-        if ( dtype == 4) {
-          dtype = 0;
-          rtype = 4;
-        }
-      }
-    } 
-    if (ctype==0 && mouseX > 340 && mouseX < 340+275 && mouseY>630+60 && mouseY < 630+60 + 100) {
-      select = 4;
-      if ( mousePressed) {
-        ctype = 4;
-        if ( dtype == 1) {
-          dtype = 0;
-          rtype = 1;
-        }
-        if ( dtype == 2) {
-          dtype = 0;
-          rtype = 2;
-        }
-        if ( dtype == 3) {
-          dtype = 0;
-          rtype = 3;
-        }
-        if ( dtype == 4) {
-          dtype = 0;
-          rtype = 4;
-        }
-      }
+      
     }
   }
 }
