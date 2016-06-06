@@ -452,7 +452,8 @@ void gamePlay() {
 
   if (mapVar == 6 &&  gx == 1 && gy == 1) {    
     completion++;
-
+    labyrinth.stop();
+    win.play();
     mapVar = 1;
     storeVar=1;
     if (completion>3) {

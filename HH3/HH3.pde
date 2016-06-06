@@ -32,9 +32,18 @@ int mapVar;
 
 
 
-SoundFile sound1;
-SoundFile sound2;//sword
-SoundFile sound3;//hit
+SoundFile intro;
+SoundFile swordfx;//sword
+SoundFile hitfx;//hit
+SoundFile overworld ;
+SoundFile win;
+SoundFile labyrinth;
+SoundFile die;
+SoundFile enter;
+SoundFile getHeart;
+SoundFile getRupee;
+SoundFile hurt;
+SoundFile kill;
 
 
 
@@ -61,11 +70,27 @@ void setup() {
 
   populateArrays();
 
-  sound1 = new SoundFile(this, "intro.wav");
-  sound2 = new SoundFile(this, "Sword.wav");
-  sound3 = new SoundFile(this, "Hit.wav");
+  intro = new SoundFile(this, "intro.wav");
+  swordfx = new SoundFile(this, "Sword.wav");
+  hitfx = new SoundFile(this, "Hit.wav");
 
-  sound1.loop();
+
+  overworld = new SoundFile(this, "overworld.wav");
+  win = new SoundFile(this, "triforce.wav");
+  labyrinth = new SoundFile(this, "labyrinth.wav");  
+  die = new SoundFile(this, "Die.wav");
+  enter = new SoundFile(this, "Enter.wav");
+  getHeart = new SoundFile(this, "GetHeart.wav");  
+  getRupee = new SoundFile(this, "GetRupee.wav");
+  hurt = new SoundFile(this, "Hurt.wav");
+  kill = new SoundFile(this, "Kill.wav");
+
+
+
+
+
+
+  intro.loop();
 
   //  playSound(1);
 }
@@ -94,7 +119,7 @@ int wx = -3, wy = 480, wo = 255;
 
 void draw() {
 
-  //println(random(1) +  "  " + sound1);
+  //println(random(1) +  "  " + intro);
 
 
 
@@ -126,10 +151,8 @@ void draw() {
   rect(wx, wy, 645, wH);
 
   if (!talk) {
-  
-      wH = lerp(wH, 0, .4);
-     
-    
+
+    wH = lerp(wH, 0, .4);
   }
 
 
@@ -273,7 +296,7 @@ void keyPressed() {
   if (page == 2) {
 
     if ((key == 'z' || key == 'Z' || key == ' ') && types<=4 && talk == false ) {
-      sound2.play();
+      swordfx.play();
       types+=4;
     }
 
@@ -305,7 +328,7 @@ void keyPressed() {
     }
 
     if (key == 'g')
-      dGrid = !dGrid;
+    dGrid = !dGrid;
   }
 }
 

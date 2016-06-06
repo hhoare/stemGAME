@@ -668,7 +668,7 @@ class ENEMY {
 
   void enouch() {  //enemy health
     ///println("hi" + types);
-   sound3.play();
+   hitfx.play();
     stopMe = 1;
     if (companion==false) {
       enhealth-=.5;

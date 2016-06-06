@@ -48,6 +48,9 @@ class dialogue {
 
 
   void update() {
+    if (convo > 1) {
+      convo = 1;
+    }
 
     if ( seq == 1) {//before you choose
       stroke(255);
