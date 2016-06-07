@@ -12,26 +12,26 @@ int dialogue=0;
 class dialogue {
 
 
-  String[] owen1 = {"Hi, my name's Owen. Let's travel together", "How should we handle this dungeon?"
+  String[] owen1 = {"Hi, my name's Owen. Let's travel together", "How do you wanna handle this dungeon?"
   };
-  String[] opt1 = {"Sure", "I HATE U"
+  String[] opt1 = {"Sure", "Kill everyone"
   };
-  String[] opt2 = {"Fine, but don't \nget in my way", "good"
+  String[] opt2 = {"Fine, but don't \nget in my way", "Just follow me, Owen"
   };
-  String[] opt3 = {"No, \nleave me alone", "i dont like u"
+  String[] opt3 = {"No, \nleave me alone", "Shut up"
   };
-  String[] opt4 = {"Sounds great! \n Nice to meet you", "i love u"
+  String[] opt4 = {"Sounds great! \n Nice to meet you", "Try not to hurt anyone"
   };
-  String[] owenBest = {"best0 asdasd asd a dad \naasdasd", "best1\nasd asd asd asdasd"
+  String[] owenBest = {"Okay, I'll do my best...", "best1\nasd asd asd asdasd"
   };
-  String[] owenGood = {"Okay", "good1"
+  String[] owenGood = {"It's nice to \nmeet you too!\nLet's get going", "good1"
   };
-  String[] owenBad = {"bad0", "bad1"
+  String[] owenBad = {"Okay.. \n  *leaves*", "bad1"
   };
-  String[] owenWorst = {"worst0", "worst1"
+  String[] owenWorst = {"Okay", "worst1"
   };
 
-  int[] outcomes = {4, 1, 2, 3, 1, 3, 2, 4, 2, 1, 4, 3};
+  int[] outcomes = {1, 4, 2, 3, 1, 3, 2, 4, 2, 1, 4, 3};            // good, best, bad, worst
 
 
 
@@ -45,12 +45,13 @@ class dialogue {
   float phrase = 0;//used for substrings
 
 
+  int soundPlayed = 0;
+
+
 
 
   void update() {
-    if (convo > 1) {
-      convo = 1;
-    }
+
 
     if ( seq == 1) {//before you choose
       stroke(255);
@@ -107,6 +108,20 @@ class dialogue {
     }
 
     if (seq <=1) {     // first set of dialogue options
+
+      if (soundPlayed==0) {          // questions
+        soundPlayed = 1;
+        if (convo== 0) {
+          q1.play();
+        }
+        if (convo== 1) {
+          q2.play();
+        }
+
+        //1
+        ///2
+        ///3
+      }
       phrase+=.8;
       if (phrase >owen1[convo].length()) {
         phrase = owen1[convo].length();
@@ -121,8 +136,81 @@ class dialogue {
 
 
 
-
     if (seq == 2) {
+      if (soundPlayed==1) {              // response sounds
+        soundPlayed = 0;
+
+        if (res == 4) {
+          if (convo == 0) {
+            r14.play();
+          }
+          if (convo == 1) {
+            getRupee.play();
+          }
+          if (convo == 2) {
+            getRupee.play();
+          }
+          if (convo == 3) {
+            getRupee.play();
+          }
+          if (convo == 4) {
+            getRupee.play();
+          }
+        }
+        if (res == 3) {
+          if (convo == 0) {
+            r13.play();
+          }
+          if (convo == 1) {
+            getRupee.play();
+          }
+          if (convo == 2) {
+            getRupee.play();
+          }
+          if (convo == 3) {
+            getRupee.play();
+          }
+          if (convo == 4) {
+            getRupee.play();
+          }
+        }
+        if (res == 2) {
+          if (convo == 0) {
+            r12.play();
+          }
+          if (convo == 1) {
+            getRupee.play();
+          }
+          if (convo == 2) {
+            getRupee.play();
+          }
+          if (convo == 3) {
+            getRupee.play();
+          }
+          if (convo == 4) {
+            getRupee.play();
+          }
+        }
+        if (res == 1) {
+          if (convo == 0) {
+            r11.play();
+          }
+          if (convo == 1) {
+            getRupee.play();
+          }
+          if (convo == 2) {
+            getRupee.play();
+          }
+          if (convo == 3) {
+            getRupee.play();
+          }
+          if (convo == 4) {
+            getRupee.play();
+          }
+        }
+      }
+
+
       phrase+=.8;
       fill(255);
       textSize(25);
@@ -153,18 +241,24 @@ class dialogue {
 
       fill(255);
       textSize(25);
-      text("press space yo", 80+50, 590+50);
+      text("Press SPACE to Continue", 80+50, 590+50+100);
 
       if (keyPressed && key == ' ') {
         convo++;
+
+
+        if (convo > owen1.length-1) {
+          convo = owen1.length;
+        }
+
+
         talk = false;
         seq = 0;
         phrase = 0;
       }
     }
-    
-    
+
+
     /////////
-    
   }
 }

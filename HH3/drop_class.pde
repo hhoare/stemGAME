@@ -52,17 +52,21 @@ class DROPS {
       if (itypes== 1) {
         //playSound(8);
         coins+=50;
+        getRupee.play();
       }
       if (itypes==2) {
         health=healthmax;
+        getHeart.play();
       }
       if (itypes== 3) {
         //playSound(8);
         coins+=20;
+        getRupee.play();
       }
       if (itypes== 4) {
         //playSound(8);
         coins+=5;
+        getRupee.play();
       }
     }
     //  println(coins);

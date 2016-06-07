@@ -599,7 +599,7 @@ class ENEMY {
       enouch();
       if (enhealth==0) {
         //playSound(11);
-
+        kill.play();
         if (random(1) <= .1) {  //gold rupee
           drops.add(new DROPS(egx1, egy1, 1));
         } else if ( random(1)<= .2) {            //image for potion
@@ -668,7 +668,7 @@ class ENEMY {
 
   void enouch() {  //enemy health
     ///println("hi" + types);
-   hitfx.play();
+    hitfx.play();
     stopMe = 1;
     if (companion==false) {
       enhealth-=.5;
@@ -683,7 +683,7 @@ class ENEMY {
     }
 
 
-      types-=4;
+    types-=4;
     //  println("yes");
     keyReleased();
   }

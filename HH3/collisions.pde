@@ -2,7 +2,7 @@
 
 void ouch() {
   //playSound(10);
-
+  hurt.play();
   if (healthcounter == 0) {
     healthcounter = 1;
 
@@ -44,7 +44,7 @@ int rhealth = 50;
 void drawRhealth() {
   fill(255);
   noStroke();
-  rect(30,5,110,50,8);
+  rect(30, 5, 110, 50, 8);
   fill(#FF0000);
   textSize(50);
   // stroke(0);

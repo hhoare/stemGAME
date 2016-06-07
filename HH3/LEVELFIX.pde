@@ -89,6 +89,8 @@ void gamePlay() {
 
 
   if (health == 0) {
+    main.stop();
+    die.play();
     //playsound(5);
     //  populateArrays();
     types = 2;
@@ -256,6 +258,8 @@ void gamePlay() {
 
   if (mapVar == 1 &&  gx == 116 && gy == 39) {
     //playSound(6);
+    labyrinth.loop();
+    main.stop();
     //   playSound(3);
     mapVar = 3;
     storeVar=3;
@@ -273,6 +277,9 @@ void gamePlay() {
   if (mapVar == 1 &&  gx == 2 && gy == 48) {
     //playSound(6);
     //   playSound(3);
+    labyrinth.loop();
+    main.stop();
+
     mapVar = 4;
     storeVar=4;
     loadLevelFromText("d2.txt");    
@@ -289,6 +296,9 @@ void gamePlay() {
   if (mapVar == 1 &&  gx == 19 && gy == 9) {
     //playSound(6);
     //     playSound(3);
+    labyrinth.loop();
+    main.stop();
+
     mapVar = 5;
     storeVar=5;
     loadLevelFromText("d3.txt");    
@@ -305,6 +315,9 @@ void gamePlay() {
   if (mapVar == 1 &&  (gx == 106 ||gx == 107 ||gx == 108 ||gx == 109) && gy == 4) {   // this is the boss dungeon 
     //playSound(6);
     //     playSound(3);
+    labyrinth.loop();
+    main.stop();
+
     mapVar = 6;
     storeVar=6;
     loadLevelFromText("d1.txt");    
@@ -382,6 +395,8 @@ void gamePlay() {
   ////////////////////////////////////// DUNGEON EXITS
 
   if (mapVar == 3 &&  gx == 1 && gy == 11) {
+    labyrinth.stop();
+    main.loop();
     //playSound(6);
     //playSound(2);
     completion++;
@@ -405,6 +420,8 @@ void gamePlay() {
   }
 
   if (mapVar == 4 &&  gx == 1 && gy == 16) { 
+    labyrinth.stop();
+    main.loop();
     //playSound(6);
     //playSound(2);
     completion++;
@@ -428,6 +445,8 @@ void gamePlay() {
   }
 
   if (mapVar == 5 &&  gx == 19 && gy == 43) { 
+    labyrinth.stop();
+    main.loop();
     //playSound(6);
     //playSound(2);
     completion++;
@@ -450,7 +469,7 @@ void gamePlay() {
     l=0;
   }
 
-  if (mapVar == 6 &&  gx == 1 && gy == 1) {    
+  if (mapVar == 6 &&  gx == 1 && gy == 1) {  
     completion++;
     labyrinth.stop();
     win.play();
@@ -458,6 +477,7 @@ void gamePlay() {
     storeVar=1;
     if (completion>3) {
       page =3;
+      win.loop(0);
     }    
     coincolor=255;
     frogX = 32*108;

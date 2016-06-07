@@ -12,7 +12,7 @@ int page = 0;
 int frogX = 32*1;
 int frogY = 32*1;
 
-float speed=8;
+float speed=8;      // should be 8
 
 int cameraX;
 int cameraY;
@@ -44,6 +44,21 @@ SoundFile getHeart;
 SoundFile getRupee;
 SoundFile hurt;
 SoundFile kill;
+SoundFile q1;
+SoundFile r11;
+SoundFile r12;
+SoundFile r13;
+SoundFile r14;
+
+SoundFile q2;
+SoundFile r21;
+SoundFile r22;
+SoundFile r23;
+SoundFile r24;
+SoundFile ruh;
+
+
+
 
 
 
@@ -84,6 +99,23 @@ void setup() {
   getRupee = new SoundFile(this, "GetRupee.wav");
   hurt = new SoundFile(this, "Hurt.wav");
   kill = new SoundFile(this, "Kill.wav");
+
+
+  ruh = new SoundFile(this, "Ruh.mp3");
+
+
+  q1 = new SoundFile(this, "Q1.mp3");
+  r11 = new SoundFile(this, "R1.1.mp3");
+  r12 = new SoundFile(this, "R1.2.mp3");
+  r13 = new SoundFile(this, "R1.3.mp3");
+  r14 = new SoundFile(this, "R1.4.mp3");
+
+
+
+  q2 = new SoundFile(this, "Q2.mp3");
+  r21 = new SoundFile(this, "R2.1.mp3");
+  r22 = new SoundFile(this, "R2.2.mp3");
+  r23 = new SoundFile(this, "R2.3.mp3");
 
 
 
@@ -134,7 +166,7 @@ void draw() {
   }
 
   if (page == 2) {
-    main.loop();
+    //  main.loop();
     gamePlay();
     drawRhealth();
   }
@@ -290,8 +322,8 @@ void keyPressed() {
       setCompArray();
       //bordersAndCamera();
       //  playSound(2);
-     // intro.stop();
-      //main.play();
+      intro.stop();
+      main.play();
     }
   }
 
