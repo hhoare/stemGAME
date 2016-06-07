@@ -14,13 +14,13 @@ class dialogue {
 
   String[] owen1 = {"Hi, my name's Owen. Let's travel together", "How should we handle this dungeon?"
   };
-  String[] opt1 = {"sure.. i love u", "I HATE U"
+  String[] opt1 = {"Sure", "I HATE U"
   };
-  String[] opt2 = {"na", "good"
+  String[] opt2 = {"Fine, but don't \nget in my way", "good"
   };
-  String[] opt3 = {"i hate u", "i dont like u"
+  String[] opt3 = {"No, \nleave me alone", "i dont like u"
   };
-  String[] opt4 = {"ok", "i love u"
+  String[] opt4 = {"Sounds great! \n Nice to meet you", "i love u"
   };
   String[] owenBest = {"best0 asdasd asd a dad \naasdasd", "best1\nasd asd asd asdasd"
   };
@@ -100,9 +100,9 @@ class dialogue {
     if (seq == 1) {
       fill(255);
       textSize(25);
-      text(opt1[convo], 20+50, 490+50+60);
+      text(opt1[convo], 10+20, 490+50+60);
       text(opt2[convo], 340+15, 490+40+60);
-      text(opt3[convo], 20+50, 630+40+60);
+      text(opt3[convo], 10+20, 630+40+60);
       text(opt4[convo], 340+10, 630+40+60);
     }
 
