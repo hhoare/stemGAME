@@ -35,7 +35,7 @@ int mapVar;
 SoundFile intro;
 SoundFile swordfx;//sword
 SoundFile hitfx;//hit
-SoundFile overworld ;
+SoundFile main;
 SoundFile win;
 SoundFile labyrinth;
 SoundFile die;
@@ -75,7 +75,7 @@ void setup() {
   hitfx = new SoundFile(this, "Hit.wav");
 
 
-  overworld = new SoundFile(this, "overworld.wav");
+  main = new SoundFile(this, "overworld.wav");
   win = new SoundFile(this, "triforce.wav");
   labyrinth = new SoundFile(this, "labyrinth.wav");  
   die = new SoundFile(this, "Die.wav");
@@ -134,6 +134,7 @@ void draw() {
   }
 
   if (page == 2) {
+    main.loop();
     gamePlay();
     drawRhealth();
   }
@@ -289,6 +290,8 @@ void keyPressed() {
       setCompArray();
       //bordersAndCamera();
       //  playSound(2);
+     // intro.stop();
+      //main.play();
     }
   }
 
@@ -328,7 +331,7 @@ void keyPressed() {
     }
 
     if (key == 'g')
-    dGrid = !dGrid;
+      dGrid = !dGrid;
   }
 }
 

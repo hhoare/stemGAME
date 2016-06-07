@@ -162,5 +162,9 @@ class dialogue {
         phrase = 0;
       }
     }
+    
+    
+    /////////
+    
   }
 }
