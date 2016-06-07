@@ -24,14 +24,14 @@ class dialogue {
   };
   String[] owenBest = {"best0 asdasd asd a dad \naasdasd", "best1\nasd asd asd asdasd"
   };
-  String[] owenGood = {"good0", "good1"
+  String[] owenGood = {"Okay", "good1"
   };
   String[] owenBad = {"bad0", "bad1"
   };
   String[] owenWorst = {"worst0", "worst1"
   };
 
-  int[] outcomes = {4, 2, 1, 3, 1, 3, 2, 4, 2, 1, 4, 3};
+  int[] outcomes = {4, 1, 2, 3, 1, 3, 2, 4, 2, 1, 4, 3};
 
 
 
