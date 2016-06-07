@@ -16,19 +16,19 @@ class dialogue {
   };
   String[] opt1 = {"Sure", "Kill everyone"
   };
-  String[] opt2 = {"Fine, but don't \nget in my way", "Just follow me, Owen"
+  String[] opt2 = {"Fine, but don't \nget in my way", "Just follow me,\n Owen"
   };
   String[] opt3 = {"No, \nleave me alone", "Shut up"
   };
-  String[] opt4 = {"Sounds great! \n Nice to meet you", "Try not to hurt anyone"
+  String[] opt4 = {"Sounds great! \n Nice to meet you", "Try not to\n hurt anyone"
   };
-  String[] owenBest = {"Okay, I'll do my best...", "best1\nasd asd asd asdasd"
+  String[] owenBest = {"Okay, I'll do my best...", "Good Plan!"
   };
-  String[] owenGood = {"It's nice to \nmeet you too!\nLet's get going", "good1"
+  String[] owenGood = {"It's nice to \nmeet you too!\nLet's get going", "Okay"
   };
-  String[] owenBad = {"Okay.. \n  *leaves*", "bad1"
+  String[] owenBad = {"Okay.. \n  *leaves*", "...."
   };
-  String[] owenWorst = {"Okay", "worst1"
+  String[] owenWorst = {"Okay", "That's \nterrible"
   };
 
   int[] outcomes = {1, 4, 2, 3, 1, 3, 2, 4, 2, 1, 4, 3};            // good, best, bad, worst
@@ -145,7 +145,7 @@ class dialogue {
             r14.play();
           }
           if (convo == 1) {
-            getRupee.play();
+            r21.play();
           }
           if (convo == 2) {
             getRupee.play();
@@ -162,7 +162,7 @@ class dialogue {
             r13.play();
           }
           if (convo == 1) {
-            getRupee.play();
+            r23.play();
           }
           if (convo == 2) {
             getRupee.play();
@@ -179,7 +179,7 @@ class dialogue {
             r12.play();
           }
           if (convo == 1) {
-            getRupee.play();
+            ruh.play();
           }
           if (convo == 2) {
             getRupee.play();
@@ -196,7 +196,7 @@ class dialogue {
             r11.play();
           }
           if (convo == 1) {
-            getRupee.play();
+            r22.play();
           }
           if (convo == 2) {
             getRupee.play();
