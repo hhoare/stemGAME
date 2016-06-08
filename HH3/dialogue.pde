@@ -18,7 +18,7 @@ class dialogue {
   };
   String[] opt2 = {"Fine, but don't \nget in my way", "Just follow me,\n Owen"
   };
-  String[] opt3 = {"No, \nleave me alone", "Shut up"
+  String[] opt3 = {"No, \nleave me alone", "Don't talk \nto me"
   };
   String[] opt4 = {"Sounds great! \n Nice to meet you", "Try not to\n hurt anyone"
   };
@@ -143,6 +143,7 @@ class dialogue {
         if (res == 4) {
           if (convo == 0) {
             r14.play();
+            rhealth-=5;
           }
           if (convo == 1) {
             r21.play();
@@ -160,6 +161,7 @@ class dialogue {
         if (res == 3) {
           if (convo == 0) {
             r13.play();
+            rhealth+=10;
           }
           if (convo == 1) {
             r23.play();
@@ -177,6 +179,7 @@ class dialogue {
         if (res == 2) {
           if (convo == 0) {
             r12.play();
+            rhealth = 0;
           }
           if (convo == 1) {
             ruh.play();
@@ -194,6 +197,7 @@ class dialogue {
         if (res == 1) {
           if (convo == 0) {
             r11.play();
+            rhealth+=5;
           }
           if (convo == 1) {
             r22.play();

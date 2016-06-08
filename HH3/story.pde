@@ -9,14 +9,16 @@ void story() {
   textSize(15);
   text("Your princess has been captured, \nbut not because she's a girl, \nshe was outnumbered", 20, 70);
   image(princess, 300, 50, 32*2, 32*2);
-  image(right3, 100, 150, 64*2, 32*2);
-  text("As Link, you must explore your surroundings,\n clearing all 4 dungeons in order\n to rescue the princess", 300-50, 150);
-  text("Use the arrow keys to move,\nand SPACE or Z to attack. \nDon't forget to visit the shop to upgrade your health", 20, 270); 
-  image(shop,440,235,48*2,32*2);
-  textSize(75);
-  text("GOOD LUCK", 85-50, 400);
+  image(right3, 100, 130, 64*2, 32*2);
+  text("As Link, you must explore your surroundings,\n clearing all 4 dungeons in order\n to rescue the princess", 300-50, 130);
+  text("Use the arrow keys to move,\nand SPACE or Z to attack. \nDon't forget to visit the shop to upgrade your health", 20, 220); 
+  image(shop,440,190,48*2,32*2);
+  text("Your relationship level is displayed in the top left corner \n With your companion, you are much stronger \n You are about to meet Owen",20,310);
+  image(bdown1,460,320,64*2,64*2);
+  textSize(50);
+  text("GOOD LUCK", 85+30, 430);
   textSize(25);
-  text("ENTER TO BEGIN", 200-50, 450);
+  text("ENTER TO BEGIN", 200-50, 455);
 }
 
 

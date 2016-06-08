@@ -169,6 +169,10 @@ void draw() {
     //  main.loop();
     gamePlay();
     drawRhealth();
+    if(rhealth == 0){
+    companion = false;
+    }
+    
   }
   if (page == 3) {
     // playSound(4);
