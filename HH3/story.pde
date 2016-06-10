@@ -14,7 +14,7 @@ void story() {
   text("Use the arrow keys to move,\nand SPACE or Z to attack. \nDon't forget to visit the shop to upgrade your health", 20, 220); 
   image(shop,440,190,48*2,32*2);
   text("Your relationship level is displayed in the top left corner \n With your companion, you are much stronger \n You are about to meet Owen",20,310);
-  image(bdown1,460,320,64*2,64*2);
+  image(bdown1,460,320,64,64);
   textSize(50);
   text("GOOD LUCK", 85+30, 430);
   textSize(25);
