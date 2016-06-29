@@ -54,9 +54,21 @@ SoundFile q2;
 SoundFile r21;
 SoundFile r22;
 SoundFile r23;
-SoundFile r24;
 SoundFile ruh;
 
+SoundFile q3;
+SoundFile r31;   // you're really rude
+SoundFile r32;   // let's go
+SoundFile r33;   // happy to help
+
+SoundFile q4;
+SoundFile r41;
+SoundFile r42;
+
+SoundFile q5;
+SoundFile r51;
+SoundFile r52;
+SoundFile r53;
 
 
 
@@ -169,10 +181,9 @@ void draw() {
     //  main.loop();
     gamePlay();
     drawRhealth();
-    if(rhealth == 0){
-    companion = false;
+    if (rhealth == 0) {
+      companion = false;
     }
-    
   }
   if (page == 3) {
     // playSound(4);

@@ -49,7 +49,7 @@ void drawRhealth() {
   textSize(50);
   // stroke(0);
   // strokeWeight(5);
-  text(rhealth + "%", 25, 50);
+  text(rhealth + "%", 31, 50);
 }
 
 

@@ -12,7 +12,7 @@ int dialogue=0;
 class dialogue {
 
 
-  String[] owen1 = {"Hi, my name's Owen. Let's travel together", "How do you wanna handle this dungeon?"
+  String[] owen1 = {"Hi, my name's Owen. Let's travel together", "How do you wanna handle this dungeon?", "I think the next dungeon is hidden, to the West"
   };
   String[] opt1 = {"Sure", "Kill everyone"
   };
@@ -116,6 +116,15 @@ class dialogue {
         }
         if (convo== 1) {
           q2.play();
+        }
+        if (convo== 2) {
+          q3.play();
+        }
+        if (convo== 3) {
+          q4.play();
+        }
+        if (convo== 4) {
+          q5.play();
         }
 
         //1
